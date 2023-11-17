@@ -8,29 +8,29 @@ Train::Train(double vitesse, const Terminus& terminus, double distanceTerminus, 
         : vitesse(vitesse), terminus(terminus), distanceTerminus(distanceTerminus), nombrePassagers(nombrePassagers), assetVisuel("") {}
 
 double Train::getVitesse() const {
-    return vitesse;
+    return this->vitesse;
 }
 
 void Train::setVitesse(double nouvelleVitesse) {
-    vitesse = nouvelleVitesse;
+    this->vitesse = nouvelleVitesse;
 }
 
 Terminus Train::getTerminus() const {
-    return terminus;
+    return this->terminus;
 }
 
 void Train::ajusterPassagers(int deltaPassagers) {
-    nombrePassagers += deltaPassagers;
-    if (nombrePassagers < 0) {
-        std::cerr << "Bro bouge" << std::endl;
-        nombrePassagers = 0;
+    this->nombrePassagers += deltaPassagers;
+    if (this->nombrePassagers < 0) {
+        std::cerr << "Passengers negatif" << std::endl;
+        this->nombrePassagers = 0;
     }
 }
 
 void Train::ajusterVitesse(double deltaVitesse) {
-    vitesse += deltaVitesse;
-    if (vitesse < 0.0) {
-        std::cerr << "Tu forces" << std::endl;
-        vitesse = 0.0;
+    this->vitesse += deltaVitesse;
+    if (this->vitesse < 0.0) {
+        std::cerr << "Vitesse negatif" << std::endl;
+        this->vitesse = 0.0;
     }
 }

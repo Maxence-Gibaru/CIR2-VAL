@@ -7,6 +7,7 @@
 #include <chrono>
 #include <vector>
 #include <algorithm>
+#include "include/Terminus.h"
 
 using namespace std::chrono_literals;
 
@@ -22,23 +23,31 @@ int main()
     std::vector<std::thread> threads(10);
     std::vector<Train> myList;
 
-    Train myTrain1(1);
-    Train myTrain2(2);
+    Terminus Ugo("Ugo");
+    Terminus Maxence("Maxence");
+
+    Train myTrain1(0.0, Ugo, 0.0, 10, "sexe");
+    Train myTrain2(0.0, Maxence, 0.0, 10, "sexe");
 
     myList.push_back(myTrain1);
     myList.push_back(myTrain2);
+
 
     // number max of threads
 
     bool stopping = false;
 
-    for(int i = 0; i < myList.size(); i++) {
+    for(auto &train : myList) {
         threads.emplace_back(
-                [&myList, i, &stopping](){
+                [&train, &stopping](){
                     while(!stopping) {
-                        std::cout << myList[i].getIndex() << std::endl;
+                        if(train.getTerminus().getNom() == "Ugo") {
+                            train.ajusterVitesse(0.5);
+                        } else {
+                            train.ajusterVitesse(1);
+                        }
+                        std::cout << "Train de " << train.getTerminus().getNom() << " de vitesse : " << train.getVitesse() << std::endl;
                         std::this_thread::sleep_for(1s);
-
                     }
                 });
     }
