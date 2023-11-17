@@ -12,7 +12,7 @@ double Train::getVitesse() const {
 }
 
 void Train::setVitesse(double nouvelleVitesse) {
-    this->vitesse = nouvelleVitesse;
+    this->vitesse += nouvelleVitesse;
 }
 
 Terminus Train::getTerminus() const {

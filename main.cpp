@@ -1,4 +1,3 @@
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "include/Train.h"
 #include <array>
@@ -20,37 +19,50 @@ void fillTab(std::vector<Train> &myList, Train &train) {
 
 int main()
 {
-    std::vector<std::thread> threads(10);
+    std::vector<std::jthread> threads(10);
     std::vector<Train> myList;
 
     Terminus Ugo("Ugo");
     Terminus Maxence("Maxence");
+    Terminus Laurine("Laurine");
+    Terminus Momo("Momo");
 
-    Train myTrain1(0.0, Ugo, 0.0, 10, "sexe");
-    Train myTrain2(0.0, Maxence, 0.0, 10, "sexe");
+    Train myTrain1(0.0, Ugo, 0.0, 10, "none");
+    Train myTrain2(0.0, Maxence, 0.0, 10, "none");
+    Train myTrain3(0.0, Laurine, 0.0, 10, "none");
+    Train myTrain4(0.0, Momo, 0.0, 10, "none");
+
 
     myList.push_back(myTrain1);
     myList.push_back(myTrain2);
+    myList.push_back(myTrain3);
+    myList.push_back(myTrain4);
 
 
     // number max of threads
 
     bool stopping = false;
 
-    for(auto &train : myList) {
+    for(int i = 0; i < myList.size(); i++)
+    {
         threads.emplace_back(
-                [&train, &stopping](){
+                [&myList, i, &stopping]() mutable -> auto {
                     while(!stopping) {
-                        if(train.getTerminus().getNom() == "Ugo") {
-                            train.ajusterVitesse(0.5);
-                        } else {
-                            train.ajusterVitesse(1);
+                        if(i == 0) {
+                            myList[i].setVitesse(1);
                         }
-                        std::cout << "Train de " << train.getTerminus().getNom() << " de vitesse : " << train.getVitesse() << std::endl;
+
+                        else if(i != 0  and myList[i-1].getVitesse() >= 10) {
+                            myList[i].setVitesse(1);
+                        }
+                        std::cout <<  myList[i].getTerminus().getNom() << " : |" << myList[i].getVitesse() << "|" << std::endl;
                         std::this_thread::sleep_for(1s);
                     }
+                    std::cout << std::endl;
                 });
     }
+
+    std::cout << "Main thread" << std::endl;
 
 
     for (auto& thread : threads) {
