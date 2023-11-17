@@ -4,8 +4,12 @@
 
 #include "../include/Terminus.h"
 
-Terminus::Terminus(const std::string& nom) : nom(nom) {}
+Terminus::Terminus(const std::string& nom, int train_number) : nom(nom), train_number(train_number) {}
 
 std::string Terminus::getNom() const {
     return nom;
+}
+
+const int Terminus::getTrainNumber() const {
+    return this->train_number;
 }

@@ -1,5 +1,5 @@
-#ifndef CIR2_PROJET_VAL_TRAIN_H
-#define CIR2_PROJET_VAL_TRAIN_H
+#ifndef CIR2_VAL_TRAIN_H
+#define CIR2_VAL_TRAIN_H
 
 #include "Terminus.h"
 #include <string>
@@ -7,21 +7,24 @@
 
 class Train {
 private:
-    double vitesse;
+    double speed;
     Terminus terminus;
-    double distanceTerminus;
+    double coordX;
     int nombrePassagers;
     std::string assetVisuel;
 
 public:
-    Train(double vitesse, const Terminus& terminus, double distanceTerminus, int nombrePassagers, const std::string& assetVisuel);
+    Train(double speed, const Terminus& terminus, double coordX, int nombrePassagers, const std::string& assetVisuel);
 
-    double getVitesse() const;
-    void setVitesse(double nouvelleVitesse);
+    double getSpeed() const;
+    double getCoordX() const;
     Terminus getTerminus() const;
-    void ajusterPassagers(int deltaPassagers);
-    void ajusterVitesse(double deltaVitesse);
+
+    void setSpeed(const double &newSpeed);
+    void setCoordX(const double &newCoordX);
+    void setPassengers(const int &deltaPassagers);
+    void ajusterVitesse(const double &deltaVitesse);
 
 };
 
-#endif //CIR2_PROJET_VAL_TRAIN_H
+#endif //CIR2_VAL_TRAIN_H

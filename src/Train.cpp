@@ -1,25 +1,26 @@
-//
-// Created by maxence on 15/11/23.
-//
-
 #include "../include/Train.h"
 
-Train::Train(double vitesse, const Terminus& terminus, double distanceTerminus, int nombrePassagers, const std::string& assetVisuel)
-        : vitesse(vitesse), terminus(terminus), distanceTerminus(distanceTerminus), nombrePassagers(nombrePassagers), assetVisuel("") {}
+Train::Train(double speed, const Terminus& terminus, double coordX, int nombrePassagers, const std::string& assetVisuel)
+        : speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers), assetVisuel("") {}
 
-double Train::getVitesse() const {
-    return this->vitesse;
+double Train::getSpeed() const {
+    return this->speed;
 }
 
-void Train::setVitesse(double nouvelleVitesse) {
-    this->vitesse += nouvelleVitesse;
+double Train::getCoordX() const {
+    return this->coordX;
 }
 
 Terminus Train::getTerminus() const {
     return this->terminus;
 }
 
-void Train::ajusterPassagers(int deltaPassagers) {
+
+void Train::setSpeed(const double &newSpeed) {
+    this->speed = newSpeed;
+}
+
+void Train::setPassengers(const int &deltaPassagers){
     this->nombrePassagers += deltaPassagers;
     if (this->nombrePassagers < 0) {
         std::cerr << "Passengers negatif" << std::endl;
@@ -27,10 +28,15 @@ void Train::ajusterPassagers(int deltaPassagers) {
     }
 }
 
-void Train::ajusterVitesse(double deltaVitesse) {
-    this->vitesse += deltaVitesse;
-    if (this->vitesse < 0.0) {
+void Train::ajusterVitesse(const double &deltaVitesse) {
+    this->speed += deltaVitesse;
+    if (this->speed < 0.0) {
         std::cerr << "Vitesse negatif" << std::endl;
-        this->vitesse = 0.0;
+        this->speed = 0.0;
     }
 }
+
+void Train::setCoordX(const double &newCoordX) {
+    this->coordX += newCoordX;
+}
+
