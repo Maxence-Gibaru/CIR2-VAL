@@ -9,13 +9,25 @@
 class Station {
 private:
     int passengers;
-    bool isTrain;
+    bool presence;
 
 public:
     // Getters
     const int getPassengers() const{
         return this->passengers;
     }
+    const bool isTrain() const{
+        return this->presence;
+    };
+
+    // Setters
+    void setPassengers(const int &newPassengers) {
+        this->passengers = newPassengers;
+    }
+    void setPresence(bool &newPresence) {
+        this->presence = newPresence;
+    }
+
 };
 
 #endif //CIR2_VAL_STATION_H
