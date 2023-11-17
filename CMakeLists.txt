@@ -10,4 +10,6 @@ add_executable(CIR2_VAL main.cpp
         include/Terminus.h
         include/Station.h
         src/Station.cpp
+        src/TrainControlFunction.cpp
+        include/TrainControlFunction.h
 )

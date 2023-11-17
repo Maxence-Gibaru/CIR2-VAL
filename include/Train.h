@@ -1,29 +1,105 @@
 #ifndef CIR2_VAL_TRAIN_H
 #define CIR2_VAL_TRAIN_H
 
-#include "Terminus.h"
-#include <string>
 #include <iostream>
+
+#include "Terminus.h"
 
 class Train {
 private:
+    int id;
     double speed;
     Terminus terminus;
     double coordX;
     int nombrePassagers;
-    std::string assetVisuel;
+    Train* voisin;
 
 public:
-    Train(double speed, const Terminus& terminus, double coordX, int nombrePassagers, const std::string& assetVisuel);
+    /**
+     * @brief Contructeur de la classe Train
+     * @param id : id du train
+     * @param speed : vitesse du train
+     * @param terminus : terminus du train
+     * @param coordX : coordonnée du train
+     * @param nombrePassagers : nombre de passagers dans le train
+     * @return void
+    */
+    Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers);
 
+/* ===== GETTER ===== */
+
+    /**
+    * @brief Getter de l'id du train
+    * @return int : id du train
+    */
+    int getId() const;
+
+    /**
+     * @brief Getter de la vitesse du train
+     * @return double : vitesse du train
+    */
     double getSpeed() const;
+
+    /**
+     * @brief Getter des coordonnées du train
+     * @return double : coordonnées du train
+    */
     double getCoordX() const;
+
+    /**
+     * @brief Getter le terminus du train
+     * @return Terminus : terminus du train (le nom)
+    */
     Terminus getTerminus() const;
 
+    /**
+     * @brief Getter du voisin du train
+     * @return Train* : récupérer l'id
+     */
+    Train* getVoisin() const;
+
+    /**
+     * @biref Getter de la distance entre le train et son vosin
+     * @return
+     */
+    double getDistance() const;
+
+/* ===== SETTER ===== */
+
+    /**
+     * @brief Setter de la vitesse du train
+     * @param newSpeed : nouvelle vitesse du train
+     * @return void
+    */
     void setSpeed(const double &newSpeed);
+
+    /**
+     * @brief Setter des coordonnées du train
+     * @param newCoordX : nouvelle coordonnée du train
+     * @return void
+    */
     void setCoordX(const double &newCoordX);
+
+    /**
+     * @brief Setter du nombre de passagers du train
+     * @param deltaPassagers : nombre de passagers à ajouter ou à retirer
+     * @return void
+    */
     void setPassengers(const int &deltaPassagers);
+
+    /**
+     * @brief ajuster la vitesse du train
+     * @param deltaVitesse
+     * @return void
+     */
     void ajusterVitesse(const double &deltaVitesse);
+
+    /**
+     * @brief Setter du voisin du train
+     * @param neighbor
+     * @return void
+     */
+    void setVoisin(Train* neighbor);
 
 };
 

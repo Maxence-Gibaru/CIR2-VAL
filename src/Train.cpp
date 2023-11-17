@@ -1,10 +1,17 @@
 #include "../include/Train.h"
 
-Train::Train(double speed, const Terminus& terminus, double coordX, int nombrePassagers, const std::string& assetVisuel)
-        : speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers), assetVisuel("") {}
+Train::Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers)
+        : id(id),speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers)
+{}
+
+/* ==== GETTERS ==== */
 
 double Train::getSpeed() const {
     return this->speed;
+}
+
+int Train::getId() const {
+    return this->id;
 }
 
 double Train::getCoordX() const {
@@ -15,6 +22,27 @@ Terminus Train::getTerminus() const {
     return this->terminus;
 }
 
+Train* Train::getVoisin() const {
+    return voisin;
+}
+
+double Train::getDistance() const {
+    if (getCoordX() == 0) {
+        std::cout << "Le train est au terminus" << std::endl;
+        return 0;
+    }
+    return std::abs(this->coordX - this->voisin->getCoordX());
+}
+
+/* ==== SETTERS ==== */
+
+void Train::setCoordX(const double &newCoordX) {
+    this->coordX += newCoordX;
+}
+
+void Train::setVoisin(Train* neighbor) {
+    voisin = neighbor;
+}
 
 void Train::setSpeed(const double &newSpeed) {
     this->speed = newSpeed;
@@ -28,6 +56,8 @@ void Train::setPassengers(const int &deltaPassagers){
     }
 }
 
+/* ==== OTHER ==== */
+
 void Train::ajusterVitesse(const double &deltaVitesse) {
     this->speed += deltaVitesse;
     if (this->speed < 0.0) {
@@ -36,7 +66,7 @@ void Train::ajusterVitesse(const double &deltaVitesse) {
     }
 }
 
-void Train::setCoordX(const double &newCoordX) {
-    this->coordX += newCoordX;
-}
+
+
+
 

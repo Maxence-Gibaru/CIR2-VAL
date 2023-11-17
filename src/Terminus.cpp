@@ -6,6 +6,8 @@
 
 Terminus::Terminus(const std::string& nom, int train_number) : nom(nom), train_number(train_number) {}
 
+/* ==== GETTERS ==== */
+
 std::string Terminus::getNom() const {
     return nom;
 }
