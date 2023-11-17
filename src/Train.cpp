@@ -1,42 +1,36 @@
+//
+// Created by maxence on 15/11/23.
+//
+
 #include "../include/Train.h"
 
-Train::Train() {
-    this->passengers = 0;
-    this->speed = 0;
+Train::Train(double vitesse, const Terminus& terminus, double distanceTerminus, int nombrePassagers, const std::string& assetVisuel)
+        : vitesse(vitesse), terminus(terminus), distanceTerminus(distanceTerminus), nombrePassagers(nombrePassagers), assetVisuel("") {}
+
+double Train::getVitesse() const {
+    return vitesse;
 }
 
-Train::Train(int index) {
-    this->index = index;
-    this->speed = 0;
-    this->passengers = 0;
+void Train::setVitesse(double nouvelleVitesse) {
+    vitesse = nouvelleVitesse;
 }
 
-const float Train::getSpeed() const {
-    return this->speed;
+Terminus Train::getTerminus() const {
+    return terminus;
 }
 
-const int Train::getPassengers() const {
-    return this->passengers;
+void Train::ajusterPassagers(int deltaPassagers) {
+    nombrePassagers += deltaPassagers;
+    if (nombrePassagers < 0) {
+        std::cerr << "Bro bouge" << std::endl;
+        nombrePassagers = 0;
+    }
 }
 
-const int Train::getIndex() const {
-    return this->index;
+void Train::ajusterVitesse(double deltaVitesse) {
+    vitesse += deltaVitesse;
+    if (vitesse < 0.0) {
+        std::cerr << "Tu forces" << std::endl;
+        vitesse = 0.0;
+    }
 }
-
-void Train::setSpeed(const int &newSpeed) {
-    this->speed += newSpeed;
-}
-
-void Train::setPassengers(int &newPassengers) {
-    this->passengers = newPassengers;
-}
-
-
-
-
-
-
-
-
-
-

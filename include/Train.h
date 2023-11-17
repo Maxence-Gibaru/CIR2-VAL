@@ -1,33 +1,27 @@
-#ifndef CIR2_VAL_TRAIN_H
-#define CIR2_VAL_TRAIN_H
+#ifndef CIR2_PROJET_VAL_TRAIN_H
+#define CIR2_PROJET_VAL_TRAIN_H
 
+#include "Terminus.h"
+#include <string>
+#include <iostream>
 
 class Train {
 private:
-    int speed;
-    int passengers;
-    int index;
-
+    double vitesse;
+    Terminus terminus;
+    double distanceTerminus;
+    int nombrePassagers;
+    std::string assetVisuel;
 
 public:
-    // Constructors implementation
-    Train();
-    Train(int index);
+    Train(double vitesse, const Terminus& terminus, double distanceTerminus, int nombrePassagers, const std::string& assetVisuel);
 
-    // Getters
-    const int getPassengers() const;
-    const float getSpeed() const;
-    const int getIndex() const;
-
-    // Setters
-    void setPassengers(int &newPassengers);
-    void setSpeed(const int &newSpeed);
-
+    double getVitesse() const;
+    void setVitesse(double nouvelleVitesse);
+    Terminus getTerminus() const;
+    void ajusterPassagers(int deltaPassagers);
+    void ajusterVitesse(double deltaVitesse);
 
 };
 
-
-
-
-
-#endif //CIR2_VAL_TRAIN_H
+#endif //CIR2_PROJET_VAL_TRAIN_H
