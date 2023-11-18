@@ -47,9 +47,7 @@ int main()
                 [&mtx_,&myList, i, &stopping, &Maxence]() mutable -> auto {
                     while(!stopping) {
 
-
-
-
+/*
                         if(i == 0) {
                             myList[i].setSpeed(108); // 108 m/s soit 30 km/h
                             myList[i].setCoordX(108);
@@ -77,7 +75,7 @@ int main()
 
                         mtx_.unlock();
                         std::this_thread::sleep_for(1s);
-
+*/
                     }
                     std::cout << std::endl;
                 });

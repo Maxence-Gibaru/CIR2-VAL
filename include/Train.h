@@ -88,18 +88,20 @@ public:
     void setPassengers(const int &deltaPassagers);
 
     /**
+     * @brief Setter du voisin du train
+     * @param neighbor
+     * @return void
+     */
+    void setVoisin(Train* neighbor);
+
+    /**
      * @brief ajuster la vitesse du train
      * @param deltaVitesse
      * @return void
      */
     void ajusterVitesse(const double &deltaVitesse);
 
-    /**
-     * @brief Setter du voisin du train
-     * @param neighbor
-     * @return void
-     */
-    void setVoisin(Train* neighbor);
+
 
 };
 

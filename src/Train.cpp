@@ -28,7 +28,6 @@ Train* Train::getVoisin() const {
 
 double Train::getDistance() const {
     if (getCoordX() == 0) {
-        std::cout << "Le train est au terminus" << std::endl;
         return 0;
     }
     return std::abs(this->coordX - this->voisin->getCoordX());
@@ -65,6 +64,7 @@ void Train::ajusterVitesse(const double &deltaVitesse) {
         this->speed = 0.0;
     }
 }
+
 
 
 
