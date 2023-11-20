@@ -1,7 +1,3 @@
-//
-// Created by Ugo WAREMBOURG on 15/11/2023.
-//
-
 #include <string>
 
 #ifndef CIR2_PROJET_VAL_TERMINUS_H
@@ -14,6 +10,7 @@ class Terminus {
 private:
     std::string nom;
     int train_number;
+    int coordT;
 
 public:
     /**
@@ -22,7 +19,7 @@ public:
      * @param train_number : nombre de train ayant atteint le terminus
      * @return void
     */
-    Terminus(const std::string& nom, int train_number);
+    Terminus(const std::string& nom, int train_number, int coordT);
 
     /**
      * @brief Getter du nom du terminus
@@ -35,6 +32,8 @@ public:
      * @return int : nombre de train ayant atteint le terminus
     */
     const int getTrainNumber() const;
+
+    const int getCoordT() const;
 
     /**
      * @brief Incrémente le nombre de train ayant atteint le terminus

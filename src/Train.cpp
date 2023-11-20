@@ -37,14 +37,23 @@ double Train::getDistance() const {
     return std::abs(this->coordX - this->voisin->getCoordX());
 }
 
+Station * Train::getStation() const {
+    return this->nearestStation;
+}
+
+
 /* ==== SETTERS ==== */
 
 void Train::setCoordX(const double &newCoordX) {
-    this->coordX += newCoordX;
+    this->coordX = newCoordX;
 }
 
 void Train::setVoisin(Train* neighbor) {
     voisin = neighbor;
+}
+
+void Train::setTerminus(Terminus &newTerminus) {
+    this->terminus = newTerminus;
 }
 
 void Train::setSpeed(const double &newSpeed) {
@@ -63,15 +72,44 @@ void Train::setPassengers(const int &deltaPassagers){
     }
 }
 
+void Train::setStation(Station *nearestStation) {
+    this->nearestStation = nearestStation;
+}
+
 /* ==== OTHER ==== */
 
-void Train::ajusterVitesse(const double &deltaVitesse) {
-    this->speed += deltaVitesse;
+void Train::moveX(const double &newCoordX) {
+    this->coordX += newCoordX;
+}
+
+
+void Train::addSpeed(const double &deltaSpeed) {
+    this->speed += deltaSpeed;
     if (this->speed < 0.0) {
         std::cerr << "Vitesse negatif" << std::endl;
         this->speed = 0.0;
     }
 }
+
+void Train::subSpeed(const double &deltaSpeed) {
+    this->speed -= deltaSpeed;
+    if (this->speed < 0.0) {
+        std::cerr << "Vitesse negatif" << std::endl;
+        this->speed = 0.0;
+    }
+}
+
+double Train::getDistanceStation(const Station* station) const {
+    return std::abs(this->coordX - station->getCoordX()); // à finir
+}
+
+
+
+
+
+
+
+
 
 
 

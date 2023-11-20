@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "Terminus.h"
+#include "Station.h"
 
 class Train {
 private:
@@ -13,6 +14,7 @@ private:
     double coordX;
     int nombrePassagers;
     Train* voisin;
+    Station* nearestStation;
     bool arrived;
 
 public:
@@ -72,6 +74,10 @@ public:
      */
     double getDistance() const;
 
+    Station * getStation() const;
+
+    double getDistanceStation(const Station* station) const;
+
 /* ===== SETTER ===== */
 
     /**
@@ -82,10 +88,12 @@ public:
     void setSpeed(const double &newSpeed);
 
     /**
-     * @brief Setter des coordonnées du train
+     * @brief fais avancer les coordonnées du train
      * @param newCoordX : nouvelle coordonnée du train
      * @return void
     */
+    void moveX(const double &newCoordX);
+
     void setCoordX(const double &newCoordX);
 
     /**
@@ -109,12 +117,18 @@ public:
      */
     void setVoisin(Train* neighbor);
 
+    void setTerminus(Terminus &newTerminus);
+
+    void setStation(Station *nearestStation);
+
     /**
      * @brief ajuster la vitesse du train
-     * @param deltaVitesse
+     * @param deltaSpeed
      * @return void
      */
-    void ajusterVitesse(const double &deltaVitesse);
+    void addSpeed(const double &deltaSpeed);
+
+    void subSpeed(const double &deltaSpeed);
 
     /**
     * @brief Vérifie la distance de sécurité

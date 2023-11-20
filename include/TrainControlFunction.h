@@ -1,8 +1,5 @@
-//
-// Created by Ugo WAREMBOURG on 17/11/2023.
-//
-
-#include "../include/Train.h"
+#include "Train.h"
+#include "Station.h"
 
 #include <vector>
 
@@ -14,6 +11,8 @@
  * @param myList : liste des trains
  * @return 0 si bien récupéré
 */
-int setVoisinList(std::vector<Train> &myList);
+void setVoisinList(std::vector<Train> &myList);
+
+void setNearestStation(std::vector<Station> &Stations, std::vector<Train> &myList);
 
 #endif //CIR2_VAL_TRAINCONTROLFUNCTION_H
