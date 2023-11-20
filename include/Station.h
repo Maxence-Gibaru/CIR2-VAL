@@ -6,15 +6,17 @@
 class Station {
 private:
     std::string nom;
+    int id;
     int passengers;
     bool presence;
     double coordX;
+    Station *neighbour;
 
 public:
 
 /* ===== CONSTRUCTOR ===== */
 
-    Station(const std::string &nom, int passengers, bool presence, double coordX);
+    Station(const std::string &nom, int id, int passengers, bool presence, double coordX);
 
 
 /* ===== GETTER ===== */
@@ -50,6 +52,8 @@ public:
      * @param newPresence : nouvelle présence d'un train dans la station
     */
     void setPresence(const bool &newPresence);
+
+    void setNeighbour(Station * newNeighbour);
 
 };
 

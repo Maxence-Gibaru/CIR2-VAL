@@ -1,9 +1,7 @@
 #include "../include/Station.h"
 #include <string>
 
-// aussi vide que mes poches
-
-Station::Station(const std::string &nom, int passengers, bool presence, double coordX) : nom(nom), passengers(passengers), presence(presence), coordX(coordX) {}
+Station::Station(const std::string &nom, int id,int passengers, bool presence, double coordX) : nom(nom), id(id), passengers(passengers), presence(presence), coordX(coordX) {}
 
 const double Station::getCoordX() const {
     return this->coordX;
@@ -24,3 +22,7 @@ void Station::setPassengers(const int &newPassengers) {
 void Station::setPresence(const bool &newPresence) {
     this->presence = newPresence;
 }
+
+void Station::setNeighbour(Station *newNeighbour) {
+        this->neighbour = newNeighbour;
+    }

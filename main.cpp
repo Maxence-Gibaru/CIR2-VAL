@@ -13,7 +13,7 @@
 #define DISTANCE_SECURITY 1000
 #define MIN_SPEED 122.4
 #define MAX_SPEED 280
-#define COEFF_SPEED 10
+#define COEFF_SPEED 100
 
 
 
@@ -24,82 +24,66 @@ int main()
     std::mutex mtx_;
 
     std::vector<std::thread> threads;
-    std::vector<Train> myList;
+    std::vector<Train> Trains;
     std::vector<Station> Stations;
 
     // mettre toutes ces lignes sous la forme d'une fonction
 
-    Terminus CHU("Lille CHU-Eurasanté", 0, 0);
-    Terminus CANTONS("Villeneuve d'Ascq 4 Cantons Stade Pierre Mauroy", 0, DISTANCE_TOT);
+    Terminus CHU("CHU-Eurasanté", 0, 0);
+    Terminus CANTONS("4 Cantons", 0, DISTANCE_TOT);
 
-    Train myTrain1(1,0.0, CANTONS, 0.0, 10, false);
-    Train myTrain2(2,0.0, CANTONS, 0.0, 10, false);
-    Train myTrain3(3,0.0, CANTONS, 0.0, 10, false);
-    Train myTrain4(4,0.0, CANTONS, 0.0, 10, false);
-    myList.push_back(myTrain1);
-    myList.push_back(myTrain2);
-    myList.push_back(myTrain3);
-    myList.push_back(myTrain4);
 
-    //Station LilleFlandres("Lille FLandres", 10, false, 1500);
-    Station LilleEurope("Lille Europe", 10, false, 1500);
-    //tations.push_back(LilleFlandres);
+    initTrains(Trains, CANTONS, 45);
+
+    Station LilleFlandres("Lille FLandres", 1,  10, false, 500);
+    Station LilleEurope("Lille Europe", 2, 10, false, 1800);
+    Stations.push_back(LilleFlandres);
     Stations.push_back(LilleEurope);
 
 
-    setVoisinList(myList);
-    setNearestStation(Stations, myList);
-
+    setVoisinList(Trains);
+    setNearestStation(Stations, Trains);
+    setNextStation(Stations);
     bool stopping = false;
 
-    for(auto &train: myList)
+    for(auto &train: Trains)
     {
         threads.emplace_back(
-                [&mtx_,&train, &myList, &stopping, &CANTONS, &CHU, &Stations]() mutable -> auto {
+                [&mtx_,&train, &Trains, &stopping, &CANTONS, &CHU, &Stations]() mutable -> auto {
                     while(!stopping) {
-                        setNearestStation(Stations, myList);
-
-                        for(auto &station : Stations) {
-                            if(train.getCoordX() == train.getStation()->getCoordX() or train.getCoordX() == (train.getStation()->getCoordX() + 2*(DISTANCE_TOT - train.getStation()->getCoordX())) and !train.getStation()->isTrain()){
-                                train.getStation()->setPresence(true);
-                                train.setSpeed(0);
-                                std::cout << "Arrêt du train " << train.getId() << " à la gare " << train.getStation()->getNom() << std::endl;
-                            }
-                            if (train.getSpeed() <= MAX_SPEED) {
-                                train.addSpeed(COEFF_SPEED);
-                            }
+                        train.setSpeed(COEFF_SPEED);
+                        if(train.getCoordX() == train.getNextStation()->getCoordX() or train.getCoordX() == DISTANCE_TOT*2 - train.getNextStation()->getCoordX()){
+                            mtx_.lock();
+                            std::cout << "Arrêt du train " << train.getId() << " à la gare " << train.getNextStation()->getNom() << std::endl;
+                            mtx_.unlock();
                         }
 
+                        // mettre les deux conditions suivantes en une
                         if(train.getId() == 1 and !train.getState()) {
                             train.moveX(train.getSpeed());
                         }
 
-                        if(train.checkSecurityDistance(DISTANCE_SECURITY) and train.getId() != myList.size()) {
+                        if(train.checkSecurityDistance(DISTANCE_SECURITY) and train.getId() != Trains.size()) {
                             train.getVoisin()->moveX(train.getSpeed());
                         }
 
 
-
-
-
-                        // faire une méthode swap terminus
+                        // faire une méthode next terminus
                         if(train.getCoordX() >= CANTONS.getCoordT() ) {
                             train.setTerminus(CHU);
-                            train.setCoordX(0);
                         }
 
-                        if(train.getCoordX() >= CANTONS.getCoordT() * 2.0) {
+                        if(train.getCoordX() >= CANTONS.getCoordT()*2) { // C'est nul à chier de faire x 2
                             train.setTerminus(CANTONS);
                             train.setCoordX(0);
                         }
 
                         mtx_.lock();
-
-                        if(train.getId() == 1) {
-                            std::cout <<  train.getId() << " : |" << train.getCoordX()<< " | " << train.getTerminus().getNom() << std::endl;
+                        if(train.getCoordX() > 0) {
+                            std::cout <<  train.getId() << " : |" << train.getCoordX()<< " | " << train.getTerminus().getNom() <<  std::endl;
                         }
                         mtx_.unlock();
-                        std::this_thread::sleep_for(1s);
+                        std::this_thread::sleep_for(0.5s);
 
                     }
                     std::cout << std::endl;

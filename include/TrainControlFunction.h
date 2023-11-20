@@ -11,8 +11,11 @@
  * @param myList : liste des trains
  * @return 0 si bien récupéré
 */
-void setVoisinList(std::vector<Train> &myList);
+void setVoisinList(std::vector<Train> &Trains);
 
 void setNearestStation(std::vector<Station> &Stations, std::vector<Train> &myList);
 
+void setNextStation(std::vector<Station> &Stations);
+
+void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
 #endif //CIR2_VAL_TRAINCONTROLFUNCTION_H

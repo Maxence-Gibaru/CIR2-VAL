@@ -37,8 +37,8 @@ double Train::getDistance() const {
     return std::abs(this->coordX - this->voisin->getCoordX());
 }
 
-Station * Train::getStation() const {
-    return this->nearestStation;
+Station * Train::getNextStation() const {
+    return this->station;
 }
 
 
@@ -64,16 +64,16 @@ void Train::setState(const bool &newState) {
     this->arrived = newState;
 }
 
-void Train::setPassengers(const int &deltaPassagers){
-    this->nombrePassagers += deltaPassagers;
+void Train::setPassengers(const int &deltaPassengers){
+    this->nombrePassagers += deltaPassengers;
     if (this->nombrePassagers < 0) {
         std::cerr << "Passengers negatif" << std::endl;
         this->nombrePassagers = 0;
     }
 }
 
-void Train::setStation(Station *nearestStation) {
-    this->nearestStation = nearestStation;
+void Train::setStation(Station *nextStation) {
+    this->station = nextStation;
 }
 
 /* ==== OTHER ==== */
@@ -100,7 +100,9 @@ void Train::subSpeed(const double &deltaSpeed) {
 }
 
 double Train::getDistanceStation(const Station* station) const {
-    return std::abs(this->coordX - station->getCoordX()); // à finir
+    double distance = station->getCoordX() - this->coordX;
+
+    return std::abs(distance);
 }
 
 

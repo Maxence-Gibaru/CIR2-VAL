@@ -14,7 +14,7 @@ private:
     double coordX;
     int nombrePassagers;
     Train* voisin;
-    Station* nearestStation;
+    Station* station;
     bool arrived;
 
 public:
@@ -74,9 +74,9 @@ public:
      */
     double getDistance() const;
 
-    Station * getStation() const;
+    Station * getNextStation() const;
 
-    double getDistanceStation(const Station* station) const;
+    double getDistanceStation(const Station * station) const;
 
 /* ===== SETTER ===== */
 
@@ -98,10 +98,10 @@ public:
 
     /**
      * @brief Setter du nombre de passagers du train
-     * @param deltaPassagers : nombre de passagers à ajouter ou à retirer
+     * @param deltaPassengers : nombre de passagers à ajouter ou à retirer
      * @return void
     */
-    void setPassengers(const int &deltaPassagers);
+    void setPassengers(const int &deltaPassengers);
 
     /**
      * @brief Setter de l'arrivé
@@ -119,7 +119,8 @@ public:
 
     void setTerminus(Terminus &newTerminus);
 
-    void setStation(Station *nearestStation);
+    void setStation(Station *nextStation);
+
 
     /**
      * @brief ajuster la vitesse du train
@@ -135,7 +136,7 @@ public:
     * @param securiy
     * @return bool
     */
-    bool checkSecurityDistance(const int security) {
+    bool checkSecurityDistance(const int security) const {
         if(getDistance() >= security) {
             return true;
         }
