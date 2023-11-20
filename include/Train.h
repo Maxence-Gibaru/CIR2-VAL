@@ -13,6 +13,7 @@ private:
     double coordX;
     int nombrePassagers;
     Train* voisin;
+    bool arrived;
 
 public:
     /**
@@ -22,9 +23,10 @@ public:
      * @param terminus : terminus du train
      * @param coordX : coordonnée du train
      * @param nombrePassagers : nombre de passagers dans le train
+     * @param arrived : le train est-il arrivé ?
      * @return void
     */
-    Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers);
+    Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers, bool arrived);
 
 /* ===== GETTER ===== */
 
@@ -59,7 +61,13 @@ public:
     Train* getVoisin() const;
 
     /**
-     * @biref Getter de la distance entre le train et son vosin
+    * @brief Getter de l'etat d'arrive du train
+    * @return bool : le train est arrivé
+    */
+    bool getState() const;
+
+    /**
+     * @biref Getter de la distance entre le train et son voisin
      * @return
      */
     double getDistance() const;
@@ -88,6 +96,13 @@ public:
     void setPassengers(const int &deltaPassagers);
 
     /**
+     * @brief Setter de l'arrivé
+     * @param newState
+     * @return void
+     */
+    void setState(const bool &newState);
+
+    /**
      * @brief Setter du voisin du train
      * @param neighbor
      * @return void
@@ -101,6 +116,17 @@ public:
      */
     void ajusterVitesse(const double &deltaVitesse);
 
+    /**
+    * @brief Vérifie la distance de sécurité
+    * @param securiy
+    * @return bool
+    */
+    bool checkSecurityDistance(const int security) {
+        if(getDistance() >= security) {
+            return true;
+        }
+        return false;
+    }
 
 
 };

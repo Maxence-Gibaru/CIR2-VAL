@@ -1,7 +1,7 @@
 #include "../include/Train.h"
 
-Train::Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers)
-        : id(id),speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers)
+Train::Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers, bool arrived)
+        : id(id),speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers), arrived(arrived)
 {}
 
 /* ==== GETTERS ==== */
@@ -26,6 +26,10 @@ Train* Train::getVoisin() const {
     return voisin;
 }
 
+bool Train::getState() const {
+    return this->arrived;
+}
+
 double Train::getDistance() const {
     if (getCoordX() == 0) {
         return 0;
@@ -45,6 +49,10 @@ void Train::setVoisin(Train* neighbor) {
 
 void Train::setSpeed(const double &newSpeed) {
     this->speed = newSpeed;
+}
+
+void Train::setState(const bool &newState) {
+    this->arrived = newState;
 }
 
 void Train::setPassengers(const int &deltaPassagers){
