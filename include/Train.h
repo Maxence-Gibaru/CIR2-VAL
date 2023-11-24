@@ -142,8 +142,6 @@ public:
         }
         return false;
     }
-
-
 };
 
 #endif //CIR2_VAL_TRAIN_H

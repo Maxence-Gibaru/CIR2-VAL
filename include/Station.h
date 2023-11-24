@@ -31,13 +31,7 @@ public:
 
     const std::string getNom() const;
 
-    /**
-     * @brief Getter de la présence d'un train dans la station
-     * @return bool : true si un train est présent, false sinon bouge
-    */
-    const bool isTrain() const{
-        return this->presence;
-    };
+    Station* getNeighbour() const;
 
 /* ===== SETTER ===== */
 

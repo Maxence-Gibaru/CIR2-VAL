@@ -26,3 +26,7 @@ void Station::setPresence(const bool &newPresence) {
 void Station::setNeighbour(Station *newNeighbour) {
         this->neighbour = newNeighbour;
     }
+
+Station* Station::getNeighbour() const {
+    return this->neighbour;
+}
