@@ -13,9 +13,12 @@
 */
 void setVoisinList(std::vector<Train> &Trains);
 
-void setNearestStation(std::vector<Station> &Stations, std::vector<Train> &myList);
+void setFirstStation(std::vector<Station> &Stations, std::vector<Train> &myList);
 
-void setNextStation(std::vector<Station> &Stations);
+void initNextStation(std::vector<Station> &Stations);
 
 void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
+
+void initNextTerminus(std::vector<Terminus> &Line);
+
 #endif //CIR2_VAL_TRAINCONTROLFUNCTION_H

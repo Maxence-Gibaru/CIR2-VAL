@@ -1,8 +1,12 @@
 #include "../include/Train.h"
+#include <cmath>
 
-Train::Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers, bool arrived)
-        : id(id),speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers), arrived(arrived)
-{}
+#define COEFF_SPEED  10
+#define MAX_SPEED 280
+
+Train::Train(int id, double speed, Terminus *terminus, double coordX, int nombrePassagers, bool arrived)
+        : id(id), speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers),
+          arrived(arrived) {}
 
 /* ==== GETTERS ==== */
 
@@ -18,11 +22,11 @@ double Train::getCoordX() const {
     return this->coordX;
 }
 
-Terminus Train::getTerminus() const {
+Terminus *Train::getTerminus() const {
     return this->terminus;
 }
 
-Train* Train::getVoisin() const {
+Train *Train::getVoisin() const {
     return voisin;
 }
 
@@ -37,7 +41,7 @@ double Train::getDistance() const {
     return std::abs(this->coordX - this->voisin->getCoordX());
 }
 
-Station * Train::getNextStation() const {
+Station *Train::getNextStation() const {
     return this->station;
 }
 
@@ -48,11 +52,11 @@ void Train::setCoordX(const double &newCoordX) {
     this->coordX = newCoordX;
 }
 
-void Train::setVoisin(Train* neighbor) {
+void Train::setVoisin(Train *neighbor) {
     voisin = neighbor;
 }
 
-void Train::setTerminus(Terminus &newTerminus) {
+void Train::setTerminus(Terminus *newTerminus) {
     this->terminus = newTerminus;
 }
 
@@ -64,7 +68,7 @@ void Train::setState(const bool &newState) {
     this->arrived = newState;
 }
 
-void Train::setPassengers(const int &deltaPassengers){
+void Train::setPassengers(const int &deltaPassengers) {
     this->nombrePassagers += deltaPassengers;
     if (this->nombrePassagers < 0) {
         std::cerr << "Passengers negatif" << std::endl;
@@ -78,8 +82,22 @@ void Train::setStation(Station *nextStation) {
 
 /* ==== OTHER ==== */
 
-void Train::moveX(const double &newCoordX) {
-    this->coordX += newCoordX;
+void Train::moveX(double d1, double &t1, double &t2, float &time) {
+    if (getCoordX() <= d1) {
+        std::cout << "ACCELERATION" << std::endl;
+        this->coordX = 0.5 * COEFF_SPEED * pow(time, 2);
+    }
+
+    if (getCoordX() > d1 and getCoordX() < getNextStation()->getCoordX()) {
+        std::cout << "CONSTANT" << std::endl;
+        this->coordX = MAX_SPEED * (time - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
+    }
+
+    if (getCoordX() >= getNextStation()->getCoordX() - d1) {
+        std::cout << "DECELERATION" << std::endl;
+        this->coordX = -0.5 * COEFF_SPEED * pow(time - t2, 2) + MAX_SPEED * (time - t2) + MAX_SPEED * (t2 - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
+    }
+
 }
 
 
@@ -99,14 +117,38 @@ void Train::subSpeed(const double &deltaSpeed) {
     }
 }
 
-double Train::getDistanceStation(const Station* station) const {
-    double distance = station->getCoordX() - this->coordX;
+double Train::getDistanceStation() const {
+    double distance = getNextStation()->getCoordX() - this->coordX;
 
     return std::abs(distance);
 }
 
+bool Train::trainArrived() const {
+    if (getCoordX() == getTerminus()->getCoordT()) {
+        return true;
+    }
+    return false;
+}
+
+bool Train::checkSecurityDistance(const int security) const {
+    if (getDistance() >= security) {
+        return true;
+    }
+    return false;
+}
 
 
+void Train::swapTerminus() {
+    setTerminus(getTerminus()->getNextTerminus());
+    setCoordX(0);
+}
+
+bool Train::trainStationArrived() const {
+    if(round(getCoordX()) == getNextStation()->getCoordX()) {
+        return true;
+    }
+    return false;
+}
 
 
 

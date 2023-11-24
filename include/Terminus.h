@@ -11,6 +11,7 @@ private:
     std::string nom;
     int train_number;
     int coordT;
+    Terminus * nextTerminus;
 
 public:
     /**
@@ -34,6 +35,12 @@ public:
     const int getTrainNumber() const;
 
     const int getCoordT() const;
+
+    Terminus * getNextTerminus() const;
+
+
+    void setNextTerminus(Terminus* nextTerminus) ;
+
 
     /**
      * @brief Incrémente le nombre de train ayant atteint le terminus

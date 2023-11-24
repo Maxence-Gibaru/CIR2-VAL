@@ -10,7 +10,7 @@ class Train {
 private:
     int id;
     double speed;
-    Terminus terminus;
+    Terminus *terminus;
     double coordX;
     int nombrePassagers;
     Train* voisin;
@@ -28,7 +28,7 @@ public:
      * @param arrived : le train est-il arrivé ?
      * @return void
     */
-    Train(int id,double speed, const Terminus& terminus, double coordX, int nombrePassagers, bool arrived);
+    Train(int id,double speed, Terminus* terminus, double coordX, int nombrePassagers, bool arrived);
 
 /* ===== GETTER ===== */
 
@@ -54,7 +54,7 @@ public:
      * @brief Getter le terminus du train
      * @return Terminus : terminus du train (le nom)
     */
-    Terminus getTerminus() const;
+    Terminus * getTerminus() const;
 
     /**
      * @brief Getter du voisin du train
@@ -76,7 +76,7 @@ public:
 
     Station * getNextStation() const;
 
-    double getDistanceStation(const Station * station) const;
+    double getDistanceStation() const;
 
 /* ===== SETTER ===== */
 
@@ -92,7 +92,7 @@ public:
      * @param newCoordX : nouvelle coordonnée du train
      * @return void
     */
-    void moveX(const double &newCoordX);
+    void moveX(double d1, double &t1, double &t2, float &time);
 
     void setCoordX(const double &newCoordX);
 
@@ -117,7 +117,7 @@ public:
      */
     void setVoisin(Train* neighbor);
 
-    void setTerminus(Terminus &newTerminus);
+    void setTerminus(Terminus *newTerminus);
 
     void setStation(Station *nextStation);
 
@@ -136,12 +136,14 @@ public:
     * @param securiy
     * @return bool
     */
-    bool checkSecurityDistance(const int security) const {
-        if(getDistance() >= security) {
-            return true;
-        }
-        return false;
-    }
+    bool checkSecurityDistance(int security) const ;
+
+    bool trainArrived() const ;
+
+    void swapTerminus();
+
+    bool trainStationArrived() const;
+
 };
 
 #endif //CIR2_VAL_TRAIN_H

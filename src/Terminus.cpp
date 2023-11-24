@@ -4,7 +4,8 @@
 
 #include "../include/Terminus.h"
 
-Terminus::Terminus(const std::string& nom, int train_number, int coordT) : nom(nom), train_number(train_number), coordT(coordT) {}
+Terminus::Terminus(const std::string &nom, int train_number, int coordT) : nom(nom), train_number(train_number),
+                                                                           coordT(coordT) {}
 
 /* ==== GETTERS ==== */
 
@@ -18,4 +19,12 @@ const int Terminus::getTrainNumber() const {
 
 const int Terminus::getCoordT() const {
     return this->coordT;
+}
+
+Terminus *Terminus::getNextTerminus() const {
+    return this->nextTerminus;
+}
+
+void Terminus::setNextTerminus(Terminus* newTerminus) {
+    this->nextTerminus = newTerminus;
 }
