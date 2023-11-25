@@ -5,6 +5,11 @@
 
 #include "Terminus.h"
 #include "Station.h"
+#include <cmath>
+
+#define COEFF_SPEED  10.0
+#define MAX_SPEED 280.0
+#define DISTANCE_SECURITY 1000
 
 class Train {
 private:
@@ -12,10 +17,16 @@ private:
     double speed;
     Terminus *terminus;
     double coordX;
-    int nombrePassagers;
-    Train* voisin;
-    Station* station;
+    int passengersNumber;
+    Train* voisin{};
+    Station* station{};
     bool arrived;
+    double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
+    double accelerationDistance = pow(MAX_SPEED, 2) / (2 * COEFF_SPEED);
+    double V0 = sqrt(getNextStation()->getCoordX()) * COEFF_SPEED;
+    double accelerationDistance0 = pow(V0, 2) / 2 * COEFF_SPEED;
+    double time1 = MAX_SPEED / COEFF_SPEED;
+    double time2 = getNextStation()->getCoordX() / MAX_SPEED;
 
 public:
     /**
@@ -24,11 +35,11 @@ public:
      * @param speed : vitesse du train
      * @param terminus : terminus du train
      * @param coordX : coordonnée du train
-     * @param nombrePassagers : nombre de passagers dans le train
+     * @param passengersNumber : nombre de passagers dans le train
      * @param arrived : le train est-il arrivé ?
      * @return void
     */
-    Train(int id,double speed, Terminus* terminus, double coordX, int nombrePassagers, bool arrived);
+    Train(int id, double speed, Terminus* terminus, double coordX, int passengersNumber, bool arrived);
 
 /* ===== GETTER ===== */
 
@@ -78,6 +89,12 @@ public:
 
     double getDistanceStation() const;
 
+    double getHighestDistance() const;
+
+    double getAccelerationDistance() const;
+
+    double getNTime(int index) const;
+
 /* ===== SETTER ===== */
 
     /**
@@ -92,7 +109,7 @@ public:
      * @param newCoordX : nouvelle coordonnée du train
      * @return void
     */
-    void moveX(double d1, double &t1, double &t2, float &time);
+    void moveX(double d1, double t1, double t2, float &time);
 
     void setCoordX(const double &newCoordX);
 
@@ -121,22 +138,23 @@ public:
 
     void setStation(Station *nextStation);
 
+/* ===== METHODS ===== */
 
     /**
      * @brief ajuster la vitesse du train
      * @param deltaSpeed
      * @return void
      */
-    void addSpeed(const double &deltaSpeed);
+    void addSpeed(double refresh);
 
-    void subSpeed(const double &deltaSpeed);
+    void subSpeed(double refresh);
 
     /**
     * @brief Vérifie la distance de sécurité
     * @param securiy
     * @return bool
     */
-    bool checkSecurityDistance(int security) const ;
+    bool checkSecurityDistance() const ;
 
     bool trainArrived() const ;
 

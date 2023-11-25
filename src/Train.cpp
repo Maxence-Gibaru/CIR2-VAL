@@ -1,11 +1,8 @@
 #include "../include/Train.h"
-#include <cmath>
 
-#define COEFF_SPEED  10
-#define MAX_SPEED 280
 
-Train::Train(int id, double speed, Terminus *terminus, double coordX, int nombrePassagers, bool arrived)
-        : id(id), speed(speed), terminus(terminus), coordX(coordX), nombrePassagers(nombrePassagers),
+Train::Train(int id, double speed, Terminus *terminus, double coordX, int passengersNumber, bool arrived)
+        : id(id), speed(speed), terminus(terminus), coordX(coordX), passengersNumber(passengersNumber),
           arrived(arrived) {}
 
 /* ==== GETTERS ==== */
@@ -45,6 +42,25 @@ Station *Train::getNextStation() const {
     return this->station;
 }
 
+double Train::getHighestDistance() const {
+    return this->highestDistance;
+}
+
+double Train::getAccelerationDistance() const {
+    return this->accelerationDistance;
+}
+
+double Train::getNTime(int index) const {
+    if (index == 1) {
+        return this->time1;
+    }
+    else if (index == 2) {
+        return this->time2;
+    }
+    else {
+        std::cerr << "Wrong index !" << std::endl;
+    }
+}
 
 /* ==== SETTERS ==== */
 
@@ -69,10 +85,10 @@ void Train::setState(const bool &newState) {
 }
 
 void Train::setPassengers(const int &deltaPassengers) {
-    this->nombrePassagers += deltaPassengers;
-    if (this->nombrePassagers < 0) {
+    this->passengersNumber += deltaPassengers;
+    if (this->passengersNumber < 0) {
         std::cerr << "Passengers negatif" << std::endl;
-        this->nombrePassagers = 0;
+        this->passengersNumber = 0;
     }
 }
 
@@ -82,7 +98,8 @@ void Train::setStation(Station *nextStation) {
 
 /* ==== OTHER ==== */
 
-void Train::moveX(double d1, double &t1, double &t2, float &time) {
+// globalise args
+void Train::moveX(double d1, double t1, double t2, float &time) {
     if (getCoordX() <= d1) {
         std::cout << "ACCELERATION" << std::endl;
         this->coordX = 0.5 * COEFF_SPEED * pow(time, 2);
@@ -95,22 +112,23 @@ void Train::moveX(double d1, double &t1, double &t2, float &time) {
 
     if (getCoordX() >= getNextStation()->getCoordX() - d1) {
         std::cout << "DECELERATION" << std::endl;
-        this->coordX = -0.5 * COEFF_SPEED * pow(time - t2, 2) + MAX_SPEED * (time - t2) + MAX_SPEED * (t2 - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
+        this->coordX = -0.5 * COEFF_SPEED * pow(time - t2, 2) + MAX_SPEED * (time - t2) + MAX_SPEED * (t2 - t1) +
+                       0.5 * COEFF_SPEED * pow(t1, 2);
     }
 
 }
 
 
-void Train::addSpeed(const double &deltaSpeed) {
-    this->speed += deltaSpeed;
+void Train::addSpeed(double refresh) {
+    this->speed += COEFF_SPEED * refresh;
     if (this->speed < 0.0) {
         std::cerr << "Vitesse negatif" << std::endl;
         this->speed = 0.0;
     }
 }
 
-void Train::subSpeed(const double &deltaSpeed) {
-    this->speed -= deltaSpeed;
+void Train::subSpeed(double refresh) {
+    this->speed -= COEFF_SPEED * refresh;
     if (this->speed < 0.0) {
         std::cerr << "Vitesse negatif" << std::endl;
         this->speed = 0.0;
@@ -119,7 +137,6 @@ void Train::subSpeed(const double &deltaSpeed) {
 
 double Train::getDistanceStation() const {
     double distance = getNextStation()->getCoordX() - this->coordX;
-
     return std::abs(distance);
 }
 
@@ -130,8 +147,8 @@ bool Train::trainArrived() const {
     return false;
 }
 
-bool Train::checkSecurityDistance(const int security) const {
-    if (getDistance() >= security) {
+bool Train::checkSecurityDistance() const {
+    if (getDistance() >= DISTANCE_SECURITY) {
         return true;
     }
     return false;
@@ -144,7 +161,7 @@ void Train::swapTerminus() {
 }
 
 bool Train::trainStationArrived() const {
-    if(round(getCoordX()) == getNextStation()->getCoordX()) {
+    if (round(getCoordX()) == getNextStation()->getCoordX()) {
         return true;
     }
     return false;
