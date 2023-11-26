@@ -21,12 +21,6 @@ private:
     Train* voisin{};
     Station* station{};
     bool arrived;
-    double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
-    double accelerationDistance = pow(MAX_SPEED, 2) / (2 * COEFF_SPEED);
-    double V0 = sqrt(getNextStation()->getCoordX()) * COEFF_SPEED;
-    double accelerationDistance0 = pow(V0, 2) / 2 * COEFF_SPEED;
-    double time1 = MAX_SPEED / COEFF_SPEED;
-    double time2 = getNextStation()->getCoordX() / MAX_SPEED;
 
 public:
     /**
@@ -88,12 +82,15 @@ public:
     Station * getNextStation() const;
 
     double getDistanceStation() const;
-
+/*
     double getHighestDistance() const;
 
     double getAccelerationDistance() const;
 
-    double getNTime(int index) const;
+    double getTime1() const;
+
+    double getTime2() const;
+*/
 
 /* ===== SETTER ===== */
 
@@ -137,6 +134,8 @@ public:
     void setTerminus(Terminus *newTerminus);
 
     void setStation(Station *nextStation);
+
+
 
 /* ===== METHODS ===== */
 

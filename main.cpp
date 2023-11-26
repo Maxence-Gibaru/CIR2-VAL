@@ -3,16 +3,15 @@
 #include <thread>
 #include <chrono>
 #include <vector>
-#include <algorithm>
+#include <cmath>
 #include "Terminus.h"
 #include "Train.h"
 #include "Station.h"
-#include <cmath>
 #include "TrainControlFunction.h"
 
 #define DISTANCE_TOT 30000
 #define TRAIN_NUMBER 1
-#define REFRESH 1.0
+#define REFRESH 0.01
 
 using namespace std::chrono_literals;
 
@@ -28,7 +27,6 @@ int main() {
 
 
     std::mutex mtx_;
-
     std::vector<std::thread> threads;
     std::vector<Train> Trains;
     std::vector<Station> Stations;
@@ -40,17 +38,16 @@ int main() {
     Terminus CANTONS("4 Cantons", 0, DISTANCE_TOT);
     Line.push_back(CHU);
     Line.push_back(CANTONS);
-    Station LilleFlandres("Lille FLandres", 1, 10, false, 12000);
+    Station LilleFlandres("Lille FLandres", 1, 10, false, 2000);
     Station LilleEurope("Lille Europe", 2, 10, false, 25000);
     Stations.push_back(LilleFlandres);
     Stations.push_back(LilleEurope);
-
     initTrains(Trains, CHU, TRAIN_NUMBER);
     setVoisinList(Trains);
     initNextStation(Stations);
     setFirstStation(Stations, Trains);
-    initNextTerminus(Line);
 
+    initNextTerminus(Line);
     CANTONS.setNextTerminus(&CHU);
     CHU.setNextTerminus(&CANTONS);
 
@@ -63,34 +60,46 @@ int main() {
         threads.emplace_back(
                 [&time, &mtx_, &train, &Trains, &stopping, &Stations]() mutable -> auto {
                     while (!stopping) {
+                        double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
+                        double accelerationDistance = pow(MAX_SPEED, 2) / (2 * COEFF_SPEED);
+                        double V0 = sqrt(train.getNextStation()->getCoordX()* COEFF_SPEED) ;
+                        double accelerationDistance0 = pow(V0, 2) / (2 * COEFF_SPEED);
+                        double time1 = MAX_SPEED / COEFF_SPEED;
+                        double time2 = train.getNextStation()->getCoordX() / MAX_SPEED;
+
+
+                        //train.setHighestDistance();
                         std::cout << "------------------------------------------------------------------------"
                                   << std::endl;
 
+                        //std::cout << train.getHighestDistance() << std::endl;
 
                         time += REFRESH;
                         // find a way to stop using many "if" conditional statements
 
                         std::cout << "SECONDS: " << time << std::endl;
 
-                        if (train.getHighestDistance() <= train.getNextStation()->getCoordX()) {
-                            if (train.getCoordX() < train.getAccelerationDistance()) {
+                        std::cout << accelerationDistance0 << std::endl;
+
+                        /*
+                        if (highestDistance <= train.getNextStation()->getCoordX()) {
+                            if (train.getCoordX() < accelerationDistance) {
                                 train.addSpeed(REFRESH);
                             }
-                            if (train.getCoordX() >= train.getNextStation()->getCoordX() - train.getAccelerationDistance() and
+                            if (train.getCoordX() >= train.getNextStation()->getCoordX() - accelerationDistance and
                                 train.getSpeed() > 0) {
                                 train.subSpeed(REFRESH);
                             }
                         }
-                        /*
-                        else {
-                            if (train.getCoordX() < d1_V0) {
-                                train.addSpeed(REFRESH);
-                            }
-                            if (train.getCoordX() >= train.getNextStation()->getCoordX() - d1_V0 and
-                                train.getSpeed() > 0) {
-                                train.subSpeed(REFRESH);
-                            }
-                        }*/
+*/
+
+                        if (train.getCoordX() < accelerationDistance0) {
+                            train.addSpeed(REFRESH);
+                        }
+                        if (train.getCoordX() >= train.getNextStation()->getCoordX() - accelerationDistance0 and
+                            train.getSpeed() > 0) {
+                            train.subSpeed(REFRESH);
+                        }
 
 
                         mtx_.lock();
@@ -98,9 +107,11 @@ int main() {
                         std::cout << "Vitesse du train : " << train.getSpeed() << std::endl;
                         mtx_.unlock();
 
+
+
                         // make those 2 "if" one
                         if (train.getId() == 1 and !train.getState()) {
-                            train.moveX(train.getAccelerationDistance(), train.getNTime(1), train.getNTime(2), time);
+                            train.moveX(accelerationDistance0, time1, time2, time);
                         }
 
                         // find a way to swap the stations and continue driving with accelerations
@@ -117,8 +128,11 @@ int main() {
                         // faire en sorte que le cas getId == Trains.size() soit enlevé, c'est nul à chier
                         if (train.checkSecurityDistance() and train.getId() != Trains.size()) {
 
-                            train.moveX(train.getAccelerationDistance(), train.getNTime(1), train.getNTime(2), time);
+                            train.moveX(accelerationDistance0, time1, time2, time);
                         }
+
+
+
 
                         // When a train arrive, it swaps to another terminus in the other way
                         if (train.trainArrived()) {
@@ -134,7 +148,7 @@ int main() {
 
                         // delay between threads
 
-                        std::this_thread::sleep_for(1s);
+                        std::this_thread::sleep_for(0.01s);
                     }
                     std::cout << std::endl;
                 });
@@ -144,4 +158,6 @@ int main() {
         if (thread.joinable())
             thread.join();
     }
+
+    return EXIT_SUCCESS;
 }

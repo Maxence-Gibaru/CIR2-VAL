@@ -3,7 +3,9 @@
 
 Train::Train(int id, double speed, Terminus *terminus, double coordX, int passengersNumber, bool arrived)
         : id(id), speed(speed), terminus(terminus), coordX(coordX), passengersNumber(passengersNumber),
-          arrived(arrived) {}
+          arrived(arrived) {
+
+}
 
 /* ==== GETTERS ==== */
 
@@ -42,6 +44,7 @@ Station *Train::getNextStation() const {
     return this->station;
 }
 
+/*
 double Train::getHighestDistance() const {
     return this->highestDistance;
 }
@@ -50,18 +53,14 @@ double Train::getAccelerationDistance() const {
     return this->accelerationDistance;
 }
 
-double Train::getNTime(int index) const {
-    if (index == 1) {
-        return this->time1;
-    }
-    else if (index == 2) {
-        return this->time2;
-    }
-    else {
-        std::cerr << "Wrong index !" << std::endl;
-    }
+double Train::getTime1() const {
+    return this->time1;
 }
 
+double Train::getTime2() const {
+    return this->time2;
+}
+*/
 /* ==== SETTERS ==== */
 
 void Train::setCoordX(const double &newCoordX) {
@@ -100,22 +99,21 @@ void Train::setStation(Station *nextStation) {
 
 // globalise args
 void Train::moveX(double d1, double t1, double t2, float &time) {
-    if (getCoordX() <= d1) {
+    if (coordX <= d1) {
         std::cout << "ACCELERATION" << std::endl;
         this->coordX = 0.5 * COEFF_SPEED * pow(time, 2);
     }
 
-    if (getCoordX() > d1 and getCoordX() < getNextStation()->getCoordX()) {
+    if (coordX > d1 and getCoordX() < getNextStation()->getCoordX()) {
         std::cout << "CONSTANT" << std::endl;
         this->coordX = MAX_SPEED * (time - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
     }
 
-    if (getCoordX() >= getNextStation()->getCoordX() - d1) {
+    if (coordX >= getNextStation()->getCoordX() - d1) {
         std::cout << "DECELERATION" << std::endl;
         this->coordX = -0.5 * COEFF_SPEED * pow(time - t2, 2) + MAX_SPEED * (time - t2) + MAX_SPEED * (t2 - t1) +
                        0.5 * COEFF_SPEED * pow(t1, 2);
     }
-
 }
 
 
@@ -166,6 +164,9 @@ bool Train::trainStationArrived() const {
     }
     return false;
 }
+
+
+
 
 
 
