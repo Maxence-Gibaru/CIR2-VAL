@@ -1,7 +1,9 @@
 #include "../include/Train.h"
 
-Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, int passengersNumber, bool arrived)
-        : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), passengersNumber(passengersNumber),
+Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
+             int passengersNumber, bool arrived)
+        : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), totalCoordX(totalCoordX),
+          passengersNumber(passengersNumber),
           arrived(arrived), passengersCapacity(MAX_PASSENGERS_CAPACITY) {
 }
 
@@ -35,7 +37,7 @@ double Train::getDistance() const {
     if (getCoordX() == 0) {
         return 0;
     }
-    return std::abs(this->coordX - this->voisin->getCoordX());
+    return std::abs(((this->coordX) + getTotalCoordX() - (this->voisin->getCoordX()) + this->voisin->getTotalCoordX()));
 }
 
 Station *Train::getNextStation() const {
@@ -43,7 +45,7 @@ Station *Train::getNextStation() const {
 }
 
 double Train::getDistanceStation() const {
-    double distance = getNextStation()->getCoordX() - this->coordX;
+    double distance = getNextStation()->getCoordX() - getTotalCoordX() - this->coordX;
     return std::abs(distance);
 }
 
@@ -51,9 +53,14 @@ double Train::getAccelerationDistance() {
     if (fullSpeed()) {
         this->accelerationDistance = pow(MAX_SPEED, 2) / (2 * COEFF_SPEED);
     } else {
-        this->accelerationDistance = pow(sqrt(getNextStation()->getCoordX() * COEFF_SPEED), 2) / (2 * COEFF_SPEED);
+        this->accelerationDistance =
+                pow(sqrt((getNextStation()->getCoordX() - getTotalCoordX()) * COEFF_SPEED), 2) / (2 * COEFF_SPEED);
     }
     return this->accelerationDistance;
+}
+
+double Train::getTotalCoordX() const {
+    return this->totalCoordX;
 }
 
 /* ==== SETTERS ==== */
@@ -94,41 +101,53 @@ void Train::setStation(Station *nextStation) {
     this->station = nextStation;
 }
 
+void Train::setTime(const double &newTime) {
+    this->time = newTime;
+}
+
+void Train::updateTotalCoordX() {
+    this->totalCoordX += this->coordX;
+}
+
 /* ==== OTHER ==== */
 
 // globalise args
-void Train::moveX(double d1, double t1, double t2) {
+void Train::moveX() {
+    // fonction super important à optimiser !!!!
     this->time += REFRESH;
-    double NEW_MAX_SPEED = sqrt(getNextStation()->getCoordX() * COEFF_SPEED);
+    double NEW_MAX_SPEED = sqrt((getNextStation()->getCoordX() - getTotalCoordX()) * COEFF_SPEED);
+    double time1 = MAX_SPEED / COEFF_SPEED;
+    double time2 = (getNextStation()->getCoordX() - getTotalCoordX()) / MAX_SPEED;
 
-
-    if(fullSpeed()) {
-        if (coordX <= d1) {
-            std::cout << "ACCELERATION" << std::endl;
+    if (fullSpeed()) {
+        if (coordX <= getAccelerationDistance()) {
+            //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
         }
 
-        if (coordX > d1 and getCoordX() < getNextStation()->getCoordX()) {
-            std::cout << "CONSTANT" << std::endl;
-            this->coordX = MAX_SPEED * (this->time - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
+        if (coordX > getAccelerationDistance() and getCoordX() < getNextStation()->getCoordX() - getTotalCoordX()) {
+            //std::cout << "CONSTANT" << std::endl;
+            this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
         }
 
-        if (coordX >= getNextStation()->getCoordX() - d1) {
-            std::cout << "DECELERATION" << std::endl;
+        if (coordX >= (getNextStation()->getCoordX() - getTotalCoordX()) - getAccelerationDistance()) {
+            //std::cout << "DECELERATION" << std::endl;
             this->coordX =
-                    -0.5 * COEFF_SPEED * pow(this->time - t2, 2) + MAX_SPEED * (this->time - t2) + MAX_SPEED * (t2 - t1) +
-                    0.5 * COEFF_SPEED * pow(t1, 2);
+                    -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
+                    MAX_SPEED * (time2 - time1) +
+                    0.5 * COEFF_SPEED * pow(time1, 2);
         }
     } else {
-        t1 = NEW_MAX_SPEED / COEFF_SPEED;
-        if (coordX < d1) {
-            std::cout << "ACCELERATION" << std::endl;
+        time1 = NEW_MAX_SPEED / COEFF_SPEED;
+        if (coordX < getAccelerationDistance()) {
+            //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
         }
 
-        if (coordX >= getNextStation()->getCoordX() - d1) {
-            std::cout << "DECELERATION" << std::endl;
-            this->coordX = -0.5 * COEFF_SPEED * pow(this->time - t1, 2) + NEW_MAX_SPEED * (this->time - t1) + 0.5 * COEFF_SPEED * pow(t1, 2);
+        if (coordX >= (getNextStation()->getCoordX() - getTotalCoordX()) - getAccelerationDistance()) {
+            //std::cout << "DECELERATION" << std::endl;
+            this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
+                           0.5 * COEFF_SPEED * pow(time1, 2);
         }
     }
 
@@ -151,13 +170,15 @@ void Train::subSpeed(double refresh) {
 }
 
 bool Train::trainArrived() const {
-    if (getCoordX() == getTerminus()->getCoordT()) {
+    if (round(getCoordX() + getTotalCoordX()) == getTerminus()->getCoordT()) {
+        std::cout << "Train terminus" << std::endl;
         return true;
     }
     return false;
 }
 
 bool Train::checkSecurityDistance() const {
+
     if (getDistance() >= DISTANCE_SECURITY) {
         return true;
     }
@@ -167,10 +188,12 @@ bool Train::checkSecurityDistance() const {
 void Train::swapTerminus() {
     setTerminus(getTerminus()->getNextTerminus());
     setCoordX(0);
+    setTime(0.0);
+    this->totalCoordX = 0.0;
 }
 
 bool Train::trainStationArrived() const {
-    if (round(getCoordX()) == getNextStation()->getCoordX()) {
+    if (round(getCoordX() + getTotalCoordX()) == getNextStation()->getCoordX()) {
         std::cout << "Arrêt du train " << getId() << " à la gare " << getNextStation()->getNom() << std::endl;
         return true;
     }
@@ -178,11 +201,35 @@ bool Train::trainStationArrived() const {
 }
 
 bool Train::fullSpeed() const {
-    if (highestDistance <= getNextStation()->getCoordX()) {
+    if (highestDistance <= (getNextStation()->getCoordX() - getTotalCoordX())) {
         return true;
     }
     return false;
 }
+
+void Train::updateSpeed() {
+    if (fullSpeed()) {
+        if (getCoordX() < getAccelerationDistance()) {
+            addSpeed(REFRESH);
+        }
+        if (getCoordX() >= (getNextStation()->getCoordX() - getTotalCoordX()) - getAccelerationDistance() and
+            getSpeed() > 0) {
+            subSpeed(REFRESH);
+        }
+    } else {
+        {
+            if (getCoordX() < getAccelerationDistance() and getSpeed() < MAX_SPEED) {
+                addSpeed(REFRESH);
+            }
+            if (getCoordX() >= (getNextStation()->getCoordX() - getTotalCoordX()) - getAccelerationDistance() and
+                getSpeed() > 0) {
+                subSpeed(REFRESH);
+            }
+        }
+    }
+}
+
+
 
 void Train::print() const {
 
@@ -191,7 +238,7 @@ void Train::print() const {
     std::cout << "Arrive dans : " << getDistanceStation() << " m " << "à la station " << getNextStation()->getNom()
               << std::endl;
     std::cout << "Speed : " << getSpeed() << " m/s " << std::endl;
-    std::cout << "Train n°" << getId() << " : distance |" << getCoordX() << " m |" << std::endl;
+    std::cout << "Train n°" << getId() << " : distance |" << getCoordX() + getTotalCoordX() << " m |" << std::endl;
     std::cout << "Voisin : " << getVoisin()->getId() << std::endl;
     std::cout << "Terminus : " << getTerminus()->getNom() << std::endl;
 }

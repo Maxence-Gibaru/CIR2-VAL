@@ -18,6 +18,7 @@ private:
     double speed;
     Terminus *terminus;
     double coordX;
+    double totalCoordX;
     int passengersNumber;
     Train *voisin{};
     Station *station{};
@@ -39,7 +40,7 @@ public:
      * @param accelerationDistance : distance que met le train jusqu'à sa vitesse max
      * @return void
     */
-    Train(int id, double speed, float time, Terminus *terminus, double coordX, int passengersNumber, bool arrived);
+    Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber, bool arrived);
 
     double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
 
@@ -58,10 +59,16 @@ public:
     double getSpeed() const;
 
     /**
-     * @brief Getter des coordonnées du train
+     * @brief Getter des coordonnées entre 2 stations du train
      * @return double : coordonnées du train
     */
     double getCoordX() const;
+
+    /**
+      * @brief Getter des coordonnées totales du train
+      * @return double : coordonnées du train
+    */
+    double getTotalCoordX() const;
 
     /**
      * @brief Getter le terminus du train
@@ -100,9 +107,9 @@ public:
     double getDistanceStation() const;
 
     /**
-  * @brief Getter de la distance d'acceleration
-  * @return double : distance d'acceleration
- */
+      * @brief Getter de la distance d'acceleration
+      * @return double : distance d'acceleration
+     */
     double getAccelerationDistance() ;
 
 /* ===== SETTER ===== */
@@ -119,7 +126,7 @@ public:
      * @param newCoordX : nouvelle coordonnée du train
      * @return void
     */
-    void moveX(double d1, double t1, double t2);
+    void moveX();
 
     /**
      * @brief Setter des coordonnées du train
@@ -169,6 +176,13 @@ public:
      */
     void setStation(Station *nextStation);
 
+    /**
+     * @brief Setter de la station du train
+     * @param nextStation : prochaine station du train
+     * @return void
+     */
+    void setTime(const double &newTime);
+
 
 /* ===== METHODS ===== */
 
@@ -215,6 +229,17 @@ public:
      * @return bool, true si le train est arrivé à la station
      */
     bool fullSpeed() const;
+
+    /**
+     * @brief augmente ou diminue la vitesse en fonction de la position du train
+     */
+    void updateSpeed();
+
+    /**
+     * @brief met à jour les coordonnées totales du train
+     */
+    void updateTotalCoordX();
+
 
 };
 

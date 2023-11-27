@@ -10,7 +10,7 @@
 #include "TrainControlFunction.h"
 #include "TrainGraphics.h"
 
-#define DISTANCE_TOT 15000
+#define DISTANCE_TOT 3000
 #define TRAIN_NUMBER 1
 
 
@@ -18,7 +18,9 @@ using namespace std::chrono_literals;
 
 /*
  * TODO
- * - [ ] Gérer l'accélération d'une station à une autre
+ * - [x] Gérer l'accélération d'une station à une autre
+ * - [X] Gérer les distance parcourues entre chaque train
+ * - [ ] Mixer Terminus et Station
  * - [ ] Implémenter les passagers avec temps d'arrêts aux stations
  * - [ ] Optimisation et cleanage du code
  * - [ ] adaptation des vitesses et temps d'arrêt en fonction de la distance de sécurité
@@ -42,20 +44,30 @@ int main() {
 
     // make function that globalises the process
 
+
     // Implementation of Terminus
     Terminus CHU("CHU-Eurasanté", 0, DISTANCE_TOT);
     Terminus CANTONS("4 Cantons", 0, DISTANCE_TOT);
-    Line.push_back(CHU);
     Line.push_back(CANTONS);
+    Line.push_back(CHU);
 
     // Implementation of Stations
-    Station LilleFlandres("Lille FLandres", 1, 10, false, 100); // gérer le cas où elle est à 100
-    Station LilleEurope("Lille Europe", 2, 10, false, 25000);
+    Station PorteDesPostes("Porte des Postes", 1, 10, false, 100);
+    Station Wazemmes("Wazemmes", 1, 10, false, 500);
+    Station Gambetta("Gambetta", 1, 10, false, 1100);
+    Station Republique("République Beaux-Arts", 1, 10, false, 1900);
+    Station Rihour("Rihour", 2, 10, false, 2500);
+    Station LilleFlandres("Lille FLandres", 2, 10, false, DISTANCE_TOT);
+    Stations.push_back(PorteDesPostes);
+    Stations.push_back(Wazemmes);
+    Stations.push_back(Gambetta);
+    Stations.push_back(Republique);
+    Stations.push_back(Rihour);
     Stations.push_back(LilleFlandres);
-    Stations.push_back(LilleEurope);
+
 
     // Definition of trains
-    initTrains(Trains, CHU, TRAIN_NUMBER);
+    initTrains(Trains, CANTONS, TRAIN_NUMBER);
 
     // Set each train's neighbour to each other
     setVoisinList(Trains);
@@ -77,62 +89,48 @@ int main() {
         threads.emplace_back(
                 [&mtx_, &train, &Trains, &stopping, &Stations]() mutable -> auto {
                     while (!stopping) {
-                        // mettre tout ça ailleurs
-                        double time1 = MAX_SPEED / COEFF_SPEED;
-                        double time2 = train.getNextStation()->getCoordX() / MAX_SPEED;
-
                         /* ===== MOVE ===== */
 
                         // make those 2 "if" one
                         if (train.getId() == 1) {
-                            train.moveX(train.getAccelerationDistance(), time1, time2);
-
+                            train.moveX();
                         }
+
                         // faire en sorte que le cas getId == Trains.size() soit enlevé, c'est nul à chier
                         if (train.checkSecurityDistance() and train.getId() != Trains.size()) {
-                            train.getVoisin()->moveX(train.getAccelerationDistance(), time1, time2);
+                            train.getVoisin()->moveX();
                         }
 
                         /* ===== SPEED ===== */
 
-                        // find a way to stop using many "if" conditional statements
-                        if (train.fullSpeed()) {
-                            std::cout << "HIGH" << std::endl;
-                            if (train.getCoordX() < train.getAccelerationDistance()) {
-                                train.addSpeed(REFRESH);
-                            }
-                            if (train.getCoordX() >= train.getNextStation()->getCoordX() - train.getAccelerationDistance() and
-                                train.getSpeed() > 0) {
-                                train.subSpeed(REFRESH);
-                            }
-                        } else {
-                            std::cout << "LOW" << std::endl;
-                            if (train.getCoordX() < train.getAccelerationDistance() and train.getSpeed() < MAX_SPEED) {
-                                train.addSpeed(REFRESH);
-                            }
-                            if (train.getCoordX() >= train.getNextStation()->getCoordX() - train.getAccelerationDistance() and
-                                train.getSpeed() > 0) {
-                                train.subSpeed(REFRESH);
-                            }
-                        }
+                        // en vrai c'est totalement indépendant mdrr
+                        train.updateSpeed();
 
 
                         /* ===== MANAGE ===== */
 
                         // find a way to swap the stations and continue driving with accelerations
-                        if (train.trainStationArrived()) {
+                        if (train.trainStationArrived() and round(train.getNextStation()->getCoordX()) != round(train.getTerminus()->getCoordT())) {
                             train.setNextStation();
+                            train.updateTotalCoordX();
+                            train.setCoordX(0);
+                            train.setTime(0.0);
+
+
                         }
 
                         // When a train arrive, it swaps to another terminus in the other way
+
+                        // ça marche pas pour l'instant
                         if (train.trainArrived()) {
                             train.swapTerminus();
-                            setFirstStation(Stations, Trains);
+                            //setFirstStation(Stations, Trains);
                         }
 
                         /* ===== DETAILS ===== */
 
                         mtx_.lock();
+//                        std::cout << "DISTANCE : " << train.getDistance()  << std::endl;
                         train.print();
                         mtx_.unlock();
 

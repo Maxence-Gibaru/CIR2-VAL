@@ -33,7 +33,7 @@ void initNextStation(std::vector<Station> &Stations) {
 
 void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     for (int i = 1; i <= n; i++) {
-        Train myTrain(i, 0.0, 0.0, &myTerminus, 0.0, 10, false);
+        Train myTrain(i, 0.0, 0.0, &myTerminus, 0.0, 0.0, 10, false);
         Trains.push_back(myTrain);
     }
 }
