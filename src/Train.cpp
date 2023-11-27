@@ -1,9 +1,10 @@
 #include "../include/Train.h"
 
+#define MAX_PASSENGERS_CAPACITY 200
 
 Train::Train(int id, double speed, Terminus *terminus, double coordX, int passengersNumber, bool arrived)
         : id(id), speed(speed), terminus(terminus), coordX(coordX), passengersNumber(passengersNumber),
-          arrived(arrived) {
+          arrived(arrived), passengersCapacity(MAX_PASSENGERS_CAPACITY) {
 
 }
 
@@ -44,23 +45,11 @@ Station *Train::getNextStation() const {
     return this->station;
 }
 
-/*
-double Train::getHighestDistance() const {
-    return this->highestDistance;
+double Train::getDistanceStation() const {
+    double distance = getNextStation()->getCoordX() - this->coordX;
+    return std::abs(distance);
 }
 
-double Train::getAccelerationDistance() const {
-    return this->accelerationDistance;
-}
-
-double Train::getTime1() const {
-    return this->time1;
-}
-
-double Train::getTime2() const {
-    return this->time2;
-}
-*/
 /* ==== SETTERS ==== */
 
 void Train::setCoordX(const double &newCoordX) {
@@ -133,11 +122,6 @@ void Train::subSpeed(double refresh) {
     }
 }
 
-double Train::getDistanceStation() const {
-    double distance = getNextStation()->getCoordX() - this->coordX;
-    return std::abs(distance);
-}
-
 bool Train::trainArrived() const {
     if (getCoordX() == getTerminus()->getCoordT()) {
         return true;
@@ -164,6 +148,9 @@ bool Train::trainStationArrived() const {
     }
     return false;
 }
+
+
+
 
 
 

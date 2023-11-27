@@ -3,9 +3,6 @@
 #ifndef CIR2_PROJET_VAL_TERMINUS_H
 #define CIR2_PROJET_VAL_TERMINUS_H
 
-/**
- * @brief Classe représentant un terminus
-*/
 class Terminus {
 private:
     std::string nom;
@@ -18,9 +15,12 @@ public:
      * Constructeur de la classe Terminus
      * @param nom : nom du terminus
      * @param train_number : nombre de train ayant atteint le terminus
-     * @return void
+     * @param coordT : coordonnées du terminus
+     * @param nextTerminus : prochain terminus
     */
     Terminus(const std::string& nom, int train_number, int coordT);
+
+/* ===== GETTER ===== */
 
     /**
      * @brief Getter du nom du terminus
@@ -34,13 +34,26 @@ public:
     */
     const int getTrainNumber() const;
 
+    /**
+     * @brief Getter des coordonnées du terminus
+     * @return int : coordonnées du terminus
+    */
     const int getCoordT() const;
 
+    /**
+     * @brief Getter du prochain terminus
+     * @return Terminus* : prochain terminus
+    */
     Terminus * getNextTerminus() const;
 
+/* ===== SETTER ===== */
 
+    /**
+     * @brief Setter du prochain terminus
+     * @param nextTerminus : prochain terminus
+     * @return void
+    */
     void setNextTerminus(Terminus* nextTerminus) ;
-
 
     /**
      * @brief Incrémente le nombre de train ayant atteint le terminus

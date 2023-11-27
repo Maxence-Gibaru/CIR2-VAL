@@ -11,7 +11,7 @@
 
 #define DISTANCE_TOT 30000
 #define TRAIN_NUMBER 1
-#define REFRESH 0.01
+#define REFRESH 1
 
 using namespace std::chrono_literals;
 
@@ -67,7 +67,6 @@ int main() {
                         double time1 = MAX_SPEED / COEFF_SPEED;
                         double time2 = train.getNextStation()->getCoordX() / MAX_SPEED;
 
-
                         //train.setHighestDistance();
                         std::cout << "------------------------------------------------------------------------"
                                   << std::endl;
@@ -99,7 +98,7 @@ int main() {
                         if (train.getCoordX() >= train.getNextStation()->getCoordX() - accelerationDistance0 and
                             train.getSpeed() > 0) {
                             train.subSpeed(REFRESH);
-                        }
+                         }
 
 
                         mtx_.lock();
@@ -140,6 +139,9 @@ int main() {
                             setFirstStation(Stations, Trains);
 
                         }
+
+
+
 
                         mtx_.lock();
                         std::cout << train.getId() << " : |" << train.getCoordX() << " | "

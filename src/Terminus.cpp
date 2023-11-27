@@ -25,6 +25,8 @@ Terminus *Terminus::getNextTerminus() const {
     return this->nextTerminus;
 }
 
+/* ==== SETTERS ==== */
+
 void Terminus::setNextTerminus(Terminus* newTerminus) {
     this->nextTerminus = newTerminus;
 }
