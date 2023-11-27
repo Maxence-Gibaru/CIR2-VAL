@@ -124,7 +124,7 @@ int main() {
                         // ça marche pas pour l'instant
                         if (train.trainArrived()) {
                             train.swapTerminus();
-                            //setFirstStation(Stations, Trains);
+                            setFirstStation(Stations, Trains);
                         }
 
                         /* ===== DETAILS ===== */
@@ -135,7 +135,7 @@ int main() {
                         mtx_.unlock();
 
                         // delay between threads
-                        std::this_thread::sleep_for(1s);
+                        std::this_thread::sleep_for(0.1s);
                         std::cout << std::endl;
                     }
                 });
