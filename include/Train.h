@@ -3,14 +3,14 @@
 
 #include <iostream>
 #include <cmath>
-
 #include "Terminus.h"
 #include "Station.h"
 
-#define COEFF_SPEED  10.0
-#define MAX_SPEED 280.0
-#define DISTANCE_SECURITY 1000
+#define COEFF_SPEED 1.0
+#define MAX_SPEED 23.0
+#define DISTANCE_SECURITY 300
 #define MAX_PASSENGERS_CAPACITY 200
+#define REFRESH 1
 
 class Train {
 private:
@@ -19,23 +19,29 @@ private:
     Terminus *terminus;
     double coordX;
     int passengersNumber;
-    Train* voisin{};
-    Station* station{};
+    Train *voisin{};
+    Station *station{};
     bool arrived;
+    float time;
     int passengersCapacity;
+    double accelerationDistance;
 
 public:
     /**
      * @brief Contructeur de la classe Train
      * @param id : id du train
      * @param speed : vitesse du train
+     * @param time : temps de parcours du train
      * @param terminus : terminus du train
      * @param coordX : coordonnée du train
      * @param passengersNumber : nombre de passagers dans le train
      * @param arrived : le train est-il arrivé ?
+     * @param accelerationDistance : distance que met le train jusqu'à sa vitesse max
      * @return void
     */
-    Train(int id, double speed, Terminus* terminus, double coordX, int passengersNumber, bool arrived);
+    Train(int id, double speed, float time, Terminus *terminus, double coordX, int passengersNumber, bool arrived);
+
+    double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
 
 /* ===== GETTER ===== */
 
@@ -61,13 +67,13 @@ public:
      * @brief Getter le terminus du train
      * @return Terminus : terminus du train (le nom)
     */
-    Terminus * getTerminus() const;
+    Terminus *getTerminus() const;
 
     /**
      * @brief Getter du voisin du train
      * @return Train* : récupérer l'id
      */
-    Train* getVoisin() const;
+    Train *getVoisin() const;
 
     /**
     * @brief Getter de l'etat d'arrive du train
@@ -85,22 +91,19 @@ public:
      * @brief getter de la prochaine station ou le train va arriver
      * @return Station* : prochaine station ( pointe sur la station suivante )
     */
-    Station * getNextStation() const;
+    Station *getNextStation() const;
 
     /**
      * @brief Getter de la distance entre le train et la station
      * @return double : distance entre le train et la station
     */
     double getDistanceStation() const;
-/*
-    double getHighestDistance() const;
 
-    double getAccelerationDistance() const;
-
-    double getTime1() const;
-
-    double getTime2() const;
-*/
+    /**
+  * @brief Getter de la distance d'acceleration
+  * @return double : distance d'acceleration
+ */
+    double getAccelerationDistance() ;
 
 /* ===== SETTER ===== */
 
@@ -116,7 +119,7 @@ public:
      * @param newCoordX : nouvelle coordonnée du train
      * @return void
     */
-    void moveX(double d1, double t1, double t2, float &time);
+    void moveX(double d1, double t1, double t2);
 
     /**
      * @brief Setter des coordonnées du train
@@ -144,7 +147,7 @@ public:
      * @param neighbor
      * @return void
      */
-    void setVoisin(Train* neighbor);
+    void setVoisin(Train *neighbor);
 
     /**
      * @brief Setter du terminus du train
@@ -155,18 +158,23 @@ public:
 
     /**
      * @brief Setter de la station du train
+     * @return void
+     */
+    void setNextStation();
+
+    /**
+     * @brief Setter de la station du train
      * @param nextStation : prochaine station du train
      * @return void
      */
     void setStation(Station *nextStation);
 
 
-
 /* ===== METHODS ===== */
 
     /**
      * @brief ajuster la vitesse du train
-     * @param deltaSpeed
+     * @param refresh
      * @return void
      */
     void addSpeed(double refresh);
@@ -175,16 +183,15 @@ public:
 
     /**
     * @brief Vérifie la distance de sécurité
-    * @param securiy, distance de sécurité
     * @return bool, true si la distance de sécurité est respectée
     */
-    bool checkSecurityDistance() const ;
+    bool checkSecurityDistance() const;
 
     /**
      * @brief Vérifie si le train est arrivé
      * @return bool, true si le train est arrivé
      */
-    bool trainArrived() const ;
+    bool trainArrived() const;
 
     /**
      * @brief change le terminus du train
@@ -197,6 +204,17 @@ public:
      * @return bool, true si le train est arrivé à la station
      */
     bool trainStationArrived() const;
+
+    /**
+     * @brief print les informations du train
+     */
+    void print() const;
+
+    /**
+     * @brief verifie si le train est arrivé à la station
+     * @return bool, true si le train est arrivé à la station
+     */
+    bool fullSpeed() const;
 
 };
 
