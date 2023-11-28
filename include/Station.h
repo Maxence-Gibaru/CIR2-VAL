@@ -76,6 +76,13 @@ public:
     */
     void setNeighbour(Station * newNeighbour);
 
+    /**
+    * @brief Setter du nombre de passagers dans la station
+    * @param newCoordX : nouveau nombre de passagers dans la station
+    */
+    void setCoordX(const double &newCoordX);
+
+
 };
 
 #endif //CIR2_VAL_STATION_H

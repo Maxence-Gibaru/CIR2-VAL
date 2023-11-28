@@ -8,6 +8,7 @@ private:
     std::string nom;
     int train_number;
     int coordT;
+    bool direction;
     Terminus * nextTerminus;
 
 public:
@@ -18,7 +19,7 @@ public:
      * @param coordT : coordonnées du terminus
      * @param nextTerminus : prochain terminus
     */
-    Terminus(const std::string& nom, int train_number, int coordT);
+    Terminus(const std::string& nom, int train_number, int coordT, bool direction);
 
 /* ===== GETTER ===== */
 
@@ -45,6 +46,8 @@ public:
      * @return Terminus* : prochain terminus
     */
     Terminus * getNextTerminus() const;
+
+    bool getDirection() const;
 
 /* ===== SETTER ===== */
 

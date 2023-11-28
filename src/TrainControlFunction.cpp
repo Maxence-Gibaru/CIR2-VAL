@@ -19,17 +19,36 @@ void setVoisinList(std::vector<Train> &Trains) {
     }
 }
 
-void setFirstStation(std::vector<Station> &Stations, std::vector<Train> &myList) {
+void setStation(std::vector<Station> &Stations, std::vector<Train> &myList, bool first) {
+    // à changer, ne marche que pour un seul train
     for (auto &train: myList) {
-        train.setStation(&Stations[0]);
+        if (train.getTerminus()->getDirection()) {
+            train.setStation(&Stations[1]);
+            if (!first) {
+                for (auto &station: Stations) {
+                    station.setCoordX(DISTANCE_TOT - station.getCoordX());
+                }
+            }
+        } else {
+            train.setStation(&Stations[Stations.size() - 2]);
+            for (auto &station: Stations) {
+                station.setCoordX(DISTANCE_TOT - station.getCoordX());
+            }
+        }
+    }
+
+}
+
+void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus) {
+    for (int i = 0; i < Stations.size(); i++) {
+        if (myTerminus->getDirection()) {
+            Stations[i].setNeighbour(&Stations[i + 1]);
+        } else {
+            Stations[i].setNeighbour(&Stations[i - 1]);
+        }
     }
 }
 
-void initNextStation(std::vector<Station> &Stations) {
-    for (int i = 0; i < Stations.size(); i++) {
-        Stations[i].setNeighbour(&Stations[i + 1]);
-    }
-}
 
 void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     for (int i = 1; i <= n; i++) {

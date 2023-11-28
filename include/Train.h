@@ -11,6 +11,7 @@
 #define DISTANCE_SECURITY 300
 #define MAX_PASSENGERS_CAPACITY 200
 #define REFRESH 1
+#define DISTANCE_TOT 3000
 
 class Train {
 private:

@@ -37,5 +37,8 @@ void Station::setPresence(const bool &newPresence) {
 
 void Station::setNeighbour(Station *newNeighbour) {
         this->neighbour = newNeighbour;
-    }
+}
 
+void Station::setCoordX(const double &newCoordX) {
+    this->coordX = newCoordX;
+}

@@ -9,8 +9,10 @@
 #include "Station.h"
 #include "TrainControlFunction.h"
 #include "TrainGraphics.h"
+#include <string>
+#include <ctime>
 
-#define DISTANCE_TOT 3000
+
 #define TRAIN_NUMBER 1
 
 
@@ -20,7 +22,9 @@ using namespace std::chrono_literals;
  * TODO
  * - [x] Gérer l'accélération d'une station à une autre
  * - [X] Gérer les distance parcourues entre chaque train
- * - [ ] Mixer Terminus et Station
+ * - [ ] Implémenter les heures de la journée
+ * - [ ] Mixer Terminus et Station, héritage ??
+ *   [ ] lier la vitesse avec la fonction train.move()
  * - [ ] Implémenter les passagers avec temps d'arrêts aux stations
  * - [ ] Optimisation et cleanage du code
  * - [ ] adaptation des vitesses et temps d'arrêt en fonction de la distance de sécurité
@@ -32,6 +36,24 @@ using namespace std::chrono_literals;
 
 
 int main() {
+
+    /*   // current date/time based on current system
+   time_t now = time(0);
+
+   cout << "Number of sec since January 1,1970 is:: " << now << endl;
+
+   tm *ltm = localtime(&now);
+
+   // print various components of tm structure.
+   cout << "Year:" << 1900 + ltm->tm_year<<endl;
+   cout << "Month: "<< 1 + ltm->tm_mon<< endl;
+   cout << "Day: "<<  ltm->tm_mday << endl;
+   cout << "Time: "<< 5+ltm->tm_hour << ":";
+   cout << 30+ltm->tm_min << ":";
+   cout << ltm->tm_sec << endl;*/
+
+
+
 
     //display();
 
@@ -46,41 +68,47 @@ int main() {
 
 
     // Implementation of Terminus
-    Terminus CHU("CHU-Eurasanté", 0, DISTANCE_TOT);
-    Terminus CANTONS("4 Cantons", 0, DISTANCE_TOT);
-    Line.push_back(CANTONS);
-    Line.push_back(CHU);
+    std::vector<std::tuple<std::string, int, double, bool>> dataTerminus = {
+            {"CHU-Eurasanté", 0, DISTANCE_TOT, 0},
+            {"4 Cantons", 0, DISTANCE_TOT, 1}
+    };
+
+    for(auto &data : dataTerminus) {
+        Line.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
+    }
+
+    std::vector<std::tuple<std::string, int, int, bool, double>> dataStations = {
+            {"Terminus CHU", 2, 0, false, 0},
+            {"Porte des Postes", 1, 10, false, 100},
+            {"Wazemmes", 1, 10, false, 500},
+            {"Gambetta", 1, 10, false, 1100},
+            {"République Beaux-Arts", 1, 10, false, 1900},
+            {"Rihour", 2, 10, false, 2500},
+            {"Lille FLandres", 2, 10, false, 2900},
+            {"Terminus CANTONS", 2, 0, false, DISTANCE_TOT}
+    };
 
     // Implementation of Stations
-    Station PorteDesPostes("Porte des Postes", 1, 10, false, 100);
-    Station Wazemmes("Wazemmes", 1, 10, false, 500);
-    Station Gambetta("Gambetta", 1, 10, false, 1100);
-    Station Republique("République Beaux-Arts", 1, 10, false, 1900);
-    Station Rihour("Rihour", 2, 10, false, 2500);
-    Station LilleFlandres("Lille FLandres", 2, 10, false, DISTANCE_TOT);
-    Stations.push_back(PorteDesPostes);
-    Stations.push_back(Wazemmes);
-    Stations.push_back(Gambetta);
-    Stations.push_back(Republique);
-    Stations.push_back(Rihour);
-    Stations.push_back(LilleFlandres);
-
+    for(auto &data : dataStations) {
+        Stations.emplace_back(std::get<0>(data),std::get<1>(data),std::get<2>(data),std::get<3>(data),std::get<4>(data));
+    }
 
     // Definition of trains
-    initTrains(Trains, CANTONS, TRAIN_NUMBER);
+    initTrains(Trains, Line[1], TRAIN_NUMBER);
 
     // Set each train's neighbour to each other
     setVoisinList(Trains);
 
     // Set each station next station to each other
-    initNextStation(Stations);
+    initNextStation(Stations, &Line[1]);
 
     // Initialise the first station of each train
-    setFirstStation(Stations, Trains);
+    setStation(Stations, Trains, 1);
 
     //Set the next Terminus of each other
-    CANTONS.setNextTerminus(&CHU);
-    CHU.setNextTerminus(&CANTONS);
+    // !!! OPTI
+    Line[1].setNextTerminus(&Line[0]);
+    Line[0].setNextTerminus(&Line[1]);
 
     bool stopping = false; // gérer la boucle while en fonction du temps
 
@@ -109,33 +137,31 @@ int main() {
 
                         /* ===== MANAGE ===== */
 
-                        // find a way to swap the stations and continue driving with accelerations
+                        //  !!! put everything in a single function
+
                         if (train.trainStationArrived() and round(train.getNextStation()->getCoordX()) != round(train.getTerminus()->getCoordT())) {
                             train.setNextStation();
                             train.updateTotalCoordX();
+                            // make a reset function
                             train.setCoordX(0);
                             train.setTime(0.0);
-
-
                         }
 
-                        // When a train arrive, it swaps to another terminus in the other way
-
-                        // ça marche pas pour l'instant
+                        // When a train arrive, it swaps to another terminus in the other direction
                         if (train.trainArrived()) {
                             train.swapTerminus();
-                            setFirstStation(Stations, Trains);
+                            setStation(Stations, Trains, 0);
+                            initNextStation(Stations, train.getTerminus());
                         }
 
                         /* ===== DETAILS ===== */
 
                         mtx_.lock();
-//                        std::cout << "DISTANCE : " << train.getDistance()  << std::endl;
                         train.print();
                         mtx_.unlock();
 
                         // delay between threads
-                        std::this_thread::sleep_for(0.1s);
+                        std::this_thread::sleep_for(-1s);
                         std::cout << std::endl;
                     }
                 });
