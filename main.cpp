@@ -14,6 +14,8 @@
 
 
 #define TRAIN_NUMBER 1
+#define WIDTH 1920
+#define HEIGHT 1080
 
 
 using namespace std::chrono_literals;
@@ -33,26 +35,61 @@ using namespace std::chrono_literals;
  */
 
 
+struct SharedData {
+    double coordX;
+    double coordY;
+};
 
+// Fonction de rendu visuel SFML
+int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
+    while (window.isOpen()) {
+        window.clear(sf::Color::White);
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
+                window.close();
+        }
+        // Load an image file from a file
+        sf::Image background;
+        if (!background.loadFromFile("flashbackmetro.jpeg"))
+            return -1;
+        // Background sprite
+
+        sf::RectangleShape rectangle;
+        rectangle.setSize(sf::Vector2f(1800, 900));
+        rectangle.setOutlineColor(sf::Color::Red);
+        rectangle.setOutlineThickness(5);
+        rectangle.setPosition(50, 50);
+
+        // Load a sprite to display
+        sf::Texture texture;
+        if (!texture.loadFromFile("spr_train_0.png")) {
+            return EXIT_FAILURE;
+        }
+        sf::Sprite sprite(texture);
+
+        sprite.setPosition(sharedData.coordX * WIDTH/DISTANCE_TOT, sharedData.coordY);
+        sprite.setScale(0.5, 0.5);
+        window.draw(rectangle);
+        window.draw(sprite);
+
+
+
+        // display the render
+        window.display();
+    }
+}
 
 int main() {
 
-    /*   // current date/time based on current system
-   time_t now = time(0);
+    SharedData sharedData;
 
-   cout << "Number of sec since January 1,1970 is:: " << now << endl;
-
-   tm *ltm = localtime(&now);
-
-   // print various components of tm structure.
-   cout << "Year:" << 1900 + ltm->tm_year<<endl;
-   cout << "Month: "<< 1 + ltm->tm_mon<< endl;
-   cout << "Day: "<<  ltm->tm_mday << endl;
-   cout << "Time: "<< 5+ltm->tm_hour << ":";
-   cout << 30+ltm->tm_min << ":";
-   cout << ltm->tm_sec << endl;*/
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
 
 
+
+
+    std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
 
 
     //display();
@@ -70,27 +107,28 @@ int main() {
     // Implementation of Terminus
     std::vector<std::tuple<std::string, int, double, bool>> dataTerminus = {
             {"CHU-Eurasanté", 0, DISTANCE_TOT, 0},
-            {"4 Cantons", 0, DISTANCE_TOT, 1}
+            {"4 Cantons",     0, DISTANCE_TOT, 1}
     };
 
-    for(auto &data : dataTerminus) {
+    for (auto &data: dataTerminus) {
         Line.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
     }
 
     std::vector<std::tuple<std::string, int, int, bool, double>> dataStations = {
-            {"Terminus CHU", 2, 0, false, 0},
-            {"Porte des Postes", 1, 10, false, 100},
-            {"Wazemmes", 1, 10, false, 500},
-            {"Gambetta", 1, 10, false, 1100},
+            {"Terminus CHU",          2, 0,  false, 0},
+            {"Porte des Postes",      1, 10, false, 100},
+            {"Wazemmes",              1, 10, false, 500},
+            {"Gambetta",              1, 10, false, 1100},
             {"République Beaux-Arts", 1, 10, false, 1900},
-            {"Rihour", 2, 10, false, 2500},
-            {"Lille FLandres", 2, 10, false, 2900},
-            {"Terminus CANTONS", 2, 0, false, DISTANCE_TOT}
+            {"Rihour",                2, 10, false, 2500},
+            {"Lille FLandres",        2, 10, false, 2900},
+            {"Terminus CANTONS",      2, 0,  false, DISTANCE_TOT}
     };
 
     // Implementation of Stations
-    for(auto &data : dataStations) {
-        Stations.emplace_back(std::get<0>(data),std::get<1>(data),std::get<2>(data),std::get<3>(data),std::get<4>(data));
+    for (auto &data: dataStations) {
+        Stations.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data),
+                              std::get<4>(data));
     }
 
     // Definition of trains
@@ -115,12 +153,26 @@ int main() {
     // launch a thread for each train
     for (auto &train: Trains) {
         threads.emplace_back(
-                [&mtx_, &train, &Trains, &stopping, &Stations]() mutable -> auto {
+                [&sharedData, &mtx_, &train, &Trains, &stopping, &Stations]() mutable -> auto {
                     while (!stopping) {
                         /* ===== MOVE ===== */
 
+
+
                         // make those 2 "if" one
                         if (train.getId() == 1) {
+
+                            // graphics data
+                            if (train.getTerminus()->getDirection()) {
+                                sharedData.coordX = train.getCoordX() + train.getTotalCoordX();
+                                sharedData.coordY = 50;
+                            } else {
+                                sharedData.coordX = DISTANCE_TOT - train.getTotalCoordX() - train.getCoordX();
+                                sharedData.coordY = 900;
+                            }
+
+
+
                             train.moveX();
                         }
 
@@ -139,7 +191,8 @@ int main() {
 
                         //  !!! put everything in a single function
 
-                        if (train.trainStationArrived() and round(train.getNextStation()->getCoordX()) != round(train.getTerminus()->getCoordT())) {
+                        if (train.trainStationArrived() and
+                            round(train.getNextStation()->getCoordX()) != round(train.getTerminus()->getCoordT())) {
                             train.setNextStation();
                             train.updateTotalCoordX();
                             // make a reset function
@@ -152,6 +205,7 @@ int main() {
                             train.swapTerminus();
                             setStation(Stations, Trains, 0);
                             initNextStation(Stations, train.getTerminus());
+
                         }
 
                         /* ===== DETAILS ===== */
@@ -161,11 +215,13 @@ int main() {
                         mtx_.unlock();
 
                         // delay between threads
-                        std::this_thread::sleep_for(-1s);
+                        std::this_thread::sleep_for(0.01s);
                         std::cout << std::endl;
                     }
                 });
     }
+
+    renderThread.join();
 
     for (auto &thread: threads) {
         if (thread.joinable())
