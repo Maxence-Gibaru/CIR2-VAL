@@ -1,10 +1,18 @@
-#include <vector>
-
-#include "Train.h"
-#include "Station.h"
-
-#ifndef CIR2_VAL_TRAINCONTROLFUNCTION_H
 #define CIR2_VAL_TRAINCONTROLFUNCTION_H
+#include <vector>
+#include <iostream>
+#include "Train.h"
+#include <thread>
+#include "Station.h"
+#include <chrono>
+#include <vector>
+#include <cmath>
+#include "Terminus.h"
+#include <string>
+#include <ctime>
+#include "TrainGraphics.h"
+using namespace std::chrono_literals;
+
 
 /**
  * @brief Trouve le voisin d'un train
@@ -14,7 +22,7 @@
 void setVoisinList(std::vector<Train> &Trains);
 
 
-void setStation(std::vector<Station> &Stations, std::vector<Train> &myList, bool first);
+void setStation(std::vector<Station> &Stations, Train &train, bool first);
 
 void setLastStation(std::vector<Station> &Stations, std::vector<Train> &myList);
 
@@ -38,4 +46,4 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
 */
 void initNextTerminus(std::vector<Terminus> &Line);
 
-#endif //CIR2_VAL_TRAINCONTROLFUNCTION_H
+void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations, std::mutex &mtx_, bool &stopping);

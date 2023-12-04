@@ -1,6 +1,7 @@
 #include <string>
 #include <random>
 #include <iostream>
+#include <tuple>
 
 #ifndef CIR2_VAL_STATION_H
 #define CIR2_VAL_STATION_H
@@ -9,15 +10,14 @@
 
 class Station {
 private:
-    Station(const std::string &nom, int id, int passengers, bool presence, double coordX);
-
     std::string nom;
     int id;
     int passengers;
     bool presence;
-    double coordX;
+    std::tuple<double, double> coordX;
     double coefficientPopularite;
     Station *neighbour{};
+    Station *previousNeighbour{};
 
 
 public:
@@ -30,7 +30,7 @@ public:
      * @param coordX : coordonnées X de la station
      * @param neighbour : station voisine
     */
-    Station(const std::string &nom, int id, int passengers, bool presence, double coordX,double coefficientPopularite);
+    Station(const std::string &nom, int id, int passengers, bool presence, std::tuple<double, double> coordX,double coefficientPopularite);
 
 /* ===== GETTER ===== */
 
@@ -44,7 +44,7 @@ public:
      * @brief Getter des coordonnées X de la station
      * @return double : coordonnées X de la station
     */
-    const double getCoordX() const;
+    const double getCoordX(const bool direction) const;
 
     /**
      * @brief getter du Nom de la station
@@ -57,6 +57,8 @@ public:
      * @return Station* : station voisine
     */
     Station* getNeighbour() const;
+
+    Station* getPreviousNeighbour() const;
 
     /**
      * @brief getter de l'identifiant de la station
@@ -84,12 +86,7 @@ public:
     */
     void setNeighbour(Station * newNeighbour);
 
-    /**
-    * @brief Setter du nombre de passagers dans la station
-    * @param newCoordX : nouveau nombre de passagers dans la station
-    */
-    void setCoordX(const double &newCoordX);
-
+    void setPreviousNeighbour(Station * newNeighbour);
 
     void reducePassengers(int reductionAmount) {
         passengers -= reductionAmount;

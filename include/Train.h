@@ -2,11 +2,14 @@
 #define CIR2_VAL_TRAIN_H
 
 #include <iostream>
+#include <thread>
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include "Terminus.h"
 #include "Station.h"
+#include <string>
+#include <ctime>
 
 #define COEFF_SPEED 1.0
 #define MAX_SPEED 23.0
@@ -21,6 +24,7 @@ private:
     double speed;
     Terminus *terminus;
     double coordX;
+    double coordY;
     double totalCoordX;
     int passengersNumber;
     Train *voisin{};
@@ -66,6 +70,8 @@ public:
      * @return double : coordonnées du train
     */
     double getCoordX() const;
+
+    double getCoordY() const;
 
     /**
       * @brief Getter des coordonnées totales du train
@@ -137,6 +143,13 @@ public:
      * @return void
     */
     void setCoordX(const double &newCoordX);
+
+    /**
+     * @brief Setter des coordonnées du train
+     * @param newCoordX : nouvelle coordonnée du train
+     * @return void
+    */
+    void setCoordY(const double &newCoordY);
 
     /**
      * @brief Setter du nombre de passagers du train
@@ -244,27 +257,12 @@ public:
     void updateTotalCoordX();
 
     //get passerger
-    int getPassengers() const {
-        return passengersNumber;
-    }
+    int getPassengers() const;
 
 
-    void addPassengers() {
-        while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers() > 0) {
-            station->setPassengers(station->getPassengers() - 1);
-            passengersNumber++;
+    void addPassengers();
 
-        }
-    }
-
-    void reducePassengers() {
-        int random = rand() % (passengersNumber/2);
-        while (passengersNumber > 0 && random > 0) {
-            passengersNumber--;
-            random--;
-        }
-
-    }
+    void reducePassengers();
 };
 
 #endif //CIR2_VAL_TRAIN_H
