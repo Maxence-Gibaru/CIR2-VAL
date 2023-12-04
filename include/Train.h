@@ -3,13 +3,15 @@
 
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
+#include <ctime>
 #include "Terminus.h"
 #include "Station.h"
 
 #define COEFF_SPEED 1.0
 #define MAX_SPEED 23.0
 #define DISTANCE_SECURITY 300
-#define MAX_PASSENGERS_CAPACITY 200
+#define MAX_PASSENGERS_CAPACITY 150
 #define REFRESH 1
 #define DISTANCE_TOT 3000
 
@@ -241,7 +243,28 @@ public:
      */
     void updateTotalCoordX();
 
+    //get passerger
+    int getPassengers() const {
+        return passengersNumber;
+    }
 
+
+    void addPassengers() {
+        while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers() > 0) {
+            station->setPassengers(station->getPassengers() - 1);
+            passengersNumber++;
+
+        }
+    }
+
+    void reducePassengers() {
+        int random = rand() % (passengersNumber/2);
+        while (passengersNumber > 0 && random > 0) {
+            passengersNumber--;
+            random--;
+        }
+
+    }
 };
 
 #endif //CIR2_VAL_TRAIN_H

@@ -1,16 +1,24 @@
 #include <string>
+#include <random>
+#include <iostream>
 
 #ifndef CIR2_VAL_STATION_H
 #define CIR2_VAL_STATION_H
 
+
+
 class Station {
 private:
+    Station(const std::string &nom, int id, int passengers, bool presence, double coordX);
+
     std::string nom;
     int id;
     int passengers;
     bool presence;
     double coordX;
-    Station *neighbour;
+    double coefficientPopularite;
+    Station *neighbour{};
+
 
 public:
     /**
@@ -22,7 +30,7 @@ public:
      * @param coordX : coordonnées X de la station
      * @param neighbour : station voisine
     */
-    Station(const std::string &nom, int id, int passengers, bool presence, double coordX);
+    Station(const std::string &nom, int id, int passengers, bool presence, double coordX,double coefficientPopularite);
 
 /* ===== GETTER ===== */
 
@@ -83,6 +91,22 @@ public:
     void setCoordX(const double &newCoordX);
 
 
+    void reducePassengers(int reductionAmount) {
+        passengers -= reductionAmount;
+        if (passengers < 0) {
+            passengers = 0;
+        }
+    }
+
+    double getCoefficientPopularite() const {
+        return coefficientPopularite;
+    }
+
+    void addPassengers() {
+        int random = rand() % 20;
+        passengers += random * coefficientPopularite;
+
+    }
 };
 
 #endif //CIR2_VAL_STATION_H

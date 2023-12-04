@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+//#include <SFML/Graphics.hpp>
 
 #ifndef CIR2_VAL_TRAINGRAPHICS_H
 #define CIR2_VAL_TRAINGRAPHICS_H

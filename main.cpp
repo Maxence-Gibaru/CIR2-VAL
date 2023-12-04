@@ -11,6 +11,8 @@
 #include "TrainGraphics.h"
 #include <string>
 #include <ctime>
+#include <cstdlib>
+
 
 
 #define TRAIN_NUMBER 1
@@ -39,7 +41,7 @@ struct SharedData {
     double coordX;
     double coordY;
 };
-
+/*
 // Fonction de rendu visuel SFML
 int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
     while (window.isOpen()) {
@@ -79,17 +81,17 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         window.display();
     }
 }
-
+*/
 int main() {
-
+    srand(time(nullptr));
     SharedData sharedData;
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
+    //sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
 
 
 
 
-    std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
+    //std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
 
 
     //display();
@@ -99,6 +101,8 @@ int main() {
     std::vector<std::thread> threads;
     std::vector<Train> Trains;
     std::vector<Station> Stations;
+    // display stations
+
     std::vector<Terminus> Line;
 
     // make function that globalises the process
@@ -114,22 +118,28 @@ int main() {
         Line.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
     }
 
-    std::vector<std::tuple<std::string, int, int, bool, double>> dataStations = {
-            {"Terminus CHU",          2, 0,  false, 0},
-            {"Porte des Postes",      1, 10, false, 100},
-            {"Wazemmes",              1, 10, false, 500},
-            {"Gambetta",              1, 10, false, 1100},
-            {"République Beaux-Arts", 1, 10, false, 1900},
-            {"Rihour",                2, 10, false, 2500},
-            {"Lille FLandres",        2, 10, false, 2900},
-            {"Terminus CANTONS",      2, 0,  false, DISTANCE_TOT}
+    std::vector<std::tuple<std::string, int, int, bool, double,double>> dataStations = {
+            {"Terminus CHU",          2, 0,  false, 0, 1.1},
+            {"Porte des Postes",      1, 10, false, 100, 1.1},
+            {"Wazemmes",              1, 10, false, 500, 1.1},
+            {"Gambetta",              1, 10, false, 1100, 1.1},
+            {"République Beaux-Arts", 1, 10, false, 1900, 1.1},
+            {"Rihour",                2, 10, false, 2500, 1.1},
+            {"Lille FLandres",        2, 10, false, 2900, 1.1},
+            {"Terminus CANTONS",      2, 0,  false, DISTANCE_TOT, 1.1}
     };
 
-    // Implementation of Stations
+// Implementation of Stations
     for (auto &data: dataStations) {
-        Stations.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data),
-                              std::get<4>(data));
+        Stations.emplace_back(
+                std::get<0>(data),
+                std::get<1>(data),
+                std::get<2>(data),
+                std::get<3>(data),
+                std::get<4>(data),
+                std::get<5>(data));
     }
+
 
     // Definition of trains
     initTrains(Trains, Line[1], TRAIN_NUMBER);
@@ -193,6 +203,20 @@ int main() {
 
                         if (train.trainStationArrived() and
                             round(train.getNextStation()->getCoordX()) != round(train.getTerminus()->getCoordT())) {
+
+                            std::cout << "Train n°" << train.getId() << " à la gare " << train.getNextStation()->getNom() << std::endl;
+                            std::cout << "Passagers station : " << train.getNextStation()->getPassengers() << std::endl;
+                            std::cout << "Passagers train : " << train.getPassengers() << std::endl;
+                            train.addPassengers();
+                            train.reducePassengers();
+                            std::cout << "Passagers station : " << train.getNextStation()->getPassengers() << std::endl;
+                            std::cout << "Passagers train : " << train.getPassengers() << std::endl;
+                            std::this_thread::sleep_for(5s);
+                            train.getNextStation()->addPassengers();
+
+
+
+
                             train.setNextStation();
                             train.updateTotalCoordX();
                             // make a reset function
@@ -205,7 +229,8 @@ int main() {
                             train.swapTerminus();
                             setStation(Stations, Trains, 0);
                             initNextStation(Stations, train.getTerminus());
-
+                            train.setPassengers(-train.getPassengers());
+                            std::cout << "nb passagers" << train.getPassengers() << std::endl;
                         }
 
                         /* ===== DETAILS ===== */
@@ -215,13 +240,13 @@ int main() {
                         mtx_.unlock();
 
                         // delay between threads
-                        std::this_thread::sleep_for(0.01s);
+                        std::this_thread::sleep_for(1s);
                         std::cout << std::endl;
                     }
                 });
     }
 
-    renderThread.join();
+    //renderThread.join();
 
     for (auto &thread: threads) {
         if (thread.joinable())

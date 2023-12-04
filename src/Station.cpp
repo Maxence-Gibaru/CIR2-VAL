@@ -1,7 +1,7 @@
 #include "../include/Station.h"
 #include <string>
 
-Station::Station(const std::string &nom, int id,int passengers, bool presence, double coordX) : nom(nom), id(id), passengers(passengers), presence(presence), coordX(coordX) {}
+Station::Station(const std::string &nom, int id,int passengers, bool presence, double coordX,double coefficientPopularite) : nom(nom), id(id), passengers(passengers), presence(presence), coordX(coordX),coefficientPopularite(coefficientPopularite) {}
 
 /* ==== GETTERS ==== */
 
