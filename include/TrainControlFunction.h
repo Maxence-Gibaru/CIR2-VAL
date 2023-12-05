@@ -1,4 +1,5 @@
 #define CIR2_VAL_TRAINCONTROLFUNCTION_H
+
 #include <vector>
 #include <iostream>
 #include "Train.h"
@@ -11,6 +12,7 @@
 #include <string>
 #include <ctime>
 #include "TrainGraphics.h"
+
 using namespace std::chrono_literals;
 
 
@@ -46,4 +48,5 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
 */
 void initNextTerminus(std::vector<Terminus> &Line);
 
-void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations, std::mutex &mtx_, bool &stopping);
+void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+                 std::mutex &mtx_, bool &stopping);

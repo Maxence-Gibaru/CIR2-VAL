@@ -107,8 +107,9 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             } else {
                 sprite.setPosition((DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * WIDTH / DISTANCE_TOT,
                                    train.getCoordY());
-                passengersNumber.setPosition((DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * WIDTH / DISTANCE_TOT,
-                                             train.getCoordY() - 50);
+                passengersNumber.setPosition(
+                        (DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * WIDTH / DISTANCE_TOT,
+                        train.getCoordY() - 50);
                 window.draw(passengersNumber);
             }
             sprite.setScale(0.5, 0.5);

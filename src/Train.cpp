@@ -165,7 +165,21 @@ void Train::moveX() {
                            0.5 * COEFF_SPEED * pow(time1, 2);
         }
     }
+}
 
+void Train::stopX() {
+    // time1 = NEW_MAX_SPEED / COEFF_SPEED;
+    // prendre en compte la vitesse au temps d'arrêt
+    if (coordX < getAccelerationDistance()) {
+        //std::cout << "ACCELERATION" << std::endl;
+        this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+    }
+
+    if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
+                  getAccelerationDistance()) {
+        //std::cout << "DECELERATION" << std::endl;
+        //this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
+    }
 }
 
 void Train::addSpeed(double refresh) {

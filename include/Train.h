@@ -137,6 +137,8 @@ public:
     */
     void moveX();
 
+    void stopX();
+
     /**
      * @brief Setter des coordonnées du train
      * @param newCoordX : nouvelle coordonnée du train

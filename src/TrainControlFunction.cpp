@@ -56,7 +56,8 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
         //  !!! put everything in a single function
         if (train.trainStationArrived() and
-            round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) != round(train.getTerminus()->getCoordT())) {
+            round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
+            round(train.getTerminus()->getCoordT())) {
             train.addPassengers();
             train.reducePassengers();
             train.getNextStation()->addPassengers();
@@ -65,7 +66,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
             // make a reset function
             train.setCoordX(0);
             train.setTime(0.0);
-            std::this_thread::sleep_for(0.1s);
+            std::this_thread::sleep_for(5s);
         }
 
         // When a train arrive, it swaps to another terminus in the other direction
@@ -98,6 +99,8 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
             }
             train.moveX();
+        } else {
+
         }
 
         /* ===== SPEED ===== */

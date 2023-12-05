@@ -22,8 +22,11 @@
  *   [ ] lier la vitesse avec la fonction train.move()
  * - [x] Implémenter les passagers avec temps d'arrêts aux stations
  * - [ ] Optimisation et cleanage du code
- * - [ ] distance de sécurité qui varie en fonction de la distance à parcourir
+ * - [ ] gérer arrêt en fonction de distance de sécurité
+ * - [ ] Mettre en place des arrêts d'urgence
+ * - [ ] améliorer les assets visuel
  * - [x] adapter la structure pour le visuel
+ * !! pas nécessaire mais se renseigner quand même
  * - [ ] gérer la structure des appels et utilisation en mémoire
  *      - faire tous les destructeurs
  *      - faire toutes les allocations mémoires nécessaires
@@ -73,6 +76,8 @@ int main() {
     }
 
 
+
+    // Call these somewhere else
 
     // Definition of trains
     initTrains(Trains, Line[1], TRAIN_NUMBER);
