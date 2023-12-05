@@ -95,6 +95,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
                 train.setCoordY(50);
             } else {
                 train.setCoordY(900);
+
             }
             train.moveX();
         }
@@ -104,7 +105,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
         train.updateSpeed();
 
         // delay between threads
-        std::this_thread::sleep_for(0.1s);
+        std::this_thread::sleep_for(0.01s);
         std::cout << std::endl;
     }
 }

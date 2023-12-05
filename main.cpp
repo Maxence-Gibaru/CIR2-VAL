@@ -12,7 +12,7 @@
 #include <ctime>
 
 
-#define TRAIN_NUMBER 5
+#define TRAIN_NUMBER 10
 
 /*
  * TODO
@@ -56,14 +56,14 @@ int main() {
     }
 
     std::vector<std::tuple<std::string, int, int, bool, std::tuple<double, double>, double>> dataStations = {
-            {"Terminus CHU",          2, 0,  false, {0,                   DISTANCE_TOT}, 1.1},
-            {"Porte des Postes",      1, rand()%100, false, {DISTANCE_TOT - 2900, 2900},         1.1},
-            {"Wazemmes",              1, rand()%100, false, {DISTANCE_TOT - 2000, 2000},         1.1},
-            {"Gambetta",              1, rand()%100, false, {DISTANCE_TOT - 1500, 1500},         1.1},
-            {"République Beaux-Arts", 1, rand()%100, false, {DISTANCE_TOT - 1100, 1100},         1.1},
-            {"Rihour",                2, rand()%100, false, {DISTANCE_TOT - 500,  500},          1.1},
-            {"Lille FLandres",        2, rand()%100, false, {DISTANCE_TOT - 100,  100},          2},
-            {"Terminus CANTONS",      2, 0,  false, {DISTANCE_TOT, 0},                   1.1}
+            {"Terminus CHU",          2, 0,            false, {0,                   DISTANCE_TOT}, 1.1},
+            {"Porte des Postes",      1, rand() % 100, false, {DISTANCE_TOT - 2900, 2900},         1.1},
+            {"Wazemmes",              1, rand() % 100, false, {DISTANCE_TOT - 2000, 2000},         1.1},
+            {"Gambetta",              1, rand() % 100, false, {DISTANCE_TOT - 1500, 1500},         1.1},
+            {"République Beaux-Arts", 1, rand() % 100, false, {DISTANCE_TOT - 1100, 1100},         1.1},
+            {"Rihour",                2, rand() % 100, false, {DISTANCE_TOT - 500,  500},          1.1},
+            {"Lille FLandres",        2, rand() % 100, false, {DISTANCE_TOT - 100,  100},          2},
+            {"Terminus CANTONS",      2, 0,            false, {DISTANCE_TOT, 0},                   1.1}
     };
 
     // Implementation of Stations

@@ -1,4 +1,4 @@
-#include "../include/Train.h"
+#include "Train.h"
 
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
              int passengersNumber, bool arrived)
