@@ -203,16 +203,6 @@ public:
 
 
 /* ===== METHODS ===== */
-
-    /**
-     * @brief ajuster la vitesse du train
-     * @param refresh
-     * @return void
-     */
-    void addSpeed(double refresh);
-
-    void subSpeed(double refresh);
-
     /**
     * @brief Vérifie la distance de sécurité
     * @return bool, true si la distance de sécurité est respectée
@@ -247,11 +237,6 @@ public:
      * @return bool, true si le train est arrivé à la station
      */
     bool fullSpeed() const;
-
-    /**
-     * @brief augmente ou diminue la vitesse en fonction de la position du train
-     */
-    void updateSpeed();
 
     /**
      * @brief met à jour les coordonnées totales du train

@@ -12,7 +12,7 @@
 #include <ctime>
 
 
-#define TRAIN_NUMBER 10
+#define TRAIN_NUMBER 2
 
 /*
  * TODO
@@ -60,7 +60,7 @@ int main() {
 
     std::vector<std::tuple<std::string, int, int, bool, std::tuple<double, double>, double>> dataStations = {
             {"Terminus CHU",          2, 0,            false, {0,                   DISTANCE_TOT}, 1.1},
-            {"Porte des Postes",      1, rand() % 100, false, {DISTANCE_TOT - 2900, 2900},         1.1},
+            //{"Porte des Postes",      1, rand() % 100, false, {DISTANCE_TOT - 2900, 2900},         1.1},
             {"Wazemmes",              1, rand() % 100, false, {DISTANCE_TOT - 2000, 2000},         1.1},
             {"Gambetta",              1, rand() % 100, false, {DISTANCE_TOT - 1500, 1500},         1.1},
             {"République Beaux-Arts", 1, rand() % 100, false, {DISTANCE_TOT - 1100, 1100},         1.1},

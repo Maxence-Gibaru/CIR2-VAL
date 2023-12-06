@@ -135,12 +135,14 @@ void Train::moveX() {
         if (coordX <= getAccelerationDistance()) {
             //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+            this->speed = COEFF_SPEED * time;
         }
 
         if (coordX > getAccelerationDistance() and
             getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
             //std::cout << "CONSTANT" << std::endl;
             this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
+            this->speed = MAX_SPEED;
         }
 
         if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
@@ -150,12 +152,14 @@ void Train::moveX() {
                     -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
                     MAX_SPEED * (time2 - time1) +
                     0.5 * COEFF_SPEED * pow(time1, 2);
+            this->speed = -COEFF_SPEED * (time - time2) + MAX_SPEED;
         }
     } else {
         time1 = NEW_MAX_SPEED / COEFF_SPEED;
         if (coordX < getAccelerationDistance()) {
             //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+            this->speed = COEFF_SPEED * time;
         }
 
         if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
@@ -163,40 +167,19 @@ void Train::moveX() {
             //std::cout << "DECELERATION" << std::endl;
             this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
                            0.5 * COEFF_SPEED * pow(time1, 2);
+            this->speed = -COEFF_SPEED * (time - time1) + NEW_MAX_SPEED;
         }
     }
 }
 
 void Train::stopX() {
-    // time1 = NEW_MAX_SPEED / COEFF_SPEED;
-    // prendre en compte la vitesse au temps d'arrêt
-    if (coordX < getAccelerationDistance()) {
-        //std::cout << "ACCELERATION" << std::endl;
-        this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+    double init = this->coordX;
+    while (!checkSecurityDistance()) {
+        this->coordX = -0.5 * COEFF_SPEED * pow(time, 2) + MAX_SPEED * time + init;
     }
 
-    if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                  getAccelerationDistance()) {
-        //std::cout << "DECELERATION" << std::endl;
-        //this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
-    }
 }
 
-void Train::addSpeed(double refresh) {
-    this->speed += COEFF_SPEED * refresh;
-    if (this->speed < 0.0) {
-        std::cerr << "Vitesse negatif" << std::endl;
-        this->speed = 0.0;
-    }
-}
-
-void Train::subSpeed(double refresh) {
-    this->speed -= COEFF_SPEED * refresh;
-    if (this->speed < 0.0) {
-        std::cerr << "Vitesse negatif" << std::endl;
-        this->speed = 0.0;
-    }
-}
 
 bool Train::trainArrived() const {
     if (round(getCoordX() + getTotalCoordX()) == getTerminus()->getCoordT()) {
@@ -234,30 +217,6 @@ bool Train::fullSpeed() const {
         return true;
     }
     return false;
-}
-
-void Train::updateSpeed() {
-    if (fullSpeed()) {
-        if (getCoordX() < getAccelerationDistance()) {
-            addSpeed(REFRESH);
-        }
-        if (getCoordX() >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                           getAccelerationDistance() and
-            getSpeed() > 0) {
-            subSpeed(REFRESH);
-        }
-    } else {
-        {
-            if (getCoordX() < getAccelerationDistance() and getSpeed() < MAX_SPEED) {
-                addSpeed(REFRESH);
-            }
-            if (getCoordX() >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                               getAccelerationDistance() and
-                getSpeed() > 0) {
-                subSpeed(REFRESH);
-            }
-        }
-    }
 }
 
 

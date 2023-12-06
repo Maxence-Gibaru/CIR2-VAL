@@ -99,16 +99,19 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
             }
             train.moveX();
-        } else {
-
         }
 
-        /* ===== SPEED ===== */
+        if(!train.checkSecurityDistance() and train.getSpeed() != 0  and train.getId() != 1) {
 
-        train.updateSpeed();
+            train.stopX();
+        }
+
+
+
+
 
         // delay between threads
-        std::this_thread::sleep_for(0.01s);
+        std::this_thread::sleep_for(0.1s);
         std::cout << std::endl;
     }
 }
