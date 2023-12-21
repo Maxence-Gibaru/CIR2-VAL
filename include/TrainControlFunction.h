@@ -12,6 +12,7 @@
 #include <string>
 #include <ctime>
 #include "TrainGraphics.h"
+#include "Heure.h"
 
 using namespace std::chrono_literals;
 
@@ -50,3 +51,5 @@ void initNextTerminus(std::vector<Terminus> &Line);
 
 void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                  std::mutex &mtx_, bool &stopping);
+
+void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stopping);

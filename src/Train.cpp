@@ -1,10 +1,10 @@
 #include "Train.h"
 
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
-             int passengersNumber, bool arrived)
+             int passengersNumber, bool arrived, bool emergencyStop)
         : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), totalCoordX(totalCoordX),
           passengersNumber(passengersNumber),
-          arrived(arrived), passengersCapacity(MAX_PASSENGERS_CAPACITY) {
+          arrived(arrived), passengersCapacity(MAX_PASSENGERS_CAPACITY), emergencyStop(emergencyStop) {
 }
 
 /* ==== GETTERS ==== */
@@ -65,6 +65,10 @@ double Train::getTotalCoordX() const {
     return this->totalCoordX;
 }
 
+bool Train::getEmergencyStop() const {
+    return this->emergencyStop;
+}
+
 /* ==== SETTERS ==== */
 
 void Train::setCoordX(const double &newCoordX) {
@@ -118,6 +122,10 @@ void Train::setTime(const double &newTime) {
 
 void Train::updateTotalCoordX() {
     this->totalCoordX += this->coordX;
+}
+
+void Train::setEmergencyStop(const bool &newState) {
+    this->emergencyStop = newState;
 }
 
 /* ==== OTHER ==== */
@@ -230,7 +238,7 @@ void Train::print() const {
     std::cout << "Train n°" << getId() << " : distance |" << getCoordX() + getTotalCoordX() << " m |" << std::endl;
     std::cout << "Voisin : " << getVoisin()->getId() << std::endl;
     std::cout << "Terminus : " << getTerminus()->getNom() << std::endl;
-    std::cout << "Passagers station : " << getNextStation()->getPassengers() << std::endl;
+    //std::cout << "Passagers station : " << getNextStation()->getPassengers() << std::endl;
     std::cout << "Passagers train : " << getPassengers() << std::endl;
 
     std::cout << "DISTANCE : " << getDistance() << std::endl;
@@ -240,7 +248,6 @@ void Train::reducePassengers() {
     if (passengersNumber <= 0) {
         return;
     }
-
     int random = rand() % (passengersNumber / 2 + 1);
     while (passengersNumber > 0 && random > 0) {
         passengersNumber--;
@@ -250,17 +257,14 @@ void Train::reducePassengers() {
 
 
 void Train::addPassengers() {
-    while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers() > 0) {
-        station->setPassengers(station->getPassengers() - 1);
+    while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers(getTerminus()->getDirection()) > 0) {
+        station->setPassengers(station->getPassengers(getTerminus()->getDirection()) - 1);
         passengersNumber++;
-
     }
 }
 
 int Train::getPassengers() const {
-
     return passengersNumber;
-
 }
 
 

@@ -1,7 +1,8 @@
 #include "../include/Station.h"
 #include <string>
 
-Station::Station(const std::string &nom, int id, int passengers, bool presence, std::tuple<double, double> coordX,
+Station::Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool presence,
+                 std::tuple<double, double> coordX,
                  double coefficientPopularite) : nom(nom), id(id), passengers(passengers), presence(presence),
                                                  coordX(coordX), coefficientPopularite(coefficientPopularite) {}
 
@@ -15,8 +16,12 @@ const double Station::getCoordX(bool direction) const {
     }
 }
 
-const int Station::getPassengers() const {
-    return this->passengers;
+const int Station::getPassengers(bool direction) const {
+    if (direction) {
+        return std::get<0>(this->passengers);
+    } else {
+        return std::get<1>(this->passengers);
+    }
 }
 
 const std::string Station::getNom() const {
@@ -38,11 +43,6 @@ const int Station::getId() const {
 /* ==== SETTERS ==== */
 
 void Station::setPassengers(const int &newPassengers) {
-    this->passengers = newPassengers;
-}
-
-void Station::setPresence(const bool &newPresence) {
-    this->presence = newPresence;
 }
 
 void Station::setNeighbour(Station *newNeighbour) {
@@ -51,4 +51,27 @@ void Station::setNeighbour(Station *newNeighbour) {
 
 void Station::setPreviousNeighbour(Station *newNeighbour) {
     this->previousNeighbour = newNeighbour;
+}
+
+
+/*
+void Station::reducePassengers(int reductionAmount) {
+    passengers -= reductionAmount;
+    if (passengers < 0) {
+        passengers = 0;
+    }
+}*/
+
+double Station::getCoefficientPopularite() const {
+    return coefficientPopularite;
+}
+
+void Station::addPassengers(bool direction) {
+    int random = rand() % 20;
+    if (direction) {
+        std::get<0>(this->passengers) += random * coefficientPopularite;
+    } else {
+        std::get<1>(this->passengers) += random * coefficientPopularite;
+    }
+
 }

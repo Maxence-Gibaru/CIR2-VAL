@@ -13,10 +13,10 @@
 
 #define COEFF_SPEED 1.0
 #define MAX_SPEED 23.0
-#define DISTANCE_SECURITY 300
+#define DISTANCE_SECURITY 1000
 #define MAX_PASSENGERS_CAPACITY 150
 #define REFRESH 1
-#define DISTANCE_TOT 3000
+#define DISTANCE_TOT 12000
 
 class Train {
 private:
@@ -33,6 +33,7 @@ private:
     float time;
     int passengersCapacity;
     double accelerationDistance;
+    bool emergencyStop;
 
 public:
     /**
@@ -47,7 +48,7 @@ public:
      * @param accelerationDistance : distance que met le train jusqu'à sa vitesse max
      * @return void
     */
-    Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber, bool arrived);
+    Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber, bool arrived, bool emergencyStop);
 
     double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
 
@@ -120,6 +121,8 @@ public:
       * @return double : distance d'acceleration
      */
     double getAccelerationDistance() ;
+
+    bool getEmergencyStop() const;
 
 /* ===== SETTER ===== */
 
@@ -200,6 +203,8 @@ public:
      * @return void
      */
     void setTime(const double &newTime);
+
+    void setEmergencyStop(const bool &newState);
 
 
 /* ===== METHODS ===== */

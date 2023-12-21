@@ -7,12 +7,11 @@
 #define CIR2_VAL_STATION_H
 
 
-
 class Station {
 private:
     std::string nom;
     int id;
-    int passengers;
+    std::tuple<int, int> passengers;
     bool presence;
     std::tuple<double, double> coordX;
     double coefficientPopularite;
@@ -30,7 +29,8 @@ public:
      * @param coordX : coordonnées X de la station
      * @param neighbour : station voisine
     */
-    Station(const std::string &nom, int id, int passengers, bool presence, std::tuple<double, double> coordX,double coefficientPopularite);
+    Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool presence,
+            std::tuple<double, double> coordX, double coefficientPopularite);
 
 /* ===== GETTER ===== */
 
@@ -38,7 +38,7 @@ public:
      *  @brief Getter du nombre de passagers dans la station
      *  @return int : nombre de passagers dans la station
     */
-    const int getPassengers() const;
+    const int getPassengers(bool direction) const;
 
     /**
      * @brief Getter des coordonnées X de la station
@@ -56,9 +56,9 @@ public:
      * @brief getter de la station voisine
      * @return Station* : station voisine
     */
-    Station* getNeighbour() const;
+    Station *getNeighbour() const;
 
-    Station* getPreviousNeighbour() const;
+    Station *getPreviousNeighbour() const;
 
     /**
      * @brief getter de l'identifiant de la station
@@ -75,35 +75,19 @@ public:
     void setPassengers(const int &newPassengers);
 
     /**
-     * @brief Setter de la présence d'un train dans la station
-     * @param newPresence : nouvelle présence d'un train dans la station
-    */
-    void setPresence(const bool &newPresence);
-
-    /**
      * @brief Setter de la station voisine
      * @param newNeighbour : nouvelle station voisine
     */
-    void setNeighbour(Station * newNeighbour);
+    void setNeighbour(Station *newNeighbour);
 
-    void setPreviousNeighbour(Station * newNeighbour);
+    void setPreviousNeighbour(Station *newNeighbour);
 
-    void reducePassengers(int reductionAmount) {
-        passengers -= reductionAmount;
-        if (passengers < 0) {
-            passengers = 0;
-        }
-    }
+    /*
+    void reducePassengers(int reductionAmount);
+*/
+    double getCoefficientPopularite() const;
 
-    double getCoefficientPopularite() const {
-        return coefficientPopularite;
-    }
-
-    void addPassengers() {
-        int random = rand() % 20;
-        passengers += random * coefficientPopularite;
-
-    }
+    void addPassengers(bool direction);
 };
 
 #endif //CIR2_VAL_STATION_H

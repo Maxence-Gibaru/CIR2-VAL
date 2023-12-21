@@ -14,6 +14,8 @@ add_executable(CIR2_VAL main.cpp
         src/TrainControlFunction.cpp
         src/TrainGraphics.cpp
         include/TrainGraphics.h
+        include/Heure.h
+        src/Heure.cpp
 )
 
 find_package(SFML REQUIRED COMPONENTS graphics window system)

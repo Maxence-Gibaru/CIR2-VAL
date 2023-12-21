@@ -1,4 +1,5 @@
 #include "TrainControlFunction.h"
+#include "Heure.h"
 
 void setVoisinList(std::vector<Train> &Trains) {
     for (int i = 0; i < Trains.size(); ++i) {
@@ -36,22 +37,33 @@ void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus) {
 
 void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     for (int i = 1; i <= n; i++) {
-        Train myTrain(i, 0.0, 0.0, &myTerminus, 0.0, 0.0, 10, false);
+        Train myTrain(i, 0.0, 0.0, &myTerminus, 0.0, 0.0, 10, false, false);
         Trains.push_back(myTrain);
     }
 }
 
+void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stopping) {
+    heureActuelle.remiseAZero();
+
+    while (1) {
+        sharedData.heure = heureActuelle.getTime();
+        //heureActuelle.afficherHeure();
+        heureActuelle.incrementerTemps(REFRESH);
+    }
+}
 
 void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                  std::mutex &mtx_, bool &stopping) {
     while (!stopping) {
 
-        /* ===== DETAILS ===== */
 
+
+        /* ===== DETAILS ===== */
+/*
         mtx_.lock();
         train.print();
         mtx_.unlock();
-
+*/
         /* ===== MANAGE ===== */
 
         //  !!! put everything in a single function
@@ -60,13 +72,13 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
             round(train.getTerminus()->getCoordT())) {
             train.addPassengers();
             train.reducePassengers();
-            train.getNextStation()->addPassengers();
+            train.getNextStation()->addPassengers(train.getTerminus()->getDirection());
             train.setNextStation();
             train.updateTotalCoordX();
             // make a reset function
             train.setCoordX(0);
             train.setTime(0.0);
-            std::this_thread::sleep_for(5s);
+            std::this_thread::sleep_for(REFRESH * 0.5s);
         }
 
         // When a train arrive, it swaps to another terminus in the other direction
@@ -77,43 +89,44 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
         }
 
         /* ===== MOVE ===== */
-        sharedData.Trains = Trains;
+        sharedData.Trains = &Trains;
         sharedData.Stations = Stations;
         // make those 2 "if" one
-        if (train.getId() == 1) {
+        if (train.getId() == 1 and !train.getEmergencyStop()) {
             if (train.getTerminus()->getDirection()) {
-                train.setCoordY(50);
+                train.setCoordY(400);
             } else {
-                train.setCoordY(900);
+                train.setCoordY(550);
             }
             train.moveX();
         }
 
         // faire en sorte que le cas getId == Trains.size() soit enlevé, c'est nul à chier
-        if (train.checkSecurityDistance() and train.getId() != 1) {
+        if (train.checkSecurityDistance() and train.getId() != 1 and !train.getEmergencyStop()) {
             // graphics data
             if (train.getTerminus()->getDirection()) {
-                train.setCoordY(50);
+                train.setCoordY(400);
             } else {
-                train.setCoordY(900);
+                train.setCoordY(550);
 
             }
             train.moveX();
         }
 
-        if(!train.checkSecurityDistance() and train.getSpeed() != 0  and train.getId() != 1) {
+
+
+/*        if(!train.checkSecurityDistance() and train.getSpeed() != 0  and train.getId() != 1) {
 
             train.stopX();
         }
-
+*/
 
 
 
 
         // delay between threads
-        std::this_thread::sleep_for(0.1s);
-        std::cout << std::endl;
+        std::this_thread::sleep_for(REFRESH * 0.01s);
+        //std::cout << std::endl;
     }
 }
-
 
