@@ -43,6 +43,7 @@ public:
     /**
      * @brief Incrémente le temps
      * @param refresh
+     * @return void
     */
     void incrementerTemps(double refresh);
 
@@ -60,6 +61,7 @@ public:
 
     /**
      * Remise à zéro de l'heure
+     * @return void
      */
     void remiseAZero();
 

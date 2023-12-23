@@ -58,6 +58,10 @@ public:
     */
     Station *getNeighbour() const;
 
+    /**
+     * @brief getter de la station précédente
+     * @return Station* : station précédente
+    */
     Station *getPreviousNeighbour() const;
 
     /**
@@ -65,6 +69,12 @@ public:
      * @return int : identifiant de la station
     */
     const int getId() const;
+
+    /**
+     * @brief getter du coefficient de popularité de la station
+     * @return double : coefficient de popularité de la station
+    */
+    double getCoefficientPopularite() const;
 
 /* ===== SETTER ===== */
 
@@ -80,14 +90,18 @@ public:
     */
     void setNeighbour(Station *newNeighbour);
 
+    /**
+     * @brief Setter de la station précédente
+     * @param newNeighbour : nouvelle station précédente
+     */
     void setPreviousNeighbour(Station *newNeighbour);
 
-    /*
-    void reducePassengers(int reductionAmount);
-*/
-    double getCoefficientPopularite() const;
-
+    /**
+     * @brief Ajouter des passagers dans la station
+     * @param direction : direction du train (true = droite, false = gauche) Dissocier station aller retour
+     */
     void addPassengers(bool direction);
+
 };
 
 #endif //CIR2_VAL_STATION_H
