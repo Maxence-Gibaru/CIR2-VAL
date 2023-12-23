@@ -106,7 +106,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
         // delay between threads
         std::this_thread::sleep_for( 0.1s);
-        //std::cout << std::endl;
+
     }
 }
 

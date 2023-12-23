@@ -232,6 +232,7 @@ public:
 
 
 /* ===== METHODS ===== */
+
     /**
     * @brief Vérifie la distance de sécurité
     * @return bool, true si la distance de sécurité est respectée
