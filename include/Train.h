@@ -10,6 +10,8 @@
 #include "Station.h"
 #include <string>
 #include <ctime>
+#include "Heure.h"
+
 
 #define COEFF_SPEED 1.0
 #define MAX_SPEED 23.0

@@ -1,8 +1,8 @@
 #include "TrainGraphics.h"
 
 // Fonction de rendu visuel SFML
-int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
-
+//int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
+/*
     // Load a sprite to display
     sf::Texture texture;
     if (!texture.loadFromFile("spr_train_0.png")) {
@@ -111,8 +111,8 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             passengersNumber.setFillColor(sf::Color::Black);
             passengersNumber.setPosition(station.getCoordX(1) * ratio, MID + 25);
             window.draw(passengersNumber);
-
-/*
+*/
+/* A garder
             nomStation.setFont(font); // font is a sf::Font
             nomStation.setString(station.getNom());
             nomStation.setPosition(station.getCoordX(1) * ratio, LOW);
@@ -126,9 +126,9 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             rectangle.setFillColor(sf::Color::Blue);
             rectangle.setPosition((DISTANCE_TOT - station.getCoordX(0)) * ratio, LOW);
             window.draw(rectangle);*/
-        }
+        //}
 
-
+/*
         for (auto &train: *sharedData.Trains) {
             sf::Text passengersNumber;
             passengersNumber.setFont(font); // font is a sf::Font
@@ -191,3 +191,5 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         window.display();
     }
 }
+
+ */

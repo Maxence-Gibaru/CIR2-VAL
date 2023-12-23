@@ -12,7 +12,7 @@
 #include <ctime>
 
 
-#define TRAIN_NUMBER 2
+#define TRAIN_NUMBER 1
 #define MAX_PASSENGERS_STATION 50
 
 /*
@@ -35,7 +35,6 @@ int main() {
 
     //std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
 
-    std::thread timeThread(manageTime, std::ref(actualHour), std::ref(sharedData), std::ref(stop_working));
 
 
 
@@ -137,6 +136,7 @@ int main() {
     Line[0].setNextTerminus(&Line[1]);
 
 
+    // print time
 
     // launch a thread for each train
     threads.reserve(Trains.size());
@@ -145,8 +145,6 @@ int main() {
                              std::ref(mtx_), std::ref(stop_working));
     }
 
-
-    timeThread.join();
     //renderThread.join();
     for (auto &thread: threads) {
         if (thread.joinable())

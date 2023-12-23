@@ -245,6 +245,8 @@ void Train::print() const {
     std::cout << "Passagers train : " << getPassengers() << std::endl;
     std::cout << "VOISIN : " << getVoisin()->getId() << std::endl;
     std::cout << "DISTANCE : " << getDistance() << std::endl;
+
+
 }
 
 void Train::reducePassengers() {

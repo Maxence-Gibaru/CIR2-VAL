@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+//include <SFML/Graphics.hpp>
 #include "Train.h"
 #include <string>
 
@@ -20,7 +20,7 @@ struct SharedData {
     bool emergencyStop;
 };
 
-int renderVisuals(sf::RenderWindow &window, SharedData &sharedData);
+//int renderVisuals(sf::RenderWindow &window, SharedData &sharedData);
 
 
 #endif //CIR2_VAL_TRAINGRAPHICS_H

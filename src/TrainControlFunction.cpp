@@ -42,28 +42,20 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     }
 }
 
-void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stop_working) {
-    heureActuelle.remiseAZero();
-
-    while (!stop_working) {
-        sharedData.heure = heureActuelle.getTime();
-        //heureActuelle.afficherHeure();
-        heureActuelle.incrementerTemps(REFRESH);
-    }
-}
-
 void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                  std::mutex &mtx_, bool &stop_working) {
+    Heure temps;
     while (!stop_working) {
 
         /* ===== DETAILS ===== */
 
         mtx_.lock();
         train.print();
+        temps.afficherHeure();
         mtx_.unlock();
 
         /* ===== MANAGE ===== */
-
+        temps.incrementerTemps(REFRESH);
         //  !!! put everything in a single function
         if (train.trainStationArrived() and
             round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
@@ -113,7 +105,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
 
         // delay between threads
-        std::this_thread::sleep_for(REFRESH * 1s);
+        std::this_thread::sleep_for( 0.1s);
         //std::cout << std::endl;
     }
 }
