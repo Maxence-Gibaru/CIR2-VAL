@@ -253,7 +253,7 @@ void Train::reducePassengers() {
     if (passengersNumber <= 0) {
         return;
     }
-    int random = rand() % (passengersNumber / 2 + 1);
+    int random = rand() % 10;
     while (passengersNumber > 0 && random > 0) {
         passengersNumber--;
         random--;
@@ -263,17 +263,22 @@ void Train::reducePassengers() {
 
 void Train::addPassengers() {
     while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers(getTerminus()->getDirection()) > 0) {
-        station->setPassengers(station->getPassengers(getTerminus()->getDirection()) - 1);
+        // get terminus direction
+
+        station->reducePassengers(station->getPassengers(getTerminus()->getDirection()),getTerminus()->getDirection());
         passengersNumber++;
     }
 }
+
 
 int Train::getPassengers() const {
     return passengersNumber;
 }
 
-
-
+// vider les personne du train
+void Train::emptyPassengers() {
+    passengersNumber = 0;
+}
 
 
 

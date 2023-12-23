@@ -82,7 +82,7 @@ public:
      * @brief Setter du nombre de passagers dans la station
      * @param newPassengers : nouveau nombre de passagers dans la station
     */
-    void setPassengers(const int &newPassengers);
+    void setPassengers(const int &newPassengers,bool direction);
 
     /**
      * @brief Setter de la station voisine
@@ -101,6 +101,14 @@ public:
      * @param direction : direction du train (true = droite, false = gauche) Dissocier station aller retour
      */
     void addPassengers(bool direction);
+
+    /**
+     * @brief Retirer des passagers de toute les stations
+     * @return void : rien
+     */
+    void emptyPassengers();
+
+    void reducePassengers(const int &newPassengers,bool direction);
 
 };
 

@@ -1,11 +1,31 @@
 #include "Heure.h"
 
 Heure::Heure() {
-    heures = 0;
-    minutes = 0;
+    heures = 00;
+    minutes = 52;
     secondes = 0;
     millisecondes = 0;
     microsecondes = 0;
+}
+
+const int Heure::getHeures() const {
+    return heures;
+}
+
+const int Heure::getMinutes() const {
+    return minutes;
+}
+
+const int Heure::getSecondes() const {
+    return secondes;
+}
+
+const int Heure::getMillisecondes() const {
+    return millisecondes;
+}
+
+const int Heure::getMicrosecondes() const {
+    return microsecondes;
 }
 
 void Heure::afficherHeure() const {

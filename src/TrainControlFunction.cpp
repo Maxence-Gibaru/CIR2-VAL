@@ -9,13 +9,13 @@ void setVoisinList(std::vector<Train> &Trains) {
         } else {
             Trains[i].setVoisin(&Trains[i - 1]);
         }
-        std::cout << "Train " << Trains[i].getId() << " voisin : " << Trains[i].getVoisin()->getId() << std::endl;
     }
 }
 
 void setStation(std::vector<Station> &Stations, Train &train, bool first) {
     if (train.getTerminus()->getDirection()) {
         train.setStation(&Stations[1]);
+
     } else {
         train.setStation(&Stations[Stations.size() - 2]);
     }
@@ -40,22 +40,44 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     }
 }
 
-void updateTrainState(Train &train, std::vector<Station> &Stations) {
+void updateTrainState(Train &train, std::vector<Station> &Stations, Heure &temps) {
+    // Direction du train
+    bool isOpen = true;
+
+    if (temps.getHeures() == 1 && temps.getMinutes() == 0 && temps.getSecondes() == 0 && temps.getMillisecondes() == 0 && temps.getMicrosecondes() == 0) {
+        std::cout << "On ferme les stations et on les vides" << std::endl;
+        isOpen = false;
+
+    }
+
+    // si il est 07:00:00:000:000
+    if (temps.getHeures() == 7 && temps.getMinutes() == 0 && temps.getSecondes() == 0 && temps.getMillisecondes() == 0 && temps.getMicrosecondes() == 0) {
+        std::cout << "On ouvre les stations" << std::endl;
+        // ouvrir toute les stations
+        isOpen = true;
+    }
     if (train.trainStationArrived() && round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) != round(train.getTerminus()->getCoordT())) {
-        train.addPassengers();
-        train.reducePassengers();
-        train.getNextStation()->addPassengers(train.getTerminus()->getDirection());
         train.setNextStation();
+        train.reducePassengers();
         train.updateTotalCoordX();
         train.setCoordX(0);
         train.setTime(0.0);
         std::this_thread::sleep_for(REFRESH * 0.5s);
+
+        if (isOpen) {
+            train.addPassengers();
+            train.getNextStation()->addPassengers(train.getTerminus()->getDirection());
+        }
+
     }
 
     if (train.trainArrived()) {
         train.swapTerminus();
         setStation(Stations, train, 0);
-        train.setPassengers(-train.getPassengers());
+
+        train.emptyPassengers();
+
+        std::cout << "Toutes les personnes du train sont descendus : " << train.getPassengers() << std::endl;
     }
 }
 
@@ -70,24 +92,29 @@ void updateTrainMove(Train &train, SharedData &sharedData) {
     }
 }
 
+void ManageTime(Heure &temps, std::vector<Station> &Stations) {
+    temps.incrementerTemps(REFRESH);
+    temps.afficherHeure();
+}
+
 void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                 std::mutex &mtx_, bool &stop_working) {
-    Heure temps;
+                 std::mutex &mtx_, bool &stop_working, Heure &temps) {
+
     while (!stop_working) {
 
         mtx_.lock();
-        // A optimiser pour tout print ensemble
         train.print();
         mtx_.unlock();
 
+        ManageTime(temps,Stations);
+        updateTrainState(train, Stations, temps);
 
-        updateTrainState(train, Stations);
 
-        temps.incrementerTemps(REFRESH);
+
         sharedData.Trains = &Trains;
         sharedData.Stations = Stations;
         updateTrainMove(train, sharedData);
-        std::this_thread::sleep_for( 0.1s);
+        std::this_thread::sleep_for( 0.01s);
 
     }
 }

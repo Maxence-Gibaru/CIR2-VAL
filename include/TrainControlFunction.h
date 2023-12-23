@@ -67,4 +67,4 @@ void initNextTerminus(std::vector<Terminus> &Line);
  * @param stop_working : booléen pour savoir si le train doit s'arrêter
 */
 void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                 std::mutex &mtx_, bool &stop_working);
+                 std::mutex &mtx_, bool &stop_working, Heure &temps);

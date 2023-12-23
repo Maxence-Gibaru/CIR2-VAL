@@ -283,7 +283,10 @@ public:
      * @brief retire des passagers dans le train
      * @return void
      */
+    void emptyPassengers();
+
     void reducePassengers();
+
 
 };
 

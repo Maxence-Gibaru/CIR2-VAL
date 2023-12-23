@@ -35,6 +35,38 @@ public:
     const std::tuple<int, int, int> getTime() const;
 
     /**
+     * @brief Getter des heures
+     * @return int : heures
+     */
+    const int getHeures() const;
+
+    /**
+     * @brief Getter des minutes
+     * @return int : minutes
+     */
+
+    const int getMinutes() const;
+
+    /**
+     * @brief Getter des secondes
+     * @return int : secondes
+     */
+    const int getSecondes() const;
+
+    /**
+     * @brief Getter des millisecondes
+     * @return int : millisecondes
+     */
+    const int getMillisecondes() const;
+
+    /**
+     * @brief Getter des microsecondes
+     * @return int : microsecondes
+     */
+    const int getMicrosecondes() const;
+
+
+    /**
      * @brief Affiche l'heure
      * @return void
     */
@@ -64,6 +96,8 @@ public:
      * @return void
      */
     void remiseAZero();
+
+
 
 };
 

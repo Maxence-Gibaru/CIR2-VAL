@@ -42,7 +42,35 @@ const int Station::getId() const {
 
 /* ==== SETTERS ==== */
 
-void Station::setPassengers(const int &newPassengers) {
+void Station::setPassengers(const int &newPassengers,bool direction) {
+    if (direction) {
+        std::get<0>(this->passengers) = newPassengers;
+    } else {
+        std::get<1>(this->passengers) = newPassengers;
+    }
+
+}
+
+void Station::reducePassengers(const int &newPassengers,bool direction) {
+    if (direction) {
+        std::get<0>(this->passengers) -= newPassengers;
+    }
+
+    else {
+        std::get<1>(this->passengers) -= newPassengers;
+    }
+
+}
+
+
+void Station::addPassengers(bool direction) {
+    int random = rand() % 5;
+    if (direction) {
+        std::get<0>(this->passengers) += random * coefficientPopularite;
+    } else {
+        std::get<1>(this->passengers) += random * coefficientPopularite;
+    }
+
 }
 
 void Station::setNeighbour(Station *newNeighbour) {
@@ -54,24 +82,16 @@ void Station::setPreviousNeighbour(Station *newNeighbour) {
 }
 
 
-/*
-void Station::reducePassengers(int reductionAmount) {
-    passengers -= reductionAmount;
-    if (passengers < 0) {
-        passengers = 0;
-    }
-}*/
-
 double Station::getCoefficientPopularite() const {
     return coefficientPopularite;
 }
 
-void Station::addPassengers(bool direction) {
-    int random = rand() % 20;
-    if (direction) {
-        std::get<0>(this->passengers) += random * coefficientPopularite;
-    } else {
-        std::get<1>(this->passengers) += random * coefficientPopularite;
-    }
+
+
+
+void Station::emptyPassengers() {
+
+    std::get<0>(this->passengers) = 0;
+    std::get<1>(this->passengers) = 0;
 
 }
