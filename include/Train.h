@@ -52,8 +52,6 @@ public:
     */
     Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber, bool arrived, bool emergencyStop);
 
-    double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
-
 /* ===== GETTER ===== */
 
     /**
@@ -69,11 +67,15 @@ public:
     double getSpeed() const;
 
     /**
-     * @brief Getter des coordonnées entre 2 stations du train
+     * @brief Getter des coordonnées x du train (par rapport à la station)
      * @return double : coordonnées du train
     */
     double getCoordX() const;
 
+    /**
+     * @brief Getter des coordonnées en y du train (par rapport à la station)
+     * @return double : coordonnées du train
+     */
     double getCoordY() const;
 
     /**
@@ -124,9 +126,17 @@ public:
      */
     double getAccelerationDistance() ;
 
+    /**
+     *@brief Getter retourne vrai si le arret d'urgence est activé
+     * @return bool : true or false si le arret d'urgence est activé
+     */
     bool getEmergencyStop() const;
 
-    float getTime() const;
+    /**
+     * @brief Getter du nombre de passagers du train
+     * @return int : nombre de passagers du train
+    */
+    int getPassengers() const;
 
 /* ===== SETTER ===== */
 
@@ -144,6 +154,11 @@ public:
     */
     void moveX();
 
+/**
+     * @brief fais reculer les coordonnées du train
+     * @param newCoordX : nouvelle coordonnée du train
+     * @return void
+    */
     void stopX();
 
     /**
@@ -208,6 +223,11 @@ public:
      */
     void setTime(const double &newTime);
 
+    /**
+     * @brief Setter de l'émergency stop true or false
+     * @param newState : true or false
+     * @return void
+     */
     void setEmergencyStop(const bool &newState);
 
 
@@ -252,13 +272,18 @@ public:
      */
     void updateTotalCoordX();
 
-    //get passerger
-    int getPassengers() const;
-
-
+    /**
+     * @biref ajoute des passagers dans le train
+     * @return void
+     */
     void addPassengers();
 
+    /**
+     * @brief retire des passagers dans le train
+     * @return void
+     */
     void reducePassengers();
+
 };
 
 #endif //CIR2_VAL_TRAIN_H

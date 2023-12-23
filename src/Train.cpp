@@ -191,7 +191,6 @@ void Train::stopX() {
 
 }
 
-
 bool Train::trainArrived() const {
     if (round(getCoordX() + getTotalCoordX()) == getTerminus()->getCoordT()) {
         std::cout << "Train terminus" << std::endl;
@@ -224,6 +223,7 @@ bool Train::trainStationArrived() const {
 }
 
 bool Train::fullSpeed() const {
+    double highestDistance = pow(MAX_SPEED, 2) / COEFF_SPEED;
     if (highestDistance <= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX())) {
         return true;
     }
