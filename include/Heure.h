@@ -26,6 +26,14 @@ public:
     */
     Heure();
 
+/* ===== GETTER ===== */
+
+    /**
+     * @brief Getter de l'heure
+     * @return tuple<int, int, int> : heures, minutes, secondes
+     */
+    const std::tuple<int, int, int> getTime() const;
+
     /**
      * @brief Affiche l'heure
      * @return void
@@ -38,11 +46,23 @@ public:
     */
     void incrementerTemps(double refresh);
 
-
+    /**
+     * @biref Incrémenter les minutes
+     * @return void
+     */
     void incrementerMinute();
+
+    /**
+     * @brief Incrémenter les heures
+     * @return void
+     */
     void incrementerHeure();
+
+    /**
+     * Remise à zéro de l'heure
+     */
     void remiseAZero();
-    const std::tuple<int, int, int> getTime() const;
+
 };
 
 #endif // HEURE_H
