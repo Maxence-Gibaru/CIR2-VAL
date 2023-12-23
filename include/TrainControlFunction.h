@@ -66,5 +66,5 @@ void initNextTerminus(std::vector<Terminus> &Line);
  * @param mtx_ : mutex
  * @param stop_working : booléen pour savoir si le train doit s'arrêter
 */
-void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                  std::mutex &mtx_, bool &stop_working);

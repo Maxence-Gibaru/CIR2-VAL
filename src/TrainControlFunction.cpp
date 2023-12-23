@@ -70,16 +70,14 @@ void updateTrainMove(Train &train, SharedData &sharedData) {
     }
 }
 
-void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                  std::mutex &mtx_, bool &stop_working) {
     Heure temps;
     while (!stop_working) {
 
         mtx_.lock();
-
         // A optimiser pour tout print ensemble
         train.print();
-        temps.afficherHeure();
         mtx_.unlock();
 
 

@@ -141,7 +141,7 @@ int main() {
     // launch a thread for each train
     threads.reserve(Trains.size());
     for (auto &train: Trains) {
-        threads.emplace_back(manageTrain, std::ref(sharedData), std::ref(train), std::ref(Trains), std::ref(Stations),
+        threads.emplace_back(manageSubway, std::ref(sharedData), std::ref(train), std::ref(Trains), std::ref(Stations),
                              std::ref(mtx_), std::ref(stop_working));
     }
 
