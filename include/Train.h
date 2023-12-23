@@ -124,6 +124,8 @@ public:
 
     bool getEmergencyStop() const;
 
+    float getTime() const;
+
 /* ===== SETTER ===== */
 
     /**

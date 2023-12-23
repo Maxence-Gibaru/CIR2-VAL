@@ -50,6 +50,6 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
 void initNextTerminus(std::vector<Terminus> &Line);
 
 void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                 std::mutex &mtx_, bool &stopping);
+                 std::mutex &mtx_, bool &stop_working);
 
 void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stopping);

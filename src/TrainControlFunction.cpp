@@ -42,10 +42,10 @@ void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n) {
     }
 }
 
-void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stopping) {
+void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stop_working) {
     heureActuelle.remiseAZero();
 
-    while (1) {
+    while (!stop_working) {
         sharedData.heure = heureActuelle.getTime();
         //heureActuelle.afficherHeure();
         heureActuelle.incrementerTemps(REFRESH);
@@ -53,17 +53,15 @@ void manageTime(Heure &heureActuelle, SharedData &sharedData, bool &stopping) {
 }
 
 void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                 std::mutex &mtx_, bool &stopping) {
-    while (!stopping) {
-
-
+                 std::mutex &mtx_, bool &stop_working) {
+    while (!stop_working) {
 
         /* ===== DETAILS ===== */
-/*
+
         mtx_.lock();
         train.print();
         mtx_.unlock();
-*/
+
         /* ===== MANAGE ===== */
 
         //  !!! put everything in a single function
@@ -91,18 +89,8 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
         /* ===== MOVE ===== */
         sharedData.Trains = &Trains;
         sharedData.Stations = Stations;
-        // make those 2 "if" one
-        if (train.getId() == 1 and !train.getEmergencyStop()) {
-            if (train.getTerminus()->getDirection()) {
-                train.setCoordY(400);
-            } else {
-                train.setCoordY(550);
-            }
-            train.moveX();
-        }
 
-        // faire en sorte que le cas getId == Trains.size() soit enlevé, c'est nul à chier
-        if (train.checkSecurityDistance() and train.getId() != 1 and !train.getEmergencyStop()) {
+        if (train.checkSecurityDistance() and !train.getEmergencyStop()) {
             // graphics data
             if (train.getTerminus()->getDirection()) {
                 train.setCoordY(400);
@@ -125,7 +113,7 @@ void manageTrain(SharedData &sharedData, Train &train, std::vector<Train> &Train
 
 
         // delay between threads
-        std::this_thread::sleep_for(REFRESH * 0.01s);
+        std::this_thread::sleep_for(REFRESH * 1s);
         //std::cout << std::endl;
     }
 }

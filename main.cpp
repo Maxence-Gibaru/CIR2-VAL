@@ -12,39 +12,30 @@
 #include <ctime>
 
 
-#define TRAIN_NUMBER 10
+#define TRAIN_NUMBER 2
 #define MAX_PASSENGERS_STATION 50
 
 /*
  * TODO
- * - [x] Gérer l'accélération d'une station à une autre
- * - [X] Gérer les distance parcourues entre chaque train
+ * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
  * - [ ] Implémenter les heures de la journée
- *   [ ] lier la vitesse avec la fonction train.move()
- * - [x] Implémenter les passagers avec temps d'arrêts aux stations
  * - [ ] Optimisation et cleanage du code
- * - [ ] gérer arrêt en fonction de distance de sécurité
- * - [ ] Mettre en place des arrêts d'urgence
- * - [ ] améliorer les assets visuel
+ * - [ ] gérer freinage en fonction de distance de sécurité -> méthode stop
  * - [ ] gérer le problème de boucle
- * - [x] adapter la structure pour le visuel
- * !! pas nécessaire mais se renseigner quand même
- * - [ ] gérer la structure des appels et utilisation en mémoire
- *      - faire tous les destructeurs
- *      - faire toutes les allocations mémoires nécessaires
- *      - gérer les attentes de threads
- */
+ * - [ ] faire une interface pour gérer les paramètres et ne plus avoir à le faire dans le code
+ * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
+*/
 
 int main() {
-    Heure heureActuelle;
+    Heure actualHour;
     SharedData sharedData;
-    bool stopping = false; // gérer la boucle while en fonction du temps
+    bool stop_working = false; // gérer la boucle while en fonction du temps
 
-    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
+    //sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
 
-    std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
+    //std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
 
-    std::thread timeThread(manageTime, std::ref(heureActuelle), std::ref(sharedData), std::ref(stopping));
+    std::thread timeThread(manageTime, std::ref(actualHour), std::ref(sharedData), std::ref(stop_working));
 
 
 
@@ -55,12 +46,14 @@ int main() {
     std::vector<Station> Stations;
     std::vector<Terminus> Line;
 
+
     // Implementation of Terminus
     std::vector<std::tuple<std::string, int, double, bool>> dataTerminus = {
             {"CHU-Eurasanté", 0, DISTANCE_TOT, 0},
             {"4 Cantons",     0, DISTANCE_TOT, 1}
     };
 
+    Line.reserve(dataTerminus.size());
     for (auto &data: dataTerminus) {
         Line.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
     }
@@ -116,6 +109,7 @@ int main() {
     };
 
     // Implementation of Stations
+    Stations.reserve(dataStations.size());
     for (auto &data: dataStations) {
         Stations.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data),
                               std::get<4>(data), std::get<5>(data));
@@ -145,14 +139,15 @@ int main() {
 
 
     // launch a thread for each train
+    threads.reserve(Trains.size());
     for (auto &train: Trains) {
         threads.emplace_back(manageTrain, std::ref(sharedData), std::ref(train), std::ref(Trains), std::ref(Stations),
-                             std::ref(mtx_), std::ref(stopping));
+                             std::ref(mtx_), std::ref(stop_working));
     }
 
 
     timeThread.join();
-    renderThread.join();
+    //renderThread.join();
     for (auto &thread: threads) {
         if (thread.joinable())
             thread.join();

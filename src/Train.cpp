@@ -38,6 +38,9 @@ bool Train::getState() const {
 }
 
 double Train::getDistance() const {
+    if (getVoisin()->getId() == getId()) {
+        return DISTANCE_SECURITY;
+    }
     return std::abs((this->voisin->getCoordX()) + this->voisin->getTotalCoordX() - ((this->coordX) + getTotalCoordX()));
 }
 
@@ -240,7 +243,7 @@ void Train::print() const {
     std::cout << "Terminus : " << getTerminus()->getNom() << std::endl;
     //std::cout << "Passagers station : " << getNextStation()->getPassengers() << std::endl;
     std::cout << "Passagers train : " << getPassengers() << std::endl;
-
+    std::cout << "VOISIN : " << getVoisin()->getId() << std::endl;
     std::cout << "DISTANCE : " << getDistance() << std::endl;
 }
 
