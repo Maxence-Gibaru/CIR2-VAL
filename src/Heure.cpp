@@ -2,7 +2,7 @@
 
 Heure::Heure() {
     heures = 00;
-    minutes = 52;
+    minutes = 58;
     secondes = 0;
     millisecondes = 0;
     microsecondes = 0;

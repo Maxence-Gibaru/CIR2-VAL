@@ -19,6 +19,7 @@ private:
     Station *previousNeighbour{};
 
 
+
 public:
     /**
      * @brief Constructeur de la classe Station
@@ -109,6 +110,11 @@ public:
     void emptyPassengers();
 
     void reducePassengers(const int &newPassengers,bool direction);
+
+    void isOpen();
+
+
+
 
 };
 

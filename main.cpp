@@ -51,10 +51,10 @@ int main() {
 
     std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> dataStations = {
             {"Terminus CHU",                     2, {0,                               0},                      false, {0,     DISTANCE_TOT}, 1.1},
-            {"CHR Oscar Lambret",                1, {rand() % 15, rand() %
+            {"CHR Oscar Lambret",                1, {rand() % 30, rand() %
                                                                                       15}, false, {DISTANCE_TOT -
                                                                                                                        11000, 11000},        1.1},
-            {"Porte des Postes",                 1, {rand() % 15, rand() %
+            {"Porte des Postes",                 1, {rand() % 1000, rand() %
                                                                                       15}, false, {DISTANCE_TOT -
                                                                                                                        10500, 10500},        1.1},
             {"Wazemmes",                         1, {rand() % 15, rand() %

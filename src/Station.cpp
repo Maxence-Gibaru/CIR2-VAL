@@ -64,12 +64,13 @@ void Station::reducePassengers(const int &newPassengers,bool direction) {
 
 
 void Station::addPassengers(bool direction) {
-    int random = rand() % 5;
+    int random = rand() % 20;
     if (direction) {
         std::get<0>(this->passengers) += random * coefficientPopularite;
     } else {
         std::get<1>(this->passengers) += random * coefficientPopularite;
     }
+    std::cout << random << "ont été ajoutés à la station " << this->getNom() << std::endl;
 
 }
 
@@ -86,12 +87,10 @@ double Station::getCoefficientPopularite() const {
     return coefficientPopularite;
 }
 
-
-
-
 void Station::emptyPassengers() {
 
     std::get<0>(this->passengers) = 0;
     std::get<1>(this->passengers) = 0;
 
 }
+

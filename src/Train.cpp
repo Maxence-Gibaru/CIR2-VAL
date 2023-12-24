@@ -260,39 +260,17 @@ void Train::reducePassengers() {
     }
 }
 
-
 void Train::addPassengers() {
     while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers(getTerminus()->getDirection()) > 0) {
-        // get terminus direction
-
-        station->reducePassengers(station->getPassengers(getTerminus()->getDirection()),getTerminus()->getDirection());
+        station->reducePassengers(1,getTerminus()->getDirection());
         passengersNumber++;
     }
 }
-
 
 int Train::getPassengers() const {
     return passengersNumber;
 }
 
-// vider les personne du train
 void Train::emptyPassengers() {
     passengersNumber = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
