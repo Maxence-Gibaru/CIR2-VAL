@@ -1,8 +1,8 @@
 #include "Heure.h"
 
 Heure::Heure() {
-    heures = 00;
-    minutes = 58;
+    heures = 7;
+    minutes = 0;
     secondes = 0;
     millisecondes = 0;
     microsecondes = 0;
@@ -38,20 +38,24 @@ void Heure::afficherHeure() const {
 }
 
 void Heure::incrementerTemps(double refresh) {
+    // Convertir le refresh en millisecondes.
     int delayMilliseconds = static_cast<int>(refresh * 1000);
 
-    for (int i = 0; i < 1000; i += delayMilliseconds) {
-        millisecondes += delayMilliseconds;
-        if (millisecondes >= 1000) {
-            millisecondes -= 1000;
-            secondes++;
-            if (secondes >= 60) {
-                secondes = 0;
-                incrementerMinute();
-            }
+    // Ajouter le délai aux millisecondes.
+    millisecondes += delayMilliseconds;
+
+    // Ajuster les secondes et les minutes en conséquence.
+    while (millisecondes >= 1000) {
+        millisecondes -= 1000;
+        secondes++;
+        if (secondes >= 60) {
+            secondes = 0;
+            incrementerMinute();
         }
     }
 }
+
+
 
 void Heure::incrementerMinute() {
     minutes++;

@@ -7,17 +7,16 @@
 #include "TrainControlFunction.h"
 #include "TrainGraphics.h"
 #include <string>
+#include "data.h"
 
-#define TRAIN_NUMBER 1
+int TRAIN_NUMBER = 10;
 #define MAX_PASSENGERS_STATION 50
 
 /*
  * TODO
  * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
- * - [ ] Optimisation du code
  * - [ ] gérer freinage en fonction de distance de sécurité -> méthode stop
- * - [ ] gérer le problème de boucle
- * - [ ] faire une interface pour gérer les paramètres et ne plus avoir à le faire dans le code
+ * - [ ] gérer le temps d'arrêt à une station
  * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
 */
 
@@ -25,9 +24,9 @@ int main() {
     SharedData sharedData;
     bool stop_working = false;
 
-    //sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
+    sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
 
-    //std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
+    std::thread renderThread(renderVisuals, std::ref(window), std::ref(sharedData));
 
 
     // Vector definition
@@ -37,68 +36,10 @@ int main() {
     std::vector<Station> Stations;
     std::vector<Terminus> Line;
 
-
-    // Implementation of Terminus
-    std::vector<std::tuple<std::string, int, double, bool>> dataTerminus = {
-            {"CHU-Eurasanté", 0, DISTANCE_TOT, 0},
-            {"4 Cantons",     0, DISTANCE_TOT, 1}
-    };
-
     Line.reserve(dataTerminus.size());
     for (auto &data: dataTerminus) {
         Line.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
     }
-
-    std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> dataStations = {
-            {"Terminus CHU",                     2, {0,                               0},                      false, {0,     DISTANCE_TOT}, 1.1},
-            {"CHR Oscar Lambret",                1, {rand() % 30, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       11000, 11000},        1.1},
-            {"Porte des Postes",                 1, {rand() % 1000, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       10500, 10500},        1.1},
-            {"Wazemmes",                         1, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       9000,  9000},         1.1},
-            {"Gambetta",                         1, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       8100,  8100},         1.1},
-            {"République Beaux-Arts",            1, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       7200,  7200},         1.1},
-            {"Rihour",                           2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       6500,  6500},         1.1},
-            {"Lille FLandres",                   2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       5500,  5500},         2},
-            {"Caulier",                          2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       5000,  5000},         2},
-            {"Fives",                            2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       4500,  4500},         2},
-            {"Marbrerie",                        2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       4000,  4000},         2},
-            {"Hellemmes",                        2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       3500,  3500},         2},
-            {"Lezennes",                         2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       2500,  2500},         2},
-            {"Pont de Bois",                     2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       2100,  2100},         2},
-            {"Villeneuve d'Ascq Hôtel de Ville", 2, {rand() % 15, rand() %
-                                                                                      MAX_PASSENGERS_STATION}, false, {DISTANCE_TOT -
-                                                                                                                       1900,  1900},         2},
-            {"Cité Scientifique",                2, {rand() % 15, rand() %
-                                                                                      15}, false, {DISTANCE_TOT -
-                                                                                                                       500,   500},          2},
-            {"Terminus CANTONS",                 2, {0,                               0},                      false, {DISTANCE_TOT, 0},     1.1}
-    };
-
 
     // Implementation of Stations
     Stations.reserve(dataStations.size());
@@ -108,10 +49,10 @@ int main() {
     }
 
 
-    // Call these somewhere else
+
 
     // Definition of trains
-    initTrains(Trains, Line[1], TRAIN_NUMBER);
+    initTrains(Trains, Line, TRAIN_NUMBER);
 
     // Set each train's neighbour to each other
     setVoisinList(Trains);
@@ -128,8 +69,6 @@ int main() {
     Line[1].setNextTerminus(&Line[0]);
     Line[0].setNextTerminus(&Line[1]);
 
-
-    // print time
     Heure temps;
     // launch a thread for each train
     threads.reserve(Trains.size());

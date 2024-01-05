@@ -1,5 +1,7 @@
 #include "Train.h"
 
+double REFRESH = 0.001;
+
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
              int passengersNumber, bool arrived, bool emergencyStop)
         : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), totalCoordX(totalCoordX),
@@ -38,7 +40,7 @@ bool Train::getState() const {
 }
 
 double Train::getDistance() const {
-    if (getVoisin()->getId() == getId()) {
+    if (getVoisin()->getId() == getId() ) {
         return DISTANCE_SECURITY;
     }
     return std::abs((this->voisin->getCoordX()) + this->voisin->getTotalCoordX() - ((this->coordX) + getTotalCoordX()));
@@ -70,6 +72,24 @@ double Train::getTotalCoordX() const {
 
 bool Train::getEmergencyStop() const {
     return this->emergencyStop;
+}
+
+
+int Train::getTimeAtStationMS() const {
+    return timeAtStationMS;
+}
+
+void Train::decreaseTimeAtStationMS(int decrement) {
+    if (timeAtStationMS > 0) {
+        timeAtStationMS -= decrement;
+        if (timeAtStationMS < 0) {
+            timeAtStationMS = 0;
+        }
+    }
+}
+
+void Train::setTimeAtStationMS(int ms){
+    timeAtStationMS = ms;
 }
 
 /* ==== SETTERS ==== */
@@ -201,7 +221,8 @@ bool Train::trainArrived() const {
 
 bool Train::checkSecurityDistance() const {
 
-    if (getDistance() >= DISTANCE_SECURITY) {
+
+    if (getDistance() >= DISTANCE_SECURITY or getTerminus() != getVoisin()->getTerminus()) {
         return true;
     }
     return false;
@@ -274,3 +295,4 @@ int Train::getPassengers() const {
 void Train::emptyPassengers() {
     passengersNumber = 0;
 }
+

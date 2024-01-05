@@ -1,4 +1,4 @@
-//include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "Train.h"
 #include <string>
 
@@ -9,9 +9,9 @@
 #define WIDTH 1920.0
 #define HEIGHT 1080.0
 
-#define HIGH 400.0
-#define LOW 600.0
-#define MID 500.0
+#define HIGH 150.0
+#define LOW 350.0
+#define MID 250.0
 
 struct SharedData {
     std::vector<Train> *Trains;
@@ -20,7 +20,7 @@ struct SharedData {
     bool emergencyStop;
 };
 
-//int renderVisuals(sf::RenderWindow &window, SharedData &sharedData);
+int renderVisuals(sf::RenderWindow &window, SharedData &sharedData);
 
 
 #endif //CIR2_VAL_TRAINGRAPHICS_H

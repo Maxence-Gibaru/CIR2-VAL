@@ -107,7 +107,7 @@ public:
      * @brief Retirer des passagers de toute les stations
      * @return void : rien
      */
-    void emptyPassengers();
+    void emptyPassengers(bool direction);
 
     void reducePassengers(const int &newPassengers,bool direction);
 

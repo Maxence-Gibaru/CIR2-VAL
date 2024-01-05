@@ -49,7 +49,7 @@ void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus);
  * @param myTerminus : terminus
  * @param n : nombre de trains
 */
-void initTrains(std::vector<Train> &Trains, Terminus &myTerminus, int n);
+void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
 
 /**
  * @brief Initialise la liste des terminus
@@ -67,4 +67,6 @@ void initNextTerminus(std::vector<Terminus> &Line);
  * @param stop_working : booléen pour savoir si le train doit s'arrêter
 */
 void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                 std::mutex &mtx_, bool &stop_working, Heure &temps);
+                  std::mutex &mtx_, bool &stop_working, Heure &temps);
+
+void updateRefresh(double &refresh, double &newValue);

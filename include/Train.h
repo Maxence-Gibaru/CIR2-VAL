@@ -17,8 +17,10 @@
 #define MAX_SPEED 23.0
 #define DISTANCE_SECURITY 1000
 #define MAX_PASSENGERS_CAPACITY 150
-#define REFRESH 1
-#define DISTANCE_TOT 12000
+#define DISTANCE_TOT 13000
+
+extern double REFRESH;
+extern int TRAIN_NUMBER;
 
 class Train {
 private:
@@ -36,6 +38,7 @@ private:
     int passengersCapacity;
     double accelerationDistance;
     bool emergencyStop;
+    int timeAtStationMS = 0;
 
 public:
     /**
@@ -50,7 +53,8 @@ public:
      * @param accelerationDistance : distance que met le train jusqu'à sa vitesse max
      * @return void
     */
-    Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber, bool arrived, bool emergencyStop);
+    Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber,
+          bool arrived, bool emergencyStop);
 
 /* ===== GETTER ===== */
 
@@ -124,7 +128,7 @@ public:
       * @brief Getter de la distance d'acceleration
       * @return double : distance d'acceleration
      */
-    double getAccelerationDistance() ;
+    double getAccelerationDistance();
 
     /**
      *@brief Getter retourne vrai si le arret d'urgence est activé
@@ -137,6 +141,12 @@ public:
      * @return int : nombre de passagers du train
     */
     int getPassengers() const;
+
+    int getTimeAtStationMS() const;
+
+    void setTimeAtStationMS(int ms);
+
+    void decreaseTimeAtStationMS(int decrement);
 
 /* ===== SETTER ===== */
 

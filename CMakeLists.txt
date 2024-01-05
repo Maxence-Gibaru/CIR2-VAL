@@ -17,11 +17,12 @@ add_executable(CIR2_VAL main.cpp
         include/Heure.h
         src/Heure.cpp
         src/Heure.cpp
+        include/data.h
 )
 
-#find_package(SFML REQUIRED COMPONENTS graphics window system)
-#if(SFML_FOUND)
-    #target_link_libraries(CIR2_VAL PRIVATE sfml-graphics sfml-window sfml-system)
-#endif()
+find_package(SFML REQUIRED COMPONENTS graphics window system)
+if(SFML_FOUND)
+    target_link_libraries(CIR2_VAL PRIVATE sfml-graphics sfml-window sfml-system)
+endif()
 
 

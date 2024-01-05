@@ -42,7 +42,7 @@ const int Station::getId() const {
 
 /* ==== SETTERS ==== */
 
-void Station::setPassengers(const int &newPassengers,bool direction) {
+void Station::setPassengers(const int &newPassengers, bool direction) {
     if (direction) {
         std::get<0>(this->passengers) = newPassengers;
     } else {
@@ -51,12 +51,10 @@ void Station::setPassengers(const int &newPassengers,bool direction) {
 
 }
 
-void Station::reducePassengers(const int &newPassengers,bool direction) {
+void Station::reducePassengers(const int &newPassengers, bool direction) {
     if (direction) {
         std::get<0>(this->passengers) -= newPassengers;
-    }
-
-    else {
+    } else {
         std::get<1>(this->passengers) -= newPassengers;
     }
 
@@ -87,10 +85,12 @@ double Station::getCoefficientPopularite() const {
     return coefficientPopularite;
 }
 
-void Station::emptyPassengers() {
+void Station::emptyPassengers(bool direction) {
+    if (direction) {
+        std::get<0>(this->passengers) = 0;
 
-    std::get<0>(this->passengers) = 0;
-    std::get<1>(this->passengers) = 0;
-
+    } else {
+        std::get<1>(this->passengers) = 0;
+    }
 }
 

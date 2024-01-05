@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <unistd.h>
 #include <tuple>
+#include <thread>
+#include <chrono>
 
 class Heure {
 private:
