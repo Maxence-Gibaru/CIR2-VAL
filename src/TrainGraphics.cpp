@@ -5,19 +5,11 @@
 // Fonction de rendu visuel SFML
 int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
 
-    // Load a sprite to display
-    sf::Texture texture;
-    if (!texture.loadFromFile("spr_train_0.png")) {
-        return EXIT_FAILURE;
-    }
+
     sf::Font font;
     if (!font.loadFromFile("arial.ttf")) {
         return EXIT_FAILURE;
     }
-    // Load an image file from a file
-    sf::Image background;
-    if (!background.loadFromFile("flashbackmetro.jpeg"))
-        return EXIT_FAILURE;
 
     // Background sprite
     const double ratio = WIDTH / DISTANCE_TOT - 0.01;
