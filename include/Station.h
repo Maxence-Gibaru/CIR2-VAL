@@ -3,9 +3,11 @@
 #include <iostream>
 #include <tuple>
 
+
+
 #ifndef CIR2_VAL_STATION_H
 #define CIR2_VAL_STATION_H
-
+#define PRINT false
 
 class Station {
 private:

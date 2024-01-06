@@ -3,8 +3,9 @@ project(CIR2_VAL)
 
 set(CMAKE_CXX_STANDARD 20)
 
-include_directories(include)
 
+
+include_directories(include)
 link_directories(lib)
 
 add_executable(CIR2_VAL main.cpp
@@ -20,9 +21,8 @@ add_executable(CIR2_VAL main.cpp
         include/data.h
 )
 
+# Trouver le package SFML
 find_package(SFML REQUIRED COMPONENTS graphics window system)
 if(SFML_FOUND)
     target_link_libraries(CIR2_VAL PRIVATE sfml-graphics sfml-window sfml-system)
 endif()
-
-

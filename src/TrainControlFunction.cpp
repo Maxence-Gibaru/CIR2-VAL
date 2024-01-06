@@ -36,10 +36,10 @@ void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus) {
 void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n) {
     for (int i = 1; i <= n; i++) {
         if (i == n) {
-            Train myTrain(i, 0.0, 0.0, &Line[0], 0.0, 0.0, 10, false, false);
+            Train myTrain(i, 0.0, 0.0, &Line[0], 0.0, 0.0, 10, false);
             Trains.push_back(myTrain);
         } else {
-            Train myTrain(i, 0.0, 0.0, &Line[1], 0.0, 0.0, 10, false, false);
+            Train myTrain(i, 0.0, 0.0, &Line[1], 0.0, 0.0, 10, false);
             Trains.push_back(myTrain);
         }
     }
@@ -48,10 +48,9 @@ void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n) 
 bool allPassengersEmpty(const std::vector<Station> &Stations) {
     for (const auto &station: Stations) {
         if (station.getPassengers(0) != 0) {
-            return false; // S'il y a des passagers dans une station, retourne faux
+            return false;
         }
         if (station.getPassengers(1) != 0) {
-            // print le nombre de personne dans la station
             return false;
         }
     }
@@ -61,26 +60,36 @@ bool allPassengersEmpty(const std::vector<Station> &Stations) {
 
 bool isOpen = true;
 
-void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps) {
+void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps,
+                      SharedData &sharedData) {
 
 
-    if (temps.getHeures() == 7 ) {
-        //std::cout << "On ferme les stations et on les vides" << std::endl;
+    if (temps.getHeures() == 7) {
+        if (PRINT) {
+            std::cout << "On ouvre les stations !" << std::endl;
+        }
         isOpen = true;
-        for(auto &train : Trains) {
+
+        for (auto &train: Trains) {
             train.setEmergencyStop(0);
         }
     }
 
     if (temps.getHeures() >= 1 and temps.getHeures() < 7) {
-        //std::cout << "On ferme les stations et on les vides" << std::endl;
+        if (PRINT) {
+            std::cout << "On ferme les stations et on les vides" << std::endl;
+        }
         isOpen = false;
     }
-    
-
+    sharedData.isOpen = isOpen;
 
     if (train.trainStationArrived() && round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
                                        round(train.getTerminus()->getCoordT())) {
+        train.setWait(
+                (train.getPassengers() + train.getNextStation()->getPassengers(train.getTerminus()->getDirection())) /
+                2);
+
+
         train.addPassengers();
         train.reducePassengers();
         train.setNextStation();
@@ -88,35 +97,46 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         train.updateTotalCoordX();
         train.setCoordX(0);
         train.setTime(0.0);
-        //std::this_thread::sleep_for(REFRESH * 1s);
+
+        // GERER L'ARRET A LA STATION
 
 
-        if (isOpen && train.getNextStation()->getCoordX(train.getTerminus()->getDirection()) != DISTANCE_TOT) {
+        if (isOpen and !train.getNextStation()->isTerminus() and train.getNextStation()->getNom() != "RESERVE") {
             train.getNextStation()->addPassengers(train.getTerminus()->getDirection());
         }
+    }
 
+    if (train.getNextStation()->getNom() == "RESERVE") {
+        train.emptyPassengers();
     }
 
     if (train.trainArrived()) {
         if (allPassengersEmpty(Stations) and !isOpen) {
-            train.setEmergencyStop(1);
+            train.setEmergencyStop(true);
         }
 
         train.swapTerminus();
-        setStation(Stations, train, 0);
-        train.getNextStation()->emptyPassengers(train.getTerminus()->getDirection());
-        train.emptyPassengers();
+        setStation(Stations, train, false);
     }
+
+
 }
 
 void updateTrainMove(Train &train, SharedData &sharedData) {
-    if (train.checkSecurityDistance() && !train.getEmergencyStop()) {
+    if (train.checkSecurityDistance() && !train.getEmergencyStop() and train.getWait() <= 0) {
         train.moveX();
     }
 }
 
-void ManageTime(Heure &temps, std::vector<Station> &Stations) {
-    temps.incrementerTemps(REFRESH);
+void ManageTime(Train &train, Heure &temps, std::vector<Station> &Stations) {
+    if (train.getId() == 1) {
+        temps.incrementerTemps(REFRESH);
+    }
+
+    if (train.getWait() > 0) {
+        train.decreaseWait(REFRESH);
+    }
+
     /* PRINT TIME */
     //temps.afficherHeure();
     /* ========== */
@@ -136,8 +156,11 @@ void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trai
 
         sharedData.heure = temps.getTime();
 
-        ManageTime(temps, Stations);
-        updateTrainState(Trains, train, Stations, temps);
+
+        ManageTime(train, temps, Stations);
+
+
+        updateTrainState(Trains, train, Stations, temps, sharedData);
 
         sharedData.Trains = &Trains;
         sharedData.Stations = Stations;

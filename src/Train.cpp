@@ -3,10 +3,10 @@
 double REFRESH = 0.001;
 
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
-             int passengersNumber, bool arrived, bool emergencyStop)
+             int passengersNumber, bool emergencyStop)
         : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), totalCoordX(totalCoordX),
-          passengersNumber(passengersNumber),
-          arrived(arrived), passengersCapacity(MAX_PASSENGERS_CAPACITY), emergencyStop(emergencyStop) {
+          passengersNumber(passengersNumber), passengersCapacity(MAX_PASSENGERS_CAPACITY),
+          emergencyStop(emergencyStop) {
 }
 
 /* ==== GETTERS ==== */
@@ -35,12 +35,9 @@ Train *Train::getVoisin() const {
     return voisin;
 }
 
-bool Train::getState() const {
-    return this->arrived;
-}
 
 double Train::getDistance() const {
-    if (getVoisin()->getId() == getId() ) {
+    if (getVoisin()->getId() == getId()) {
         return DISTANCE_SECURITY;
     }
     return std::abs((this->voisin->getCoordX()) + this->voisin->getTotalCoordX() - ((this->coordX) + getTotalCoordX()));
@@ -75,21 +72,21 @@ bool Train::getEmergencyStop() const {
 }
 
 
-int Train::getTimeAtStationMS() const {
-    return timeAtStationMS;
+double Train::getWait() const {
+    return wait;
 }
 
-void Train::decreaseTimeAtStationMS(int decrement) {
-    if (timeAtStationMS > 0) {
-        timeAtStationMS -= decrement;
-        if (timeAtStationMS < 0) {
-            timeAtStationMS = 0;
+void Train::decreaseWait(double decrement) {
+    if (wait > 0) {
+        wait -= decrement;
+        if (wait < 0) {
+            wait = 0;
         }
     }
 }
 
-void Train::setTimeAtStationMS(int ms){
-    timeAtStationMS = ms;
+void Train::setWait(double secondes) {
+    wait = secondes;
 }
 
 /* ==== SETTERS ==== */
@@ -112,10 +109,6 @@ void Train::setTerminus(Terminus *newTerminus) {
 
 void Train::setSpeed(const double &newSpeed) {
     this->speed = newSpeed;
-}
-
-void Train::setState(const bool &newState) {
-    this->arrived = newState;
 }
 
 void Train::setPassengers(const int &deltaPassengers) {
@@ -164,21 +157,18 @@ void Train::moveX() {
 
     if (fullSpeed()) {
         if (coordX <= getAccelerationDistance()) {
-            //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
             this->speed = COEFF_SPEED * time;
         }
 
         if (coordX > getAccelerationDistance() and
             getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
-            //std::cout << "CONSTANT" << std::endl;
             this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
             this->speed = MAX_SPEED;
         }
 
         if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
                       getAccelerationDistance()) {
-            //std::cout << "DECELERATION" << std::endl;
             this->coordX =
                     -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
                     MAX_SPEED * (time2 - time1) +
@@ -188,14 +178,12 @@ void Train::moveX() {
     } else {
         time1 = NEW_MAX_SPEED / COEFF_SPEED;
         if (coordX < getAccelerationDistance()) {
-            //std::cout << "ACCELERATION" << std::endl;
             this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
             this->speed = COEFF_SPEED * time;
         }
 
         if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
                       getAccelerationDistance()) {
-            //std::cout << "DECELERATION" << std::endl;
             this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
                            0.5 * COEFF_SPEED * pow(time1, 2);
             this->speed = -COEFF_SPEED * (time - time1) + NEW_MAX_SPEED;
@@ -203,6 +191,7 @@ void Train::moveX() {
     }
 }
 
+// à faire
 void Train::stopX() {
     double init = this->coordX;
     while (!checkSecurityDistance()) {
@@ -213,7 +202,10 @@ void Train::stopX() {
 
 bool Train::trainArrived() const {
     if (round(getCoordX() + getTotalCoordX()) == getTerminus()->getCoordT()) {
-        std::cout << "Train terminus" << std::endl;
+        if (PRINT) {
+            std::cout << "Le train n°" << getId() << " est arrivé au terminus : " << getTerminus()->getNom()
+                      << std::endl;
+        }
         return true;
     }
     return false;
@@ -237,7 +229,9 @@ void Train::swapTerminus() {
 
 bool Train::trainStationArrived() const {
     if (round(getCoordX() + getTotalCoordX()) == getNextStation()->getCoordX(getTerminus()->getDirection())) {
-        std::cout << "Arrêt du train " << getId() << " à la gare " << getNextStation()->getNom() << std::endl;
+        if (PRINT) {
+            std::cout << "Arrêt du train " << getId() << " à la gare " << getNextStation()->getNom() << std::endl;
+        }
         return true;
     }
     return false;
@@ -253,7 +247,6 @@ bool Train::fullSpeed() const {
 
 
 void Train::print() const {
-
     std::cout << "------------------------------------------------------------------------" << std::endl;
     std::cout << "SECONDS : " << time << std::endl;
     std::cout << "Arrive dans : " << getDistanceStation() << " m " << "à la station " << getNextStation()->getNom()
@@ -262,19 +255,16 @@ void Train::print() const {
     std::cout << "Train n°" << getId() << " : distance |" << getCoordX() + getTotalCoordX() << " m |" << std::endl;
     std::cout << "Voisin : " << getVoisin()->getId() << std::endl;
     std::cout << "Terminus : " << getTerminus()->getNom() << std::endl;
-    //std::cout << "Passagers station : " << getNextStation()->getPassengers() << std::endl;
     std::cout << "Passagers train : " << getPassengers() << std::endl;
     std::cout << "VOISIN : " << getVoisin()->getId() << std::endl;
     std::cout << "DISTANCE : " << getDistance() << std::endl;
-
-
 }
 
 void Train::reducePassengers() {
     if (passengersNumber <= 0) {
         return;
     }
-    int random = rand() % 10;
+    int random = rand() % 5 * getNextStation()->getCoefficientPopularite();
     while (passengersNumber > 0 && random > 0) {
         passengersNumber--;
         random--;
@@ -283,7 +273,7 @@ void Train::reducePassengers() {
 
 void Train::addPassengers() {
     while (passengersNumber < MAX_PASSENGERS_CAPACITY && station->getPassengers(getTerminus()->getDirection()) > 0) {
-        station->reducePassengers(1,getTerminus()->getDirection());
+        station->reducePassengers(1, getTerminus()->getDirection());
         passengersNumber++;
     }
 }

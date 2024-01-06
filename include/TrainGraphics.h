@@ -17,6 +17,7 @@ struct SharedData {
     std::vector<Train> *Trains;
     std::vector<Station> Stations;
     std::tuple<int, int, int> heure;
+    bool isOpen;
     bool emergencyStop;
 };
 

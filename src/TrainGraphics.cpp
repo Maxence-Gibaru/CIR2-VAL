@@ -12,31 +12,33 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
     }
 
     // Background sprite
-    const double ratio = WIDTH / DISTANCE_TOT - 0.01;
+    const double ratio = WIDTH / DISTANCE_TOT - 0.04;
 
     sf::RectangleShape sliderBarRefresh(sf::Vector2f(200, 5));
-    sliderBarRefresh.setPosition(1700, 100);
+    sliderBarRefresh.setPosition(1600, 100);
     sliderBarRefresh.setFillColor(sf::Color::Black);
 
     sf::RectangleShape sliderCursorRefresh(sf::Vector2f(10, 20));
-    sliderCursorRefresh.setPosition(1700, 95);
+    sliderCursorRefresh.setPosition(1600, 95);
     sliderCursorRefresh.setFillColor(sf::Color::Red);
 
     sf::RectangleShape sliderBarTrain(sf::Vector2f(200, 5));
-    sliderBarTrain.setPosition(1700, 150);
+    sliderBarTrain.setPosition(1600, 150);
     sliderBarTrain.setFillColor(sf::Color::Black);
 
     sf::RectangleShape sliderCursorTrain(sf::Vector2f(10, 20));
-    sliderCursorTrain.setPosition(1700, 145);
+    sliderCursorTrain.setPosition(1600, 145);
     sliderCursorTrain.setFillColor(sf::Color::Red);
 
-    bool isDragging = false;
+    bool isDraggingTrain = false;
+    bool isDraggingRefresh = false;
     double refresh = REFRESH;
     int trainNumber = TRAIN_NUMBER;
-    const double minRefresh = 0.001, maxRefresh = 1.0;
-    const int minTrain = 1, maxTrain = 40;
+    const double minRefresh = 0.001, maxRefresh = 2;
+    const int minTrain = 100, maxTrain = 5000;
 
     sf::Text refreshRate;
+    sf::Text distanceRate;
 
 
     while (window.isOpen()) {
@@ -48,10 +50,10 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                 window.close();
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (sliderCursorRefresh.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    isDragging = true;
+                    isDraggingRefresh = true;
                 }
                 if (sliderCursorTrain.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
-                    isDragging = true;
+                    isDraggingTrain = true;
                 }
             }
         }
@@ -62,42 +64,56 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         refreshRate.setString(text);
         refreshRate.setCharacterSize(24);
         refreshRate.setFillColor(sf::Color::Black);
-        refreshRate.setPosition(1700, 70);
+        refreshRate.setPosition(1600, 70);
+
+        std::string distanceText = "Security :" + std::to_string(DISTANCE_SECURITY);
+        distanceRate.setFont(font);
+        distanceRate.setString(distanceText);
+        distanceRate.setCharacterSize(24);
+        distanceRate.setFillColor(sf::Color::Black);
+        distanceRate.setPosition(1600, 120);
+
 
         if (event.type == sf::Event::MouseButtonReleased) {
-            isDragging = false;
+            isDraggingTrain = false;
+            isDraggingRefresh = false;
         }
 
         if (event.type == sf::Event::MouseMoved) {
-            if (isDragging) {
+            if (isDraggingRefresh) {
                 float newX_refresh = static_cast<float>(event.mouseMove.x);
-                float newX_train = static_cast<float>(event.mouseMove.x);
+
                 newX_refresh = std::max(newX_refresh, sliderBarRefresh.getPosition().x);
                 newX_refresh = std::min(newX_refresh, sliderBarRefresh.getPosition().x + sliderBarRefresh.getSize().x -
                                                       sliderCursorRefresh.getSize().x);
 
-                newX_train = std::max(newX_train, sliderBarTrain.getPosition().x);
-                newX_train = std::min(newX_train, sliderBarTrain.getPosition().x + sliderBarTrain.getSize().x -
-                                                  sliderCursorTrain.getSize().x);
-
 
                 sliderCursorRefresh.setPosition(newX_refresh, sliderCursorRefresh.getPosition().y);
-                sliderCursorTrain.setPosition(newX_train, sliderCursorTrain.getPosition().y);
+
 
                 // Mise à jour de la variable refresh
                 float percent = (newX_refresh - sliderBarRefresh.getPosition().x) / sliderBarRefresh.getSize().x;
                 REFRESH = minRefresh + (maxRefresh - minRefresh) * percent;
-                /*float percent_train = (newX_train - sliderBarTrain.getPosition().x) / sliderBarTrain.getSize().x;
-                REFRESH = minTrain + (maxTrain - minTrain) * percent_train;*/
+
+            }
+            if (isDraggingTrain) {
+                float newX_train = static_cast<float>(event.mouseMove.x);
+                newX_train = std::max(newX_train, sliderBarTrain.getPosition().x);
+                newX_train = std::min(newX_train, sliderBarTrain.getPosition().x + sliderBarTrain.getSize().x -
+                                                  sliderCursorTrain.getSize().x);
+                sliderCursorTrain.setPosition(newX_train, sliderCursorTrain.getPosition().y);
+                float percent_train = (newX_train - sliderBarTrain.getPosition().x) / sliderBarTrain.getSize().x;
+                DISTANCE_SECURITY = minTrain + (maxTrain - minTrain) * percent_train;
+
             }
         }
 
 
         sf::RectangleShape rectangle;
-        rectangle.setSize(sf::Vector2f(WIDTH * 2 / 3, 1));
+        rectangle.setSize(sf::Vector2f(WIDTH - 520, 10));
         rectangle.setOutlineColor(sf::Color::Red);
         rectangle.setOutlineThickness(5);
-        rectangle.setPosition(100, 250);
+        rectangle.setPosition(100, 245);
 
 
         window.draw(rectangle);
@@ -108,15 +124,160 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         restartButton.setFillColor(sf::Color::Green);
         restartButton.setPosition(1700, HEIGHT - 200);
 
+        sf::RectangleShape stopButton;
+        stopButton.setSize(sf::Vector2f(200, 100));
+        stopButton.setFillColor(sf::Color::Red);
+        stopButton.setPosition(1700, HEIGHT - 400);
+
         sf::Text restartButtonText;
         restartButtonText.setFont(font);
-        restartButtonText.setString("Restart "
+        restartButtonText.setString("STOP/START "
                                     "Trains");
         restartButtonText.setCharacterSize(24);
-        restartButtonText.setFillColor(sf::Color::Black);
-        restartButtonText.setPosition(1700, HEIGHT - 200);
+        restartButtonText.setFillColor(sf::Color::White);
+        restartButtonText.setPosition(1725, HEIGHT - 175);
+
+        sf::Text stopButtonText;
+        stopButtonText.setFont(font);
+        stopButtonText.setString("Stop "
+                                 "Train");
+        stopButtonText.setCharacterSize(24);
+        stopButtonText.setFillColor(sf::Color::White);
+        stopButtonText.setPosition(1725, HEIGHT - 375);
+
         window.draw(restartButton);
         window.draw(restartButtonText);
+        /*     window.draw(stopButton);
+             window.draw(stopButtonText);*/
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+
+            sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+
+            sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
+
+
+            if (stopButtonDetect.contains(mouse)) {
+                int random = rand() % TRAIN_NUMBER + 1;
+                for (auto &train: *sharedData.Trains) {
+                    if (train.getId() == random and !train.getEmergencyStop()) {
+                        train.setEmergencyStop(true);
+                        std::cout << "clicked" << train.getId() << std::endl;
+
+                    }
+                }
+            }
+
+        }
+
+        for (auto &train: *sharedData.Trains) {
+            std::string passengerText =
+                    "Passagers : " + std::to_string(train.getPassengers());
+            sf::Text passengersNumber;
+            passengersNumber.setFont(font);
+            passengersNumber.setString(passengerText);
+            passengersNumber.setCharacterSize(24); // in pixels, not points!
+            passengersNumber.setFillColor(sf::Color::Black);
+            passengersNumber.setPosition(1600, MID + 20);
+
+            std::string speedText =
+                    "Vitesse : " + std::to_string(train.getSpeed()) + " m/s";
+            sf::Text trainSpeed;
+            trainSpeed.setFont(font);
+            trainSpeed.setString(speedText);
+            trainSpeed.setCharacterSize(24); // in pixels, not points!
+            trainSpeed.setFillColor(sf::Color::Black);
+            trainSpeed.setPosition(1600, MID + 40);
+
+            std::string idText =
+                    "Train num " + std::to_string(train.getId());
+            sf::Text trainNumber;
+            trainNumber.setFont(font);
+            trainNumber.setString(idText);
+            trainNumber.setCharacterSize(24);
+            trainNumber.setFillColor(sf::Color::Black);
+            trainNumber.setPosition(1600, MID);
+
+            std::string distanceText =
+                    "Distance : " + std::to_string(train.getCoordX() + train.getTotalCoordX()) + " m";
+            sf::Text trainDistance;
+            trainDistance.setFont(font);
+            trainDistance.setString(distanceText);
+            trainDistance.setCharacterSize(24);
+            trainDistance.setFillColor(sf::Color::Black);
+            trainDistance.setPosition(1600, MID + 60);
+
+
+            sf::CircleShape trainShape(80, 3);
+            trainShape.setFillColor(sf::Color::Blue);
+
+
+            if (train.getTerminus()->getDirection()) {
+                trainShape.setPosition((train.getCoordX() + train.getTotalCoordX()) * ratio + 125,
+                                       200);
+                trainShape.setRotation(90);
+/*
+                passengersNumber.setPosition((train.getTotalCoordX() + train.getCoordX()) * ratio + 100,
+                                             175);
+                trainNumber.setPosition((train.getTotalCoordX() + train.getCoordX()) * ratio + 90,
+                                        208);*/
+            } else {
+                trainShape.setPosition((DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * ratio + 80,
+                                       300);
+                trainShape.setRotation(-90);
+                /*passengersNumber.setPosition(
+                        (DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * ratio + 100,
+                        300);
+                trainNumber.setPosition((DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * ratio + 114,
+                                        262);*/
+
+            }
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                // transform the mouse position from window coordinates to world coordinates
+                sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+
+                // retrieve the bounding box of the sprite
+                sf::FloatRect bounds = trainShape.getGlobalBounds();
+
+                sf::FloatRect restartButtonDetect = restartButton.getGlobalBounds();
+
+
+                if (bounds.contains(mouse)) {
+                    window.draw(trainNumber);
+                    window.draw(passengersNumber);
+                    window.draw(trainSpeed);
+                    window.draw(trainDistance);
+                }
+
+
+                if (restartButtonDetect.contains(mouse)) {
+                    if (train.getEmergencyStop()) {
+                        train.setEmergencyStop(false);
+                        if (PRINT) {
+                            std::cout << "Les trains peuvent repartir !" << std::endl;
+                        }
+                    } else {
+                        if (train.getId() == 1) {
+                            train.setEmergencyStop(true);
+                            if (PRINT) {
+                                std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
+                                          << std::endl;
+                            }
+                        }
+                    }
+
+                }
+
+
+            }
+            trainShape.setScale(0.3, 0.3);
+            if (train.getTotalCoordX() != 0 or train.getCoordX() != 0) {
+                window.draw(trainShape);
+            }
+
+
+        }
 
 
         for (auto &station: sharedData.Stations) {
@@ -128,27 +289,50 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             passengersNumber.setString(std::to_string(station.getPassengers(true)));
             passengersNumber.setCharacterSize(24);
             passengersNumber.setFillColor(sf::Color::Black);
-            passengersNumber.setPosition(station.getCoordX(1) * ratio, MID - 45);
-            window.draw(passengersNumber);
+            passengersNumber.setPosition(station.getCoordX(true) * ratio + 90, MID - 45);
+            if (station.getNom() != "RESERVE") {
+                window.draw(passengersNumber);
+            }
 
             nomStation.setFont(font); // font is a sf::Font
             nomStation.setString(station.getNom());
             nomStation.setCharacterSize(20);
             nomStation.setFillColor(sf::Color::Red);
-            nomStation.setPosition(station.getCoordX(1) * ratio, HIGH - 25);
+            nomStation.setPosition(station.getCoordX(true) * ratio, HIGH - 25);
 
             sf::CircleShape stationCircle(15);
-            stationCircle.setFillColor(sf::Color::Black);
-            stationCircle.setPosition(station.getCoordX(1) * ratio, MID - 15);
-            window.draw(stationCircle);
+            if (sharedData.isOpen) {
+                stationCircle.setFillColor(sf::Color::Green);
+            } else {
+                stationCircle.setFillColor(sf::Color::Red);
+            }
+
+            if (station.getNom() != "RESERVE") {
+                stationCircle.setPosition(station.getCoordX(true) * ratio + 80, MID - 15);
+            }
+
+
+            sf::RectangleShape reserveShape;
+            reserveShape.setSize(sf::Vector2f(70, 170));
+            reserveShape.setFillColor(sf::Color::Black);
+            if (station.getNom() == "RESERVE") {
+                reserveShape.setPosition(station.getCoordX(true) * ratio + 80, MID - 80);
+            }
+
+            if (stationCircle.getPosition().x != 0 and stationCircle.getPosition().y != 0) {
+                window.draw(stationCircle);
+            }
+
+            if (reserveShape.getPosition().x != 0 and reserveShape.getPosition().y != 0) {
+                window.draw(reserveShape);
+            }
+
+
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                // transform the mouse position from window coordinates to world coordinates
                 sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 
-                // retrieve the bounding box of the sprite
                 sf::FloatRect bounds = stationCircle.getGlobalBounds();
 
-                // hit test
                 if (bounds.contains(mouse)) {
                     window.draw(nomStation);
                 }
@@ -172,70 +356,15 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             passengersNumber.setString(std::to_string(station.getPassengers(false)));
             passengersNumber.setCharacterSize(24); // in pixels, not points!
             passengersNumber.setFillColor(sf::Color::Black);
-            passengersNumber.setPosition(station.getCoordX(1) * ratio, MID + 25);
-            window.draw(passengersNumber);
-        }
-
-
-        for (auto &train: *sharedData.Trains) {
-            sf::Text passengersNumber;
-            passengersNumber.setFont(font); // font is a sf::Font
-            passengersNumber.setString(std::to_string(train.getPassengers()));
-            passengersNumber.setCharacterSize(24); // in pixels, not points!
-            passengersNumber.setFillColor(sf::Color::Black);
-            sf::CircleShape trainShape(80, 3);
-            trainShape.setFillColor(sf::Color::Blue);
-
-
-            if (train.getTerminus()->getDirection()) {
-                trainShape.setPosition((train.getCoordX() + train.getTotalCoordX()) * ratio,
-                                       200);
-                trainShape.setRotation(90);
-
-                passengersNumber.setPosition((train.getTotalCoordX() + train.getCoordX()) * ratio - 25,
-                                             175);
-
-            } else {
-                trainShape.setPosition((DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * ratio,
-                                       300);
-                trainShape.setRotation(-90);
-                passengersNumber.setPosition(
-                        (DISTANCE_TOT - train.getCoordX() - train.getTotalCoordX()) * ratio,
-                        300);
-
-            }
-
-            if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                // transform the mouse position from window coordinates to world coordinates
-                sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
-
-                // retrieve the bounding box of the sprite
-                sf::FloatRect bounds = trainShape.getGlobalBounds();
-
-                sf::FloatRect button = restartButton.getGlobalBounds();
-
-                // hit test
-                if (bounds.contains(mouse) and !train.getEmergencyStop()) {
-                    train.setEmergencyStop(true);
-                    std::cout << "STOP : " << train.getId() << std::endl;
-                }
-                if (button.contains(mouse) and train.getEmergencyStop()) {
-                    train.setEmergencyStop(false);
-                    std::cout << "GO : " << train.getId() << std::endl;
-                }
-
-            }
-            trainShape.setScale(0.3, 0.3);
-            if (train.getTotalCoordX() != 0 or train.getCoordX() != 0) {
-                window.draw(trainShape);
+            passengersNumber.setPosition(station.getCoordX(1) * ratio + 90, MID + 25);
+            if (station.getNom() != "RESERVE") {
                 window.draw(passengersNumber);
             }
-
-
         }
 
 
         window.draw(refreshRate);
+        window.draw(distanceRate);
         window.draw(sliderBarRefresh);
         window.draw(sliderCursorRefresh);
         window.draw(sliderBarTrain);

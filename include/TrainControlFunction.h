@@ -33,11 +33,6 @@ void setVoisinList(std::vector<Train> &Trains);
 void setStation(std::vector<Station> &Stations, Train &train, bool first);
 
 /**
-  PAS ENCORE CRÉÉ ?
- */
-void setLastStation(std::vector<Station> &Stations, std::vector<Train> &myList);
-
-/**
  * @brief Initialise la liste des stations
  * @param Stations : liste des stations
 */

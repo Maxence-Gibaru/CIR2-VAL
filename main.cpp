@@ -10,13 +10,17 @@
 #include "data.h"
 
 int TRAIN_NUMBER = 10;
-#define MAX_PASSENGERS_STATION 50
+double DISTANCE_SECURITY = 1000;
+
 
 /*
  * TODO
  * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
  * - [ ] gérer freinage en fonction de distance de sécurité -> méthode stop
- * - [ ] gérer le temps d'arrêt à une station
+ * - [ ] Faire une deuxième ligne de métro
+ * - [ ] mieux gérer le start/stop
+ * - [ ] gérer le cas du premier qui ne se remplie pas
+ * - [ ] clean le code
  * 🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆🚆
 */
 

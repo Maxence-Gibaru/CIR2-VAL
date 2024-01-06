@@ -15,12 +15,13 @@
 
 #define COEFF_SPEED 1.0
 #define MAX_SPEED 23.0
-#define DISTANCE_SECURITY 1000
 #define MAX_PASSENGERS_CAPACITY 150
 #define DISTANCE_TOT 13000
 
+extern double DISTANCE_SECURITY;
 extern double REFRESH;
 extern int TRAIN_NUMBER;
+
 
 class Train {
 private:
@@ -33,12 +34,11 @@ private:
     int passengersNumber;
     Train *voisin{};
     Station *station{};
-    bool arrived;
     float time;
     int passengersCapacity;
     double accelerationDistance;
     bool emergencyStop;
-    int timeAtStationMS = 0;
+    double wait = 0;
 
 public:
     /**
@@ -54,7 +54,7 @@ public:
      * @return void
     */
     Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX, int passengersNumber,
-          bool arrived, bool emergencyStop);
+          bool emergencyStop);
 
 /* ===== GETTER ===== */
 
@@ -100,11 +100,6 @@ public:
      */
     Train *getVoisin() const;
 
-    /**
-    * @brief Getter de l'etat d'arrive du train
-    * @return bool : le train est arrivé
-    */
-    bool getState() const;
 
     /**
      * @biref Getter de la distance entre le train et son voisin
@@ -142,11 +137,11 @@ public:
     */
     int getPassengers() const;
 
-    int getTimeAtStationMS() const;
+    double getWait() const;
 
-    void setTimeAtStationMS(int ms);
+    void setWait(double secondes);
 
-    void decreaseTimeAtStationMS(int decrement);
+    void decreaseWait(double decrement);
 
 /* ===== SETTER ===== */
 
@@ -191,13 +186,6 @@ public:
      * @return void
     */
     void setPassengers(const int &deltaPassengers);
-
-    /**
-     * @brief Setter de l'arrivé
-     * @param newState
-     * @return void
-     */
-    void setState(const bool &newState);
 
     /**
      * @brief Setter du voisin du train

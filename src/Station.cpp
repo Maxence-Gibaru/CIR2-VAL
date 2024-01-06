@@ -68,7 +68,9 @@ void Station::addPassengers(bool direction) {
     } else {
         std::get<1>(this->passengers) += random * coefficientPopularite;
     }
-    std::cout << random << "ont été ajoutés à la station " << this->getNom() << std::endl;
+    if (PRINT) {
+        std::cout << random << " personnes ont rejoient la station !" << this->getNom() << std::endl;
+    }
 
 }
 
