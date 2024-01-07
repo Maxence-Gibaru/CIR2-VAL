@@ -2,6 +2,7 @@
 #define CIR2_VAL_TRAINGRAPHICS_H
 
 #include <SFML/Graphics.hpp>
+#include "TrainControlFunction.h"
 #include <string>
 #include "Train.h"
 

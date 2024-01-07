@@ -1,6 +1,6 @@
 #include "Train.h"
 
-double REFRESH = 0.001;
+double REFRESH = 0.01;
 
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
              int passengersNumber, bool emergencyStop)

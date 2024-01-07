@@ -40,8 +40,7 @@ int main(void) {
 
     threads.emplace_back(&MetroLine::manageLine, &line1, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),
                          std::ref(temps));
-    threads.emplace_back(&MetroLine::manageLine, &line2, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),
-                         std::ref(temps));
+    threads.emplace_back(&MetroLine::manageLine, &line2, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),std::ref(temps));
 
     // Wait for all threads to finish
     for (auto &thread: threads) {

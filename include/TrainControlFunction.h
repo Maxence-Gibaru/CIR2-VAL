@@ -19,6 +19,7 @@
 using namespace std::chrono_literals;
 
 extern bool isOpen; // Global variable to track station status
+extern bool moving; // Global variable to track station status
 
 /**
  * @brief Finds the neighbor of a train

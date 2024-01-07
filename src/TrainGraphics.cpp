@@ -155,6 +155,15 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             }
         }*/
 
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+            // transform the mouse position from window coordinates to world coordinates
+            sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
+            // retrieve the bounding box of the sprite
+            sf::FloatRect restartButtonDetect = restartButton.getGlobalBounds();
+            sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
+
+
+        }
 
         for (auto &train: sharedData.Trains1) {
             std::string passengerText =
@@ -220,23 +229,23 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                     window.draw(trainSpeed);
                     window.draw(trainDistance);
                 }
+                if (stopButtonDetect.contains(mouse)) {
 
+                    std::cout << train.getEmergencyStop() << std::endl;
+
+                    moving = false;
+                    if (PRINT) {
+                        std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
+                                  << std::endl;
+                    }
+                }
                 if (restartButtonDetect.contains(mouse)) {
-                    if (train.getEmergencyStop()) {
-                        train.setEmergencyStop(false);
+                    for (auto &train: sharedData.Trains1) {
+
+                        moving = true;
 
                         if (PRINT) {
                             std::cout << "Les trains peuvent repartir !" << std::endl;
-                        }
-                    }
-                }
-
-                if (stopButtonDetect.contains(mouse)) {
-                    if (train.getId() == 1 and !train.getEmergencyStop()) {
-                        train.setEmergencyStop(true);
-                        if (PRINT) {
-                            std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
-                                      << std::endl;
                         }
                     }
                 }
@@ -311,23 +320,23 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                     window.draw(trainSpeed);
                     window.draw(trainDistance);
                 }
+                if (stopButtonDetect.contains(mouse)) {
 
+                    std::cout << train.getEmergencyStop() << std::endl;
+
+                    moving = false;
+                    if (PRINT) {
+                        std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
+                                  << std::endl;
+                    }
+                }
                 if (restartButtonDetect.contains(mouse)) {
-                    if (train.getEmergencyStop()) {
-                        train.setEmergencyStop(false);
+                    for (auto &train: sharedData.Trains1) {
+
+                        moving = true;
 
                         if (PRINT) {
                             std::cout << "Les trains peuvent repartir !" << std::endl;
-                        }
-                    }
-                }
-
-                if (stopButtonDetect.contains(mouse)) {
-                    if (train.getId() == 1 and !train.getEmergencyStop()) {
-                        train.setEmergencyStop(true);
-                        if (PRINT) {
-                            std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
-                                      << std::endl;
                         }
                     }
                 }
@@ -401,7 +410,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             passengersNumber.setString(std::to_string(station.getPassengers(true)));
             passengersNumber.setCharacterSize(24);
             passengersNumber.setFillColor(sf::Color::Black);
-            passengersNumber.setPosition(station.getCoordX(true) * ratio + 90, MID -50 + 455);
+            passengersNumber.setPosition(station.getCoordX(true) * ratio + 90, MID - 50 + 455);
 
             if (station.getNom() != "RESERVE") {
                 window.draw(passengersNumber);
@@ -497,6 +506,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         // display the render
         window.display();
     }
+
 }
 
 

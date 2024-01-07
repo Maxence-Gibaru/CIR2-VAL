@@ -1,6 +1,7 @@
 #include "TrainControlFunction.h"
 
 bool isOpen = true;
+bool moving = true;
 
 // Finds the neighbor of each train in the list
 void setVoisinList(std::vector<Train> &Trains) {
@@ -64,13 +65,14 @@ bool allPassengersEmpty(const std::vector<Station> &Stations) {
 // Updates the state of a train based on time and station conditions
 void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps) {
     // Checks and updates station status based on time
-    if (temps.getHeures() == 7) {
+    if (temps.getHeures() == 7 and temps.getMinutes() < 1 and temps.getSecondes() < 1) {
         if (PRINT) {
             std::cout << "On ouvre les stations !" << std::endl;
         }
         isOpen = true;
 
         for (auto &train: Trains) {
+            std::cout << "SEXE" << std::endl;
             train.setEmergencyStop(0);
         }
     }
@@ -129,7 +131,7 @@ void updateTrainMove(Train &train) {
         }
     */
 
-    if (train.checkSecurityDistance() and !train.getEmergencyStop() and train.getWait() <= 0) {
+    if (train.checkSecurityDistance() and moving and !train.getEmergencyStop() and train.getWait() <= 0) {
         train.moveX();
     }
 }
