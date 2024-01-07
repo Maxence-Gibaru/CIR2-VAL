@@ -11,6 +11,12 @@ Projet CIR2 VAL.
     - [Prérequis](#prérequis)
     - [Étapes pour lancer le programme](#étapes-pour-lancer-le-programme)
     - [Fonctionnalités de l'interface](#fonctionnalités-de-linterface-sfml)
+  
+
+5. [Fonctionnalités Clés du Code](#fonctionnalités-clés-du-code)
+    - [Gestion du mouvement des trains](#gestion-du-mouvement-des-trains)
+    - [Gestion du temps dans la simulation](#gestion-du-temps-dans-la-simulation)
+    - [Utilisation des threads pour la gestion simultanée](#utilisation-des-threads-pour-la-gestion-simultanée)
 5. [Contact](#contact)
 
 ## Aperçu
@@ -221,6 +227,48 @@ for (auto &train: Trains) {
 
 Ce que montre le code, est que chaque train forme un thread et est géré par la fonction `ManageSubway(..)` 
 Cette fonction est documenté et développé dans le fichier **src/TrainControlFunction.cpp**
+
+## Réussite du Projet
+
+Cette section vise à résumer les aspects clés de la réussite du projet de simulation du système de métro. Elle met en lumière les objectifs atteints, les défis relevés et les conclusions tirées de cette expérience de développement.
+
+### Objectifs Accomplis
+
+- **Modélisation précise** : Réussite dans la modélisation précise du système de métro, en utilisant des principes physiques et algorithmiques pour simuler le comportement réaliste des rames et des stations.
+  
+- **Interface interactive** : Développement d'une interface utilisateur SFML interactive, offrant une représentation visuelle claire du système de métro et permettant une expérience immersive pour les utilisateurs.
+
+- **Gestion des aspects temporels** : Intégration réussie de la gestion du temps dans la simulation, avec une variation dynamique des conditions de fonctionnement du système à différentes heures de la journée.
+
+### Défis Relevés
+
+- **Complexité de la modélisation** : Surmonter la complexité liée à la modélisation physique du mouvement des rames de métro tout en assurant la précision des calculs.
+
+- **Optimisation des performances** : Optimiser l'utilisation des threads pour garantir une simulation fluide et efficace, même avec une charge de travail importante.
+
+- **DocString & Commentaires** : Ajout de commentaire de documentation dans l'intégralité du code. La structure à aussi été soigneusement réfléchi.
+
+## Défis non-relevés
+
+### Aspect Visuel Sophistiqué
+
+L'amélioration de l'aspect visuel pour offrir une représentation plus sophistiquée du système de métro a été envisagée. Cependant, la complexité d'utilisation de la bibliothèque SFML ainsi que des contraintes de temps ont limité la mise en œuvre de ces améliorations.
+
+### Heures d'Influence dans la Simulation
+
+L'ajout d'une prise en compte plus détaillée des heures où l'influence sur le réseau de métro est plus ou moins forte a été envisagé. La gestion complète de cette fonctionnalité au sein des classes existantes a été prévue, mais des contraintes de temps ont empêché sa réalisation complète.
+
+### Conclusions
+
+### Conclusion personnelle : 
+
+#### Ugo Warembourg
+
+Je suis satisfait de l'évolution du projet. J'ai trouvé particulièrement enrichissante l'approfondissement de certaines notions, notamment celle relative à l'utilisation des threads dans le contexte du projet. L'organisation a été efficacement gérée grâce à l'utilisation de listes de tâches (TO-DO lists) directement intégrées dans le projet.
+
+#### Maxence Gibaru
+
+
 
 
 ## Contact
