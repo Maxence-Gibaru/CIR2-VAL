@@ -64,8 +64,19 @@ void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
                   std::mutex &mtx_, bool &stop_working, Heure &temps);
 */
 
+/**
+ * @biref Function that updates the state of the train
+ * @param Trains : list of trains
+ * @param train : train
+ * @param Stations : list of stations
+ * @param temps : time variable from the Heure class
+ */
 void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps);
 
+/**
+ * @brief Function that updates the move of the train
+ * @param train : train
+ */
 void updateTrainMove(Train &train);
 
 /**

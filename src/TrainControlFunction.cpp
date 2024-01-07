@@ -88,8 +88,6 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         isOpen = false; // Updates station status to closed
     }
 
-
-
     // Updates train state based on arrival and passengers at the next station
     if (train.trainStationArrived() && round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
                                        round(train.getTerminus()->getCoordT())) {
@@ -157,7 +155,6 @@ void ManageTime(Train &train, Heure &temps, int lineId) {
         temps.afficherHeure(); // Prints the current time
     }
 }
-
 
 // Controls the main subway system, manages train actions, and shared data updates
 /*

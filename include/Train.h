@@ -12,7 +12,6 @@
 #include <ctime>
 #include "Heure.h"
 
-
 #define COEFF_SPEED 1.0
 #define DECELERATION_COEFF 1.5
 #define MAX_SPEED 23.0
@@ -288,8 +287,11 @@ public:
      */
     void emptyPassengers();
 
+    /**
+     * @biref : Reduce the number of passengers in the train
+     * @return void
+     */
     void reducePassengers();
-
 
 };
 

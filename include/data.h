@@ -3,11 +3,8 @@
 #include <tuple>
 #include "Train.h"
 
-
-
 #ifndef CIR2_VAL_DATA_H
 #define CIR2_VAL_DATA_H
-
 
 // Implementation of Terminus
 std::vector<std::tuple<std::string, int, double, bool>> dataTerminusLine1 = {
@@ -15,12 +12,13 @@ std::vector<std::tuple<std::string, int, double, bool>> dataTerminusLine1 = {
         {"4 Cantons",     0, DISTANCE_TOT, 1}
 };
 
+// Implementation of Terminus
 std::vector<std::tuple<std::string, int, double, bool>> dataTerminusLine2 = {
         {"Lomme St Philibert", 0, DISTANCE_TOT, 0},
         {"Tourcoing C.H. Dron",     0, DISTANCE_TOT, 1}
 };
 
-
+// Implementation of Station (name, id, (x, y), isTerminus, (distanceToNext, distanceToPrevious), speed) line 1
 std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> dataStationsLine1 = {
         {"RESERVE",                          1, {0,           0},  false, {0,                    DISTANCE_TOT}, 1},
         {"Terminus CHU",                     2, {rand() % 15,           0},  true, {DISTANCE_TOT - 12000, 12000},        1},
@@ -53,7 +51,7 @@ std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<
 
 };
 
-
+// Implementation of Station (name, id, (x, y), isTerminus, (distanceToNext, distanceToPrevious), speed) line 2
 std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> dataStationsLine2 = {
         {"RESERVE",                          1, {0,           0},  false, {0,                    DISTANCE_TOT}, 1},
         {"Terminus St Philibert",                     2, {rand() % 15,           0},  true, {DISTANCE_TOT - 12000, 12000},        1},
@@ -85,4 +83,5 @@ std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<
         {"RESERVE",                          12, {0,           0},  false, {DISTANCE_TOT, 0},                    1}
 
 };
+
 #endif //CIR2_VAL_DATA_H

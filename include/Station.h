@@ -3,8 +3,6 @@
 #include <iostream>
 #include <tuple>
 
-
-
 #ifndef CIR2_VAL_STATION_H
 #define CIR2_VAL_STATION_H
 #define PRINT false
@@ -117,8 +115,18 @@ public:
      */
     void emptyPassengers(bool direction);
 
+    /**
+     * Brief : Reduce the number of passengers in the station
+     * @param newPassengers : new number of passengers in the station
+     * @param direction : direction of the train (true = right, false = left)
+     */
     void reducePassengers(const int &newPassengers, bool direction);
 
+    /**
+     * @brief Ajust the popularity of the station by the hour
+     * @param Heure : hour
+     * No use for now
+     */
     void adjustPopularityByHour(int Heure);
 
 };

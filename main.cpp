@@ -11,7 +11,6 @@ int TRAIN_NUMBER_LINE_2 = 10;
 
 double DISTANCE_SECURITY = 1000;
 
-
 // Main function
 int main(void) {
     // Shared data among threads
@@ -36,8 +35,7 @@ int main(void) {
     }
 
     Heure temps;
-    // launch a thread for each train
-
+    // launch a thread for each train line
     threads.emplace_back(&MetroLine::manageLine, &line1, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),
                          std::ref(temps));
     threads.emplace_back(&MetroLine::manageLine, &line2, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),std::ref(temps));

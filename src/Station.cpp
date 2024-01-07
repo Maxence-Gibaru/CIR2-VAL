@@ -44,7 +44,6 @@ bool Station::isTerminus() const {
     return this->terminusState;
 }
 
-
 /* ==== SETTERS ==== */
 
 void Station::setPassengers(const int &newPassengers, bool direction) {
@@ -64,7 +63,6 @@ void Station::reducePassengers(const int &newPassengers, bool direction) {
     }
 
 }
-
 
 void Station::addPassengers(bool direction) {
     int random = rand() % 12;

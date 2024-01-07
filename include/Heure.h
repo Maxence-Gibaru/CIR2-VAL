@@ -99,8 +99,6 @@ public:
      */
     void remiseAZero();
 
-
-
 };
 
 #endif // HEURE_H

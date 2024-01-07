@@ -23,7 +23,12 @@ struct SharedData {
     bool emergencyStop;
 };
 
+/**
+ * @brief Render the visuals of the metro
+ * @param window : window of the metro
+ * @param sharedData : data shared between threads
+ * @return 0 if rendered successfully
+ */
 int renderVisuals(sf::RenderWindow &window, SharedData &sharedData);
-
 
 #endif //CIR2_VAL_TRAINGRAPHICS_H

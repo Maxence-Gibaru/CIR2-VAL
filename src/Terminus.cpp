@@ -30,3 +30,7 @@ bool Terminus::getDirection() const {
 void Terminus::setNextTerminus(Terminus* newTerminus) {
     this->nextTerminus = newTerminus;
 }
+
+void addTrainNumber() {
+    this->train_number++;
+}

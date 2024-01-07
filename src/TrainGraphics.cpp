@@ -2,16 +2,20 @@
 #include <SFML/Graphics.hpp>
 
 
-// Fonction de rendu visuel SFML
+// Function to render visuals
 int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
+
+
     sf::Font font;
     if (!font.loadFromFile("arial.ttf")) {
         return EXIT_FAILURE;
     }
 
-    // Background sprite
+    // Background shapes and variables for sliders and buttons
+
     const double ratio = WIDTH / DISTANCE_TOT - 0.04;
 
+    // Initialize various shapes and variables for UI elements
     sf::RectangleShape sliderBarRefresh(sf::Vector2f(200, 5));
     sliderBarRefresh.setPosition(1600, 100);
     sliderBarRefresh.setFillColor(sf::Color::Black);
@@ -39,10 +43,16 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
 
     while (window.isOpen()) {
         window.clear(sf::Color::White);
+
+        // Event handling
         sf::Event event;
         while (window.pollEvent(event)) {
+
+            // Close window if 'X' button clicked
             if (event.type == sf::Event::Closed)
                 window.close();
+
+            // Handling mouse button presses
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (sliderCursorRefresh.getGlobalBounds().contains(event.mouseButton.x, event.mouseButton.y)) {
                     isDraggingRefresh = true;
@@ -67,11 +77,13 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         distanceRate.setFillColor(sf::Color::Black);
         distanceRate.setPosition(1600, 120);
 
+        // Handling mouse button releases
         if (event.type == sf::Event::MouseButtonReleased) {
             isDraggingTrain = false;
             isDraggingRefresh = false;
         }
 
+        // Handling mouse movement
         if (event.type == sf::Event::MouseMoved) {
             if (isDraggingRefresh) {
                 float newX_refresh = static_cast<float>(event.mouseMove.x);
@@ -508,6 +520,3 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
     }
 
 }
-
-
-

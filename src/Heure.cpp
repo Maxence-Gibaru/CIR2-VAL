@@ -38,13 +38,13 @@ void Heure::afficherHeure() const {
 }
 
 void Heure::incrementerTemps(double refresh) {
-    // Convertir le refresh en millisecondes.
+    // Convert to milliseconds.
     int delayMilliseconds = static_cast<int>(refresh * 1000);
 
-    // Ajouter le délai aux millisecondes.
+    // Add the delay to the current time.
     millisecondes += delayMilliseconds;
 
-    // Ajuster les secondes et les minutes en conséquence.
+    // Increment the time.
     while (millisecondes >= 1000) {
         millisecondes -= 1000;
         secondes++;

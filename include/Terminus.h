@@ -47,6 +47,10 @@ public:
     */
     Terminus * getNextTerminus() const;
 
+    /**
+     * @brief Getter of the direction of the terminus
+     * @return bool : direction of the terminus
+    */
     bool getDirection() const;
 
 /* ===== SETTER ===== */
@@ -62,9 +66,7 @@ public:
      * @brief Incrémente le nombre de train ayant atteint le terminus
      * @return void
     */
-    void addTrainNumber() {
-        this->train_number += 1;
-    }
+    void addTrainNumber();
 
 };
 

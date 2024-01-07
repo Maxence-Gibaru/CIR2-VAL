@@ -2,6 +2,7 @@
 
 double REFRESH = 0.01;
 
+// Constructor for Train
 Train::Train(int id, double speed, float time, Terminus *terminus, double coordX, double totalCoordX,
              int passengersNumber, bool emergencyStop)
         : id(id), speed(speed), time(time), terminus(terminus), coordX(coordX), totalCoordX(totalCoordX),

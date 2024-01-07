@@ -1,21 +1,22 @@
 #include "MetroLine.h"
 
+// Constructor for MetroLine
 MetroLine::MetroLine(int lineId, const std::vector<std::tuple<std::string, int, double, bool>> &terminusData,
                      const std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> &stationData,
                      int trainNumber) : lineId(lineId) {
 
-    // Création des terminus
+    // Create the terminus
     for (const auto &data: terminusData) {
         Termini.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data));
     }
 
-    // Création des stations
+    // Create the stations
     for (const auto &data: stationData) {
         Stations.emplace_back(std::get<0>(data), std::get<1>(data), std::get<2>(data), std::get<3>(data),
                               std::get<4>(data), std::get<5>(data));
     }
 
-    // Initialisation des trains
+    // Init the trains
     initTrains(Trains, Termini,
                trainNumber);
 
@@ -43,7 +44,7 @@ int MetroLine::getLineId() {
     return this->lineId;
 }
 
-
+// Manages the line
 void MetroLine::manageLine(SharedData &sharedData, std::mutex &mtx, bool &stopWorking, Heure &temps) {
     while (!stopWorking) {
         for (auto &train: Trains) {
