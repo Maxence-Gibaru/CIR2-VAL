@@ -50,7 +50,6 @@ void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus);
  */
 void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
 
-
 /**
  * @brief Manages all functionalities of the trains
  * @param sharedData: shared data
