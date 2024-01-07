@@ -5,9 +5,13 @@ Projet CIR2 VAL.
 ## Table des matières
 
 1. [Aperçu](#aperçu)
-2. [Installation](#installation)
-3. [Utilisation](#utilisation)
-4. [Contact](#contact)
+2. [Chiffres Clés](#chiffres-clés)
+3. [Installation](#installation)
+4. [Utilisation](#utilisation)
+    - [Prérequis](#prérequis)
+    - [Étapes pour lancer le programme](#étapes-pour-lancer-le-programme)
+    - [Fonctionnalités de l'interface](#fonctionnalités-de-linterface-sfml)
+5. [Contact](#contact)
 
 ## Aperçu
 
@@ -26,6 +30,12 @@ Ce projet met en avant la gestion autonome des rames en interaction avec un rés
 
 Si votre projet est déjà sur un dépôt GitHub, voici comment vous pourriez ajouter la section d'installation avec la commande `git clone` pour récupérer votre projet depuis le dépôt :
 
+
+## Chiffres Clés
+
+1. **Nombre de lignes de code** :
+2. **Nombre d'heures de codage** :
+
 ## Installation
 
 Pour utiliser ce projet, vous devez avoir le fichier SFML.exe fourni sur JUNIA Learning de `Monsieur Pascal Mosbah`
@@ -42,7 +52,36 @@ Pour utiliser ce projet, vous devez avoir le fichier SFML.exe fourni sur JUNIA L
 
 ## Utilisation
 
-bouge
+### Prérequis
+Assurez-vous d'avoir le fichier SFML.exe fourni par JUNIA Learning installé sur votre système.
+
+### Étapes pour lancer le programme
+
+1. **Construction du projet**
+   - Exécutez les commandes nécessaires pour construire le projet en utilisant le système de build.
+
+2. **Lancement du programme**
+   - Après la construction réussie du projet, lancez le programme en exécutant le fichier exécutable généré.
+
+3. **Interface utilisateur SFML**
+   - Lorsque le programme est lancé, l'interface utilisateur SFML devrait se charger.
+   - Des informations supplémentaires peuvent être affichées dans la console, fournissant des détails sur le fonctionnement du programme et du système de métro simulé.
+
+4. **Observation et utilisation**
+   - Observez le fonctionnement de l'interface SFML pour visualiser la simulation du système de métro.
+   - Interagissez avec les fonctionnalités.
+
+
+## Fonctionnalités de l'interface SFML
+
+1. **Bouton de redémarrage** : Permet de réinitialiser le système à son état initial, relançant la simulation du réseau de métro.
+
+2. **Molette de gestion de la vitesse du temps** : Permet de régler la vitesse de la simulation, accélérant ou ralentissant le défilement du temps dans la simulation du système de métro.
+
+3. **Arrêt d'urgence des trains** : En appuyant sur un train spécifique, cette action simule un arrêt d'urgence pour la rame concernée, illustrant ainsi la réaction du système en cas d'urgence.
+
+4. **Molette de gestion du nombre de trains sur les voies** : Cette fonctionnalité permet de régler le nombre de trains présents sur les différentes voies de manière dynamique, permettant ainsi d'observer l'impact sur le fonctionnement du réseau.
+
 
 ## Contact
 
