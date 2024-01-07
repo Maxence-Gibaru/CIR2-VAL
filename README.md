@@ -72,7 +72,7 @@ Assurez-vous d'avoir le fichier SFML.exe fourni par JUNIA Learning installé sur
    - Interagissez avec les fonctionnalités.
 
 
-## Fonctionnalités de l'interface SFML
+### Fonctionnalités de l'interface SFML
 
 1. **Bouton de redémarrage** : Permet de réinitialiser le système à son état initial, relançant la simulation du réseau de métro.
 
