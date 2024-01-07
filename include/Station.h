@@ -111,9 +111,7 @@ public:
      */
     void emptyPassengers(bool direction);
 
-    void reducePassengers(const int &newPassengers,bool direction);
-
-    void isOpen();
+    void reducePassengers(const int &newPassengers, bool direction);
 
 
 

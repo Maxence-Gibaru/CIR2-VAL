@@ -8,23 +8,23 @@ Heure::Heure() {
     microsecondes = 0;
 }
 
-const int Heure::getHeures() const {
+int Heure::getHeures() const {
     return heures;
 }
 
-const int Heure::getMinutes() const {
+int Heure::getMinutes() const {
     return minutes;
 }
 
-const int Heure::getSecondes() const {
+int Heure::getSecondes() const {
     return secondes;
 }
 
-const int Heure::getMillisecondes() const {
+int Heure::getMillisecondes() const {
     return millisecondes;
 }
 
-const int Heure::getMicrosecondes() const {
+int Heure::getMicrosecondes() const {
     return microsecondes;
 }
 
@@ -55,8 +55,6 @@ void Heure::incrementerTemps(double refresh) {
     }
 }
 
-
-
 void Heure::incrementerMinute() {
     minutes++;
     if (minutes >= 60) {
@@ -80,6 +78,6 @@ void Heure::remiseAZero() {
     microsecondes = 0;
 }
 
-const std::tuple<int, int, int> Heure::getTime() const {
+std::tuple<int, int, int> Heure::getTime() const {
     return std::make_tuple(heures, minutes, secondes);
 }

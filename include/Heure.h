@@ -34,38 +34,38 @@ public:
      * @brief Getter de l'heure
      * @return tuple<int, int, int> : heures, minutes, secondes
      */
-    const std::tuple<int, int, int> getTime() const;
+    std::tuple<int, int, int> getTime() const;
 
     /**
      * @brief Getter des heures
      * @return int : heures
      */
-    const int getHeures() const;
+    int getHeures() const;
 
     /**
      * @brief Getter des minutes
      * @return int : minutes
      */
 
-    const int getMinutes() const;
+    int getMinutes() const;
 
     /**
      * @brief Getter des secondes
      * @return int : secondes
      */
-    const int getSecondes() const;
+    int getSecondes() const;
 
     /**
      * @brief Getter des millisecondes
      * @return int : millisecondes
      */
-    const int getMillisecondes() const;
+    int getMillisecondes() const;
 
     /**
      * @brief Getter des microsecondes
      * @return int : microsecondes
      */
-    const int getMicrosecondes() const;
+    int getMicrosecondes() const;
 
 
     /**

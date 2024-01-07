@@ -146,59 +146,85 @@ void Train::setEmergencyStop(const bool &newState) {
 
 /* ==== OTHER ==== */
 
-// globalise args
+
+// à faire
+void Train::stopX() {
+    isStopping = true;
+
+    decelerationDistance = pow(speed, 2) / (2 * DECELERATION_COEFF);
+
+}
+
 void Train::moveX() {
-    // fonction super important à optimiser !!!!
     this->time += REFRESH;
     double NEW_MAX_SPEED = sqrt(
             (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) * COEFF_SPEED);
     double time1 = MAX_SPEED / COEFF_SPEED;
     double time2 = (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) / MAX_SPEED;
 
-    if (fullSpeed()) {
-        if (coordX <= getAccelerationDistance()) {
-            this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
-            this->speed = COEFF_SPEED * time;
-        }
+    if (isStopping) {
+        if (decelerationDistance > 0 and speed > 0) {
+            coordX += speed * REFRESH - 0.5 * DECELERATION_COEFF * pow(REFRESH, 2);
+            speed -= DECELERATION_COEFF * REFRESH;
 
-        if (coordX > getAccelerationDistance() and
-            getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
-            this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
-            this->speed = MAX_SPEED;
-        }
+            // Assurez-vous que la vitesse ne devient pas négative
+            if (speed < 0) {
+                speed = 0;
+            }
 
-        if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                      getAccelerationDistance()) {
-            this->coordX =
-                    -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
-                    MAX_SPEED * (time2 - time1) +
-                    0.5 * COEFF_SPEED * pow(time1, 2);
-            this->speed = -COEFF_SPEED * (time - time2) + MAX_SPEED;
+            // Mettre à jour la distance de décélération restante
+            decelerationDistance -= speed * REFRESH;
+        } else {
+            // Le train est complètement arrêté
+
+            speed = 0; // Assurez-vous que la vitesse est bien à 0
+            return;
         }
     } else {
-        time1 = NEW_MAX_SPEED / COEFF_SPEED;
-        if (coordX < getAccelerationDistance()) {
-            this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
-            this->speed = COEFF_SPEED * time;
-        }
+        if (fullSpeed()) {
+            if (coordX <= getAccelerationDistance()) {
+                this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+                this->speed = COEFF_SPEED * time;
+            }
 
-        if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                      getAccelerationDistance()) {
-            this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
-                           0.5 * COEFF_SPEED * pow(time1, 2);
-            this->speed = -COEFF_SPEED * (time - time1) + NEW_MAX_SPEED;
+            if (coordX > getAccelerationDistance() and
+                getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
+                this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
+                this->speed = MAX_SPEED;
+            }
+
+            if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
+                          getAccelerationDistance()) {
+                this->coordX =
+                        -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
+                        MAX_SPEED * (time2 - time1) +
+                        0.5 * COEFF_SPEED * pow(time1, 2);
+                this->speed = -COEFF_SPEED * (time - time2) + MAX_SPEED;
+            }
+        } else {
+            time1 = NEW_MAX_SPEED / COEFF_SPEED;
+            if (coordX < getAccelerationDistance()) {
+                this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
+                this->speed = COEFF_SPEED * time;
+            }
+
+            if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
+                          getAccelerationDistance()) {
+                this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
+                               0.5 * COEFF_SPEED * pow(time1, 2);
+                this->speed = -COEFF_SPEED * (time - time1) + NEW_MAX_SPEED;
+            }
         }
     }
 }
 
-// à faire
-void Train::stopX() {
-    double init = this->coordX;
-    while (!checkSecurityDistance()) {
-        this->coordX = -0.5 * COEFF_SPEED * pow(time, 2) + MAX_SPEED * time + init;
-    }
 
+void Train::restart() {
+    isStopping = false;
+
+    speed = 0;
 }
+
 
 bool Train::trainArrived() const {
     if (round(getCoordX() + getTotalCoordX()) == getTerminus()->getCoordT()) {

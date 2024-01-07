@@ -14,6 +14,7 @@
 
 
 #define COEFF_SPEED 1.0
+#define DECELERATION_COEFF 1.5
 #define MAX_SPEED 23.0
 #define MAX_PASSENGERS_CAPACITY 150
 #define DISTANCE_TOT 13000
@@ -39,6 +40,8 @@ private:
     double accelerationDistance;
     bool emergencyStop;
     double wait = 0;
+    bool isStopping = false;
+    double decelerationDistance;
 
 public:
     /**
@@ -165,6 +168,8 @@ public:
      * @return void
     */
     void stopX();
+
+    void restart();
 
     /**
      * @brief Setter des coordonnées du train

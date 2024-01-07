@@ -1,8 +1,4 @@
-//
-// Created by Ugo WAREMBOURG on 15/11/2023.
-//
-
-#include "../include/Terminus.h"
+#include "Terminus.h"
 
 Terminus::Terminus(const std::string &nom, int train_number, int coordT, bool direction) : nom(nom), train_number(train_number),
                                                                            coordT(coordT), direction(direction) {}

@@ -19,6 +19,8 @@ add_executable(CIR2_VAL main.cpp
         src/Heure.cpp
         src/Heure.cpp
         include/data.h
+        include/MetroLine.h
+        src/MetroLine.cpp
 )
 
 # Trouver le package SFML
