@@ -1,5 +1,11 @@
 #include "MetroLine.h"
 
+// Default constructor
+MetroLine::MetroLine() {
+
+}
+
+
 // Constructor for MetroLine
 MetroLine::MetroLine(int lineId, const std::vector<std::tuple<std::string, int, double, bool>> &terminusData,
                      const std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> &stationData,
@@ -89,5 +95,6 @@ std::vector<Station> MetroLine::getStations() {
 void MetroLine::setStations(std::vector<Station> &newStations) {
     this->Stations = newStations;
 }
+
 
 

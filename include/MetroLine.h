@@ -17,6 +17,11 @@ public:
 
     /**
      * @brief Constructor of MetroLine class
+    */
+    MetroLine();
+
+    /**
+     * @brief Constructor of MetroLine class
      * @param lineId : id of the line
      * @param terminusData : data of the terminus
      * @param stationData : data of the stations

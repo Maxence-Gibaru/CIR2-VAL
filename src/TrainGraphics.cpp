@@ -157,24 +157,12 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         window.draw(stopButton);
         window.draw(stopButtonText);
 
-/*
-        for (const auto &lineData: sharedData.metroLinesdata) {
-            for (const auto &train: lineData.trains) {
-
-            }
-            for (const auto &station : lineData.stations) {
-
-            }
-        }*/
-
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             // transform the mouse position from window coordinates to world coordinates
             sf::Vector2f mouse = window.mapPixelToCoords(sf::Mouse::getPosition(window));
             // retrieve the bounding box of the sprite
             sf::FloatRect restartButtonDetect = restartButton.getGlobalBounds();
             sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
-
-
         }
 
         for (auto &train: sharedData.Trains1) {
@@ -242,8 +230,6 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                     window.draw(trainDistance);
                 }
                 if (stopButtonDetect.contains(mouse)) {
-
-                    std::cout << train.getEmergencyStop() << std::endl;
 
                     moving = false;
                     if (PRINT) {
@@ -333,8 +319,6 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                     window.draw(trainDistance);
                 }
                 if (stopButtonDetect.contains(mouse)) {
-
-                    std::cout << train.getEmergencyStop() << std::endl;
 
                     moving = false;
                     if (PRINT) {

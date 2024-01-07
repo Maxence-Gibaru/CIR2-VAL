@@ -22,7 +22,12 @@ void setVoisinList(std::vector<Train> &Trains) {
 // Sets the station for a train based on its direction
 void setStation(std::vector<Station> &Stations, Train &train, bool first) {
     try {
-        // Implementation remains unchanged for this function
+        if (train.getTerminus()->getDirection()) {
+            train.setStation(&Stations[1]); // Sets station for a train based on direction
+
+        } else {
+            train.setStation(&Stations[Stations.size() - 2]); // Sets station for a train based on direction
+        }
     } catch (const std::exception &e) {
         std::cerr << "Exception in setStation: " << e.what() << std::endl;
     }
@@ -79,7 +84,6 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
 
             // Clears emergency stops for all trains
             for (auto &train: Trains) {
-                std::cout << "SEXE" << std::endl;
                 train.setEmergencyStop(0);
             }
         }
@@ -93,10 +97,12 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         }
 
         // Updates train state based on arrival and passengers at the next station
-        if (train.trainStationArrived() && round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
-                                           round(train.getTerminus()->getCoordT())) {
+        if (train.trainStationArrived() &&
+            round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
+            round(train.getTerminus()->getCoordT())) {
             train.setWait(
-                    (train.getPassengers() + train.getNextStation()->getPassengers(train.getTerminus()->getDirection())) /
+                    (train.getPassengers() +
+                     train.getNextStation()->getPassengers(train.getTerminus()->getDirection())) /
                     2);
 
             train.addPassengers();

@@ -23,10 +23,12 @@ int main(void) {
         std::vector<std::thread> threads;
 
         // Metroline definition
+        MetroLine line1, line2;
+
         // Wrap potentially problematic code in try-catch blocks
         try {
-            MetroLine line1(0, dataTerminusLine1, dataStationsLine1, TRAIN_NUMBER_LINE_1);
-            MetroLine line2(1, dataTerminusLine2, dataStationsLine2, TRAIN_NUMBER_LINE_2);
+            line1 = MetroLine(0, dataTerminusLine1, dataStationsLine1, TRAIN_NUMBER_LINE_1);
+            line2 = MetroLine(1, dataTerminusLine2, dataStationsLine2, TRAIN_NUMBER_LINE_2);
 
             // ... [Other potentially problematic code]
         } catch (const std::exception &e) {
@@ -48,9 +50,11 @@ int main(void) {
         // launch a thread for each train line
         // Wrap potentially problematic code in try-catch blocks
         try {
-            threads.emplace_back(&MetroLine::manageLine, &line1, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),
+            threads.emplace_back(&MetroLine::manageLine, &line1, std::ref(sharedData), std::ref(mtx_),
+                                 std::ref(stop_working),
                                  std::ref(temps));
-            threads.emplace_back(&MetroLine::manageLine, &line2, std::ref(sharedData), std::ref(mtx_), std::ref(stop_working),std::ref(temps));
+            threads.emplace_back(&MetroLine::manageLine, &line2, std::ref(sharedData), std::ref(mtx_),
+                                 std::ref(stop_working), std::ref(temps));
 
             // ... [Other potentially problematic code]
         } catch (const std::exception &e) {
