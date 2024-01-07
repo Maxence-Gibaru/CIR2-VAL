@@ -1,6 +1,6 @@
 #include "TrainControlFunction.h"
 
-bool isOpen = true; // Global variable to track station status
+bool isOpen = true;
 
 // Finds the neighbor of each train in the list
 void setVoisinList(std::vector<Train> &Trains) {
@@ -62,8 +62,7 @@ bool allPassengersEmpty(const std::vector<Station> &Stations) {
 }
 
 // Updates the state of a train based on time and station conditions
-void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps,
-                      SharedData &sharedData) {
+void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps) {
     // Checks and updates station status based on time
     if (temps.getHeures() == 7) {
         if (PRINT) {
@@ -83,7 +82,7 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         isOpen = false;
     }
 
-    sharedData.isOpen = isOpen; // Updates shared data with station status
+
 
     // Updates train state based on arrival and passengers at the next station
     if (train.trainStationArrived() && round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
@@ -149,15 +148,16 @@ void ManageTime(Train &train, Heure &temps, std::vector<Station> &Stations) {
     }
 }
 
+
+// Controls the main subway system, manages train actions, and shared data updates
+/*
 void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                   std::mutex &mtx_, bool &stop_working, Heure &temps) {
     while (!stop_working) {
 
         if (PRINT) {
             mtx_.lock(); // Locks mutex to print train details
-            /* PRINT TRAIN'S DETAILS */
             train.print(); // Prints details of the train
-            /* ===================== */
             mtx_.unlock(); // Unlocks mutex after printing
         }
 
@@ -169,5 +169,5 @@ void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trai
         updateTrainMove(train); // Updates train movement based on conditions
         std::this_thread::sleep_for(0.001s); // Pauses thread execution for a short time
     }
-}
+}*/
 

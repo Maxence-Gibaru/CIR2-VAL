@@ -14,11 +14,11 @@
 #include "Train.h"
 #include "Station.h"
 #include "Terminus.h"
-#include "TrainGraphics.h"
 #include "Heure.h"
 
 using namespace std::chrono_literals;
 
+extern bool isOpen; // Global variable to track station status
 
 /**
  * @brief Finds the neighbor of a train
@@ -49,6 +49,7 @@ void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus);
  */
 void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
 
+
 /**
  * @brief Manages all functionalities of the trains
  * @param sharedData: shared data
@@ -58,12 +59,11 @@ void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
  * @param mtx_: mutex
  * @param stop_working: boolean to know if the train should stop
  */
-void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+/*void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
                   std::mutex &mtx_, bool &stop_working, Heure &temps);
+*/
 
-
-void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps,
-                      SharedData &sharedData);
+void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Station> &Stations, Heure &temps);
 
 void updateTrainMove(Train &train);
 
@@ -73,6 +73,6 @@ void updateTrainMove(Train &train);
  * @param temps: time variable from the Heure class
  * @param Stations: list of stations
  */
-void ManageTime(Train &train, Heure &temps, std::vector<Station> &Stations);
+void ManageTime(Train &train, Heure &temps, int lineId);
 
 #endif // TRAINCONTROLFUNCTION_H

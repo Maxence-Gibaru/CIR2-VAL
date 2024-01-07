@@ -1,8 +1,8 @@
 #include "MetroLine.h"
 
-MetroLine::MetroLine(const std::vector<std::tuple<std::string, int, double, bool>> &terminusData,
+MetroLine::MetroLine(int lineId, const std::vector<std::tuple<std::string, int, double, bool>> &terminusData,
                      const std::vector<std::tuple<std::string, int, std::tuple<int, int>, bool, std::tuple<double, double>, double>> &stationData,
-                     int trainNumber) {
+                     int trainNumber) : lineId(lineId) {
 
     // Création des terminus
     for (const auto &data: terminusData) {
@@ -18,11 +18,35 @@ MetroLine::MetroLine(const std::vector<std::tuple<std::string, int, double, bool
     // Initialisation des trains
     initTrains(Trains, Termini,
                trainNumber);
+
+    // Set each train's neighbour to each other
+    setVoisinList(Trains);
+
+    // Set each station next station to each other
+    initNextStation(Stations, &Termini[1]);
+
+    // Initialise the first station of each train
+    for (auto &train: Trains) {
+        setStation(Stations, train, true);
+    }
+
+    //Set the next Terminus of each other
+    Termini[1].setNextTerminus(&Termini[0]);
+    Termini[0].setNextTerminus(&Termini[1]);
 }
+
+std::vector<Train> MetroLine::getTrains() {
+    return this->Trains;
+}
+
+int MetroLine::getLineId() {
+    return this->lineId;
+}
+
 
 void MetroLine::manageLine(SharedData &sharedData, std::mutex &mtx, bool &stopWorking, Heure &temps) {
     while (!stopWorking) {
-        for (auto& train : Trains) {
+        for (auto &train: Trains) {
             if (PRINT) {
                 mtx.lock(); // Locks mutex to print train details
                 /* PRINT TRAIN'S DETAILS */
@@ -32,13 +56,37 @@ void MetroLine::manageLine(SharedData &sharedData, std::mutex &mtx, bool &stopWo
             }
 
             sharedData.heure = temps.getTime(); // Updates shared data with current time
-            ManageTime(train, temps, Stations); // Manages time for the train and related stations
-            updateTrainState(Trains, train, Stations, temps, sharedData); // Updates train state based on conditions
-            sharedData.Trains = &Trains; // Updates shared data with train information
-            sharedData.Stations = Stations; // Updates shared data with station information
+
+            ManageTime(train, temps, getLineId()); // Manages time for the train and related stations
+
+
+            updateTrainState(Trains, train, Stations, temps); // Updates train state based on conditions
+            sharedData.isOpen = isOpen; // Updates shared data with station status
+            ; // Updates shared data with train information
+            if (getLineId() == 0) {
+                sharedData.Trains1 = Trains;
+                sharedData.Stations1 = Stations;
+            } else {
+                sharedData.Trains2 = Trains;
+                sharedData.Stations2 = Stations;
+            }
+
             updateTrainMove(train); // Updates train movement based on conditions
             std::this_thread::sleep_for(std::chrono::milliseconds(1)); // Pauses thread execution for a short time
         }
     }
 }
+
+void MetroLine::setTrains(std::vector<Train> &newTrains) {
+    this->Trains = newTrains;
+}
+
+std::vector<Station> MetroLine::getStations() {
+    return this->Stations;
+}
+
+void MetroLine::setStations(std::vector<Station> &newStations) {
+    this->Stations = newStations;
+}
+
 
