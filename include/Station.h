@@ -14,12 +14,12 @@ private:
     std::string nom;
     int id;
     std::tuple<int, int> passengers;
-    bool presence;
     std::tuple<double, double> coordX;
     double coefficientPopularite;
+    double coefficientPopulariteBase = coefficientPopularite;
+    bool terminusState;
     Station *neighbour{};
     Station *previousNeighbour{};
-
 
 
 public:
@@ -32,7 +32,7 @@ public:
      * @param coordX : coordonnées X de la station
      * @param neighbour : station voisine
     */
-    Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool presence,
+    Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool terminusState,
             std::tuple<double, double> coordX, double coefficientPopularite);
 
 /* ===== GETTER ===== */
@@ -79,13 +79,19 @@ public:
     */
     double getCoefficientPopularite() const;
 
+    /**
+    * @brief Getter de l'etat d'arrive du train
+    * @return bool : le train est arrivé
+    */
+    bool isTerminus() const;
+
 /* ===== SETTER ===== */
 
     /**
      * @brief Setter du nombre de passagers dans la station
      * @param newPassengers : nouveau nombre de passagers dans la station
     */
-    void setPassengers(const int &newPassengers,bool direction);
+    void setPassengers(const int &newPassengers, bool direction);
 
     /**
      * @brief Setter de la station voisine
@@ -113,8 +119,7 @@ public:
 
     void reducePassengers(const int &newPassengers, bool direction);
 
-
-
+    void adjustPopularityByHour(int Heure);
 
 };
 

@@ -29,37 +29,39 @@ void setStation(std::vector<Station> &Stations, Train &train, bool first) {
 void initNextStation(std::vector<Station> &Stations, Terminus *myTerminus) {
     for (int i = 0; i < Stations.size(); i++) {
         if (myTerminus->getDirection()) {
-            Stations[i].setNeighbour(&Stations[i + 1]);
-            Stations[i].setPreviousNeighbour(&Stations[i - 1]);
+            Stations[i].setNeighbour(&Stations[i + 1]); // Sets next station in forward direction
+            Stations[i].setPreviousNeighbour(&Stations[i - 1]); // Sets previous station in forward direction
         } else {
-            Stations[i].setNeighbour(&Stations[i - 1]);
-            Stations[i].setPreviousNeighbour(&Stations[i + 1]);
+            Stations[i].setNeighbour(&Stations[i - 1]); // Sets next station in backward direction
+            Stations[i].setPreviousNeighbour(&Stations[i + 1]); // Sets previous station in backward direction
         }
     }
 }
 
+// Initializes a specified number of trains on the provided Line
 void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n) {
     for (int i = 1; i <= n; i++) {
         if (i == n) {
-            Train myTrain(i, 0.0, 0.0, &Line[0], 0.0, 0.0, 10, false);
+            Train myTrain(i, 0.0, 0.0, &Line[0], 0.0, 0.0, 10, false); // Creates the last train on Line[0]
             Trains.push_back(myTrain);
         } else {
-            Train myTrain(i, 0.0, 0.0, &Line[1], 0.0, 0.0, 10, false);
+            Train myTrain(i, 0.0, 0.0, &Line[1], 0.0, 0.0, 10, false); // Creates the last train on Line[1]
             Trains.push_back(myTrain);
         }
     }
 }
 
+// Checks if all station passengers are empty
 bool allPassengersEmpty(const std::vector<Station> &Stations) {
     for (const auto &station: Stations) {
         if (station.getPassengers(0) != 0) {
-            return false;
+            return false; // If any station has non-zero passengers, returns false
         }
         if (station.getPassengers(1) != 0) {
-            return false;
+            return false; // If any station has non-zero passengers, returns false
         }
     }
-    return true;
+    return true; // If all stations have zero passengers, returns true
 }
 
 // Updates the state of a train based on time and station conditions
@@ -69,19 +71,21 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         if (PRINT) {
             std::cout << "On ouvre les stations !" << std::endl;
         }
-        isOpen = true;
+        isOpen = true; // Updates station status to open
 
+        // Clears emergency stops for all trains
         for (auto &train: Trains) {
             std::cout << "SEXE" << std::endl;
             train.setEmergencyStop(0);
         }
     }
 
+    // Checks and updates station status based on time
     if (temps.getHeures() >= 1 and temps.getHeures() < 7) {
         if (PRINT) {
             std::cout << "On ferme les stations et on les vides" << std::endl;
         }
-        isOpen = false;
+        isOpen = false; // Updates station status to closed
     }
 
 
@@ -107,17 +111,20 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         }
     }
 
+    // Empties passengers at the reserve station
     if (train.getNextStation()->getNom() == "RESERVE") {
         train.emptyPassengers();
     }
 
+    // Handles actions when a train arrives at a station
     if (train.trainArrived()) {
+        // Activates emergency stop if all stations are empty and it's not open
         if (allPassengersEmpty(Stations) and !isOpen) {
             train.setEmergencyStop(true);
         }
 
-        train.swapTerminus();
-        setStation(Stations, train, false);
+        train.swapTerminus(); // Swaps terminus for the train
+        setStation(Stations, train, false); // Sets station for the train
     }
 
 
@@ -136,13 +143,14 @@ void updateTrainMove(Train &train) {
     }
 }
 
-void ManageTime(Train &train, Heure &temps, std::vector<Station> &Stations) {
-    if (train.getId() == 1) {
-        temps.incrementerTemps(REFRESH);
+// Manages time progression for a train and its related stations
+void ManageTime(Train &train, Heure &temps, int lineId) {
+    if (train.getId() == 1 and lineId == 0) {
+        temps.incrementerTemps(REFRESH); // Increments time if the train ID is 1
     }
 
     if (train.getWait() > 0) {
-        train.decreaseWait(REFRESH);
+        train.decreaseWait(REFRESH); // Decreases wait time if it's greater than 0
     }
 
     if (PRINT) {

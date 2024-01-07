@@ -1,9 +1,9 @@
 #include "../include/Station.h"
 #include <string>
 
-Station::Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool presence,
+Station::Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool terminusState,
                  std::tuple<double, double> coordX,
-                 double coefficientPopularite) : nom(nom), id(id), passengers(passengers), presence(presence),
+                 double coefficientPopularite) : nom(nom), id(id), passengers(passengers), terminusState(terminusState),
                                                  coordX(coordX), coefficientPopularite(coefficientPopularite) {}
 
 /* ==== GETTERS ==== */
@@ -40,6 +40,11 @@ const int Station::getId() const {
     return this->id;
 }
 
+bool Station::isTerminus() const {
+    return this->terminusState;
+}
+
+
 /* ==== SETTERS ==== */
 
 void Station::setPassengers(const int &newPassengers, bool direction) {
@@ -62,7 +67,7 @@ void Station::reducePassengers(const int &newPassengers, bool direction) {
 
 
 void Station::addPassengers(bool direction) {
-    int random = rand() % 20;
+    int random = rand() % 12;
     if (direction) {
         std::get<0>(this->passengers) += random * coefficientPopularite;
     } else {
@@ -95,4 +100,5 @@ void Station::emptyPassengers(bool direction) {
         std::get<1>(this->passengers) = 0;
     }
 }
+
 
