@@ -14,10 +14,18 @@ Projet CIR2 VAL.
 
 
 5. [Fonctionnalités Clés du Code](#fonctionnalités-clés-du-code)
+   
     - [Gestion du mouvement des trains](#gestion-du-mouvement-des-trains)
     - [Gestion du temps dans la simulation](#gestion-du-temps-dans-la-simulation)
     - [Utilisation des threads pour la gestion simultanée](#utilisation-des-threads-pour-la-gestion-simultanée)
-5. [Contact](#contact)
+
+
+6. [Réussite du Projet](#réussite-du-projet)
+    - [Objectifs Accomplis](#objectifs-accomplis)
+    - [Défis Relevés](#défis-relevés)
+    - [Défis non-relevés](#défis-non-relevés)
+7. [Conclusions](#conclusions)
+7. [Contact](#contact)
 
 ## Aperçu
 
