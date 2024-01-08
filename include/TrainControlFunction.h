@@ -10,16 +10,14 @@
 #include <cmath>
 #include <string>
 #include <ctime>
-
+#include "Heure.h"
 #include "Train.h"
 #include "Station.h"
 #include "Terminus.h"
-#include "Heure.h"
+
 
 using namespace std::chrono_literals;
 
-extern bool isOpen; // Global variable to track station status
-extern bool moving; // Global variable to track station status
 
 /**
  * @brief Finds the neighbor of a train
@@ -59,9 +57,9 @@ void initTrains(std::vector<Train> &Trains, std::vector<Terminus> &Line, int n);
  * @param mtx_: mutex
  * @param stop_working: boolean to know if the train should stop
  */
-/*void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                  std::mutex &mtx_, bool &stop_working, Heure &temps);
-*/
+void manageSubway(Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+                  std::mutex &mtx_, Heure &temps);
+
 
 /**
  * @biref Function that updates the state of the train
@@ -78,12 +76,5 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
  */
 void updateTrainMove(Train &train);
 
-/**
- * @brief Function that manages the passing time
- * @param train: train
- * @param temps: time variable from the Heure class
- * @param Stations: list of stations
- */
-void ManageTime(Train &train, Heure &temps, int lineId);
 
 #endif // TRAINCONTROLFUNCTION_H

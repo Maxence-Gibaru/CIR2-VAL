@@ -7,6 +7,7 @@
 #include "TrainControlFunction.h"
 #include "TrainGraphics.h"
 
+
 class MetroLine {
 private:
     int lineId;
@@ -28,7 +29,7 @@ public:
      * @param trainNumber : number of trains
      */
     MetroLine(int lineId, const std::vector<std::tuple<std::string, int, double, bool>> &terminusData,
-              const std::vector<std::tuple<std::string, int,
+              const std::vector<std::tuple<std::string,
                       std::tuple<int, int>, bool, std::tuple<double, double>, double>>
 
               &stationData,
@@ -42,15 +43,15 @@ public:
      * @param stopWorking : boolean to stop the thread
      * @param temps : time
      */
-    void manageLine(SharedData &sharedData, std::mutex &mtx, bool &stopWorking, Heure &temps);
+    void manageLine(Train &actualTrain, SharedData &sharedData, std::mutex &mtx, bool &stopWorking, Heure &temps);
 
     /**
      * @brief Get the id of the line
      * @return int : id of the line
      */
-    int getLineId();
+    int getLineId() const;
 
-    std::vector<Train> getTrains();
+    std::vector<Train> &getTrains();
 
     /**
      * @brief Set the trains of the line

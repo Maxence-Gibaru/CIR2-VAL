@@ -81,3 +81,22 @@ void Heure::remiseAZero() {
 std::tuple<int, int, int> Heure::getTime() const {
     return std::make_tuple(heures, minutes, secondes);
 }
+
+// Manages time progression for a train and its related stations
+void ManageTime(Heure &temps, bool &stopWorking, std::mutex &mtxTemps) {
+    try {
+        while (!stopWorking) {
+            if (moving) {
+                mtxTemps.lock();
+                temps.incrementerTemps(REFRESH); // Increments time if the train ID is 1
+                mtxTemps.unlock();
+            }
+            if (PRINT) {
+                temps.afficherHeure(); // Prints the current time
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
+    } catch (const std::exception &e) {
+        std::cerr << "Exception in ManageTime: " << e.what() << std::endl;
+    }
+}

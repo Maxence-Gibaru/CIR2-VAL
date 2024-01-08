@@ -10,7 +10,6 @@
 class Station {
 private:
     std::string nom;
-    int id;
     std::tuple<int, int> passengers;
     std::tuple<double, double> coordX;
     double coefficientPopularite;
@@ -30,7 +29,7 @@ public:
      * @param coordX : coordonnées X de la station
      * @param neighbour : station voisine
     */
-    Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool terminusState,
+    Station(const std::string &nom, std::tuple<int, int> passengers, bool terminusState,
             std::tuple<double, double> coordX, double coefficientPopularite);
 
 /* ===== GETTER ===== */
@@ -39,19 +38,19 @@ public:
      *  @brief Getter du nombre de passagers dans la station
      *  @return int : nombre de passagers dans la station
     */
-    const int getPassengers(bool direction) const;
+    int getPassengers(bool direction) const;
 
     /**
      * @brief Getter des coordonnées X de la station
      * @return double : coordonnées X de la station
     */
-    const double getCoordX(const bool direction) const;
+    double getCoordX(bool direction) const;
 
     /**
      * @brief getter du Nom de la station
      * @return string : nom de la station
     */
-    const std::string getNom() const;
+    std::string getNom() const;
 
     /**
      * @brief getter de la station voisine
@@ -64,12 +63,6 @@ public:
      * @return Station* : station précédente
     */
     Station *getPreviousNeighbour() const;
-
-    /**
-     * @brief getter de l'identifiant de la station
-     * @return int : identifiant de la station
-    */
-    const int getId() const;
 
     /**
      * @brief getter du coefficient de popularité de la station

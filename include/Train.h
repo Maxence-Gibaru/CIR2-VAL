@@ -6,22 +6,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
-#include "Terminus.h"
-#include "Station.h"
 #include <string>
 #include <ctime>
-#include "Heure.h"
-
-#define COEFF_SPEED 1.0
-#define DECELERATION_COEFF 1.5
-#define MAX_SPEED 23.0
-#define MAX_PASSENGERS_CAPACITY 150
-#define DISTANCE_TOT 13000
-
-extern double DISTANCE_SECURITY;
-extern double REFRESH;
-extern int TRAIN_NUMBER;
-
+#include "Terminus.h"
+#include "Station.h"
+#include "config.h"
 
 class Train {
 private:
@@ -141,7 +130,7 @@ public:
 
     double getWait() const;
 
-    void setWait(double secondes);
+    void setWait();
 
     void decreaseWait(double decrement);
 
@@ -223,7 +212,7 @@ public:
      * @param nextStation : prochaine station du train
      * @return void
      */
-    void setTime(const double &newTime);
+    void setTime(const float &newTime);
 
     /**
      * @brief Setter de l'émergency stop true or false

@@ -1,7 +1,5 @@
 #include "TrainControlFunction.h"
 
-bool isOpen = true;
-bool moving = true;
 
 // Finds the neighbor of each train in the list
 void setVoisinList(std::vector<Train> &Trains) {
@@ -84,7 +82,7 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
 
             // Clears emergency stops for all trains
             for (auto &train: Trains) {
-                train.setEmergencyStop(0);
+                train.setEmergencyStop(false);
             }
         }
 
@@ -100,10 +98,7 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
         if (train.trainStationArrived() &&
             round(train.getNextStation()->getCoordX(train.getTerminus()->getDirection())) !=
             round(train.getTerminus()->getCoordT())) {
-            train.setWait(
-                    (train.getPassengers() +
-                     train.getNextStation()->getPassengers(train.getTerminus()->getDirection())) /
-                    2);
+            train.setWait();
 
             train.addPassengers();
             train.reducePassengers();
@@ -124,7 +119,7 @@ void updateTrainState(std::vector<Train> &Trains, Train &train, std::vector<Stat
             train.emptyPassengers();
         }
 
-        // Handles actions when a train arrives at a station
+        // Handles actions when a train arrives at a reserve
         if (train.trainArrived()) {
             // Activates emergency stop if all stations are empty and it's not open
             if (allPassengersEmpty(Stations) and !isOpen) {
@@ -151,46 +146,24 @@ void updateTrainMove(Train &train) {
     if (train.checkSecurityDistance() and moving and !train.getEmergencyStop() and train.getWait() <= 0) {
         train.moveX();
     }
-}
-
-// Manages time progression for a train and its related stations
-void ManageTime(Train &train, Heure &temps, int lineId) {
-    try {
-        if (train.getId() == 1 and lineId == 0) {
-            temps.incrementerTemps(REFRESH); // Increments time if the train ID is 1
-        }
-
-        if (train.getWait() > 0) {
-            train.decreaseWait(REFRESH); // Decreases wait time if it's greater than 0
-        }
-
-        if (PRINT) {
-            temps.afficherHeure(); // Prints the current time
-        }
-    } catch (const std::exception &e) {
-        std::cerr << "Exception in ManageTime: " << e.what() << std::endl;
+    if (train.getWait() > 0) {
+        train.decreaseWait(REFRESH); // Decreases wait time if it's greater than 0
     }
 }
+
 
 // Controls the main subway system, manages train actions, and shared data updates
-/*
-void manageSubway(SharedData &sharedData, Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
-                  std::mutex &mtx_, bool &stop_working, Heure &temps) {
-    while (!stop_working) {
 
-        if (PRINT) {
-            mtx_.lock(); // Locks mutex to print train details
-            train.print(); // Prints details of the train
-            mtx_.unlock(); // Unlocks mutex after printing
-        }
-
-        sharedData.heure = temps.getTime(); // Updates shared data with current time
-        ManageTime(train, temps, Stations); // Manages time for the train and related stations
-        updateTrainState(Trains, train, Stations, temps, sharedData); // Updates train state based on conditions
-        sharedData.Trains = &Trains; // Updates shared data with train information
-        sharedData.Stations = Stations; // Updates shared data with station information
-        updateTrainMove(train); // Updates train movement based on conditions
-        std::this_thread::sleep_for(0.001s); // Pauses thread execution for a short time
+void manageSubway(Train &train, std::vector<Train> &Trains, std::vector<Station> &Stations,
+                  std::mutex &mtx_, Heure &temps) {
+    if (PRINT) {
+        mtx_.lock(); // Locks mutex to print train details
+        train.print(); // Prints details of the train
+        mtx_.unlock(); // Unlocks mutex after printing
     }
-}*/
+
+    updateTrainState(Trains, train, Stations, temps); // Updates train state based on conditions
+    updateTrainMove(train); // Updates train movement based on conditions
+
+}
 

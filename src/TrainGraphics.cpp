@@ -1,6 +1,7 @@
 #include "TrainGraphics.h"
-#include <SFML/Graphics.hpp>
 
+int randomTarget1 = rand() % TRAIN_NUMBER_LINE_1;
+int randomTarget2 = rand() % TRAIN_NUMBER_LINE_2;
 
 // Function to render visuals
 int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
@@ -34,8 +35,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
 
     bool isDraggingTrain = false;
     bool isDraggingRefresh = false;
-    double refresh = REFRESH;
-    const double minRefresh = 0.01, maxRefresh = 2;
+    const double minRefresh = 0.001, maxRefresh = 2;
     const int minTrain = 100, maxTrain = 5000;
 
     sf::Text refreshRate;
@@ -126,6 +126,16 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         line2.setPosition(100, 700);
         window.draw(line2);
 
+        sf::RectangleShape emergencyStopButton;
+        emergencyStopButton.setSize(sf::Vector2f(200, 100));
+        emergencyStopButton.setFillColor(sf::Color::Yellow);
+        emergencyStopButton.setPosition(100, HEIGHT - 100);
+
+        sf::RectangleShape emergencyRestartButton;
+        emergencyRestartButton.setSize(sf::Vector2f(200, 100));
+        emergencyRestartButton.setFillColor(sf::Color::Cyan);
+        emergencyRestartButton.setPosition(200, HEIGHT - 100);
+
         sf::RectangleShape restartButton;
         restartButton.setSize(sf::Vector2f(200, 100));
         restartButton.setFillColor(sf::Color::Green);
@@ -152,10 +162,6 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
         stopButtonText.setFillColor(sf::Color::White);
         stopButtonText.setPosition(1725, HEIGHT - 375);
 
-        window.draw(restartButton);
-        window.draw(restartButtonText);
-        window.draw(stopButton);
-        window.draw(stopButtonText);
 
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
             // transform the mouse position from window coordinates to world coordinates
@@ -165,7 +171,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
             sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
         }
 
-        for (auto &train: sharedData.Trains1) {
+        for (auto &train: *sharedData.Trains1) {
             std::string passengerText =
                     "Passagers : " + std::to_string(train.getPassengers());
             sf::Text passengersNumber;
@@ -222,6 +228,8 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                 sf::FloatRect bounds = trainShape.getGlobalBounds();
                 sf::FloatRect restartButtonDetect = restartButton.getGlobalBounds();
                 sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
+                sf::FloatRect emergencyStopDetect = emergencyStopButton.getGlobalBounds();
+                sf::FloatRect emergencyRestartDetect = emergencyRestartButton.getGlobalBounds();
 
                 if (bounds.contains(mouse)) {
                     window.draw(trainNumber);
@@ -238,7 +246,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                     }
                 }
                 if (restartButtonDetect.contains(mouse)) {
-                    for (auto &train: sharedData.Trains1) {
+                    for (auto &train: *sharedData.Trains1) {
 
                         moving = true;
 
@@ -247,14 +255,47 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                         }
                     }
                 }
+
+
+                if (emergencyStopDetect.contains(mouse)) {
+
+
+                    for (auto &targetTrain: *sharedData.Trains1) {
+                        if (targetTrain.getId() == randomTarget1) {
+                            targetTrain.setEmergencyStop(true);
+                            if (PRINT) {
+                                std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
+                                          << std::endl;
+                            }
+                        }
+                    }
+
+                    for (auto &targetTrain: *sharedData.Trains2) {
+                        if (targetTrain.getId() == randomTarget2) {
+                            targetTrain.setEmergencyStop(true);
+                            if (PRINT) {
+                                std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
+                                          << std::endl;
+                            }
+                        }
+                    }
+                }
+
+                if (emergencyRestartDetect.contains(mouse) and train.getEmergencyStop()) {
+                    train.setEmergencyStop(false);
+                    if (PRINT) {
+                        std::cout << "Les trains peuvent repartir !" << std::endl;
+                    }
+                }
             }
+
             trainShape.setScale(0.3, 0.3);
             if (train.getTotalCoordX() != 0 or train.getCoordX() != 0) {
                 window.draw(trainShape);
             }
         }
 
-        for (auto &train: sharedData.Trains2) {
+        for (auto &train: *sharedData.Trains2) {
             std::string passengerText =
                     "Passagers : " + std::to_string(train.getPassengers());
             sf::Text passengersNumber;
@@ -311,6 +352,7 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                 sf::FloatRect bounds = trainShape.getGlobalBounds();
                 sf::FloatRect restartButtonDetect = restartButton.getGlobalBounds();
                 sf::FloatRect stopButtonDetect = stopButton.getGlobalBounds();
+                sf::FloatRect emergencyRestartDetect = emergencyRestartButton.getGlobalBounds();
 
                 if (bounds.contains(mouse)) {
                     window.draw(trainNumber);
@@ -321,21 +363,26 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                 if (stopButtonDetect.contains(mouse)) {
 
                     moving = false;
-                    if (PRINT) {
-                        std::cout << "🚨 ARRÊT D'URGENCE ! : Le train n°" << train.getId() << " est arrếté !"
-                                  << std::endl;
-                    }
+
                 }
                 if (restartButtonDetect.contains(mouse)) {
-                    for (auto &train: sharedData.Trains1) {
+                    for (auto &train: *sharedData.Trains1) {
 
                         moving = true;
 
-                        if (PRINT) {
-                            std::cout << "Les trains peuvent repartir !" << std::endl;
-                        }
+
                     }
                 }
+                if (emergencyRestartDetect.contains(mouse) and train.getEmergencyStop()) {
+
+                    train.setEmergencyStop(false);
+                    if (PRINT) {
+                        std::cout << "Les trains peuvent repartir !" << std::endl;
+                    }
+
+                }
+
+
             }
             trainShape.setScale(0.3, 0.3);
             if (train.getTotalCoordX() != 0 or train.getCoordX() != 0) {
@@ -492,6 +539,14 @@ int renderVisuals(sf::RenderWindow &window, SharedData &sharedData) {
                 window.draw(passengersNumber2);
             }
         }
+
+
+        window.draw(restartButton);
+        window.draw(restartButtonText);
+        window.draw(stopButton);
+        window.draw(stopButtonText);
+        window.draw(emergencyStopButton);
+        window.draw(emergencyRestartButton);
         window.draw(refreshRate);
         window.draw(distanceRate);
         window.draw(sliderBarRefresh);

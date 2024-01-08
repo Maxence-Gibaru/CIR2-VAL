@@ -1,14 +1,14 @@
 #include "../include/Station.h"
 #include <string>
 
-Station::Station(const std::string &nom, int id, std::tuple<int, int> passengers, bool terminusState,
+Station::Station(const std::string &nom, std::tuple<int, int> passengers, bool terminusState,
                  std::tuple<double, double> coordX,
-                 double coefficientPopularite) : nom(nom), id(id), passengers(passengers), terminusState(terminusState),
+                 double coefficientPopularite) : nom(nom), passengers(passengers), terminusState(terminusState),
                                                  coordX(coordX), coefficientPopularite(coefficientPopularite) {}
 
 /* ==== GETTERS ==== */
 
-const double Station::getCoordX(bool direction) const {
+double Station::getCoordX(bool direction) const {
     if (direction) {
         return std::get<0>(this->coordX);
     } else {
@@ -16,7 +16,7 @@ const double Station::getCoordX(bool direction) const {
     }
 }
 
-const int Station::getPassengers(bool direction) const {
+int Station::getPassengers(bool direction) const {
     if (direction) {
         return std::get<0>(this->passengers);
     } else {
@@ -24,7 +24,7 @@ const int Station::getPassengers(bool direction) const {
     }
 }
 
-const std::string Station::getNom() const {
+std::string Station::getNom() const {
     return this->nom;
 }
 
@@ -34,10 +34,6 @@ Station *Station::getNeighbour() const {
 
 Station *Station::getPreviousNeighbour() const {
     return this->previousNeighbour;
-}
-
-const int Station::getId() const {
-    return this->id;
 }
 
 bool Station::isTerminus() const {

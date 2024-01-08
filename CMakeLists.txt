@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(include)
 link_directories(lib)
 
-add_executable(CIR2_VAL main.cpp
+add_executable(CIR2_VAL src/main.cpp
         src/Train.cpp
         src/Terminus.cpp
         src/Station.cpp
@@ -21,6 +21,8 @@ add_executable(CIR2_VAL main.cpp
         include/data.h
         include/MetroLine.h
         src/MetroLine.cpp
+        include/config.h
+        src/config.cpp
 )
 
 # Trouver le package SFML

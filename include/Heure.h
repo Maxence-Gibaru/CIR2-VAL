@@ -8,6 +8,8 @@
 #include <tuple>
 #include <thread>
 #include <chrono>
+#include "Train.h"
+#include "Station.h"
 
 class Heure {
 private:
@@ -100,5 +102,14 @@ public:
     void remiseAZero();
 
 };
+
+/**
+ * @brief Function that manages the passing time
+ * @param train: train
+ * @param temps: time variable from the Heure class
+ * @param Stations: list of stations
+ */
+void ManageTime(Heure &temps, bool &stopWorking, std::mutex &mtxTemps);
+
 
 #endif // HEURE_H
