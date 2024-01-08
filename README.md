@@ -1,4 +1,4 @@
-# Modélisation simplifiée d’un système de transport de type « VAL
+# Modélisation simplifiée d’un système de transport de type " VAL "
 
 Projet CIR2 VAL.
 
