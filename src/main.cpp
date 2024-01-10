@@ -10,27 +10,16 @@ std::mutex mtx_;
 
 
 
-/* TO-DO
- * - [X] Arrêt d'urgence
- * - [ ] Cas unique, arrêt d'urgence dans la station reserve
+/* TODO
  * - [ ] mettre à jour les informations dans le rendu
- * - [ ] Stop function
- * - [X] Heure indépendante
- * - [ ] SFML optimisation
  * - [ ] gérer le cas des passagers terminus
- * - [ ] merge TrainControlFunction et MetroLine
- *
+ * - [ ] rendre le visuel plus beau
 */
-
-
-
 
 
 // Main function
 int main() {
     try {
-
-
         // Shared data among threads
         SharedData sharedData;
         Heure temps;

@@ -10,7 +10,7 @@
 // Moteur de nombres aléatoires et distribution
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_int_distribution<> dis(1, 15); // Pour des nombres entre 1 et 15, par exemple
+std::uniform_int_distribution<> dis(1, 25); // Pour des nombres entre 1 et 15, par exemple
 
 // Implementation of Terminus
 std::vector<std::tuple<std::string, int, double, bool>> dataTerminusLine1 = {
@@ -32,8 +32,6 @@ std::vector<std::tuple<std::string, std::tuple<int, int>, bool, std::tuple<doubl
                                                                 11000,                11000},        3},
         {"Wazemmes",              {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 10000,                10000},        2.5},
-        {"Gambetta",              {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
-                                                                9200,                 9200},         3},
         {"Republique Beaux-Arts", {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 8700,                 8700},         3.5},
         {"Rihour",                {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
@@ -45,7 +43,7 @@ std::vector<std::tuple<std::string, std::tuple<int, int>, bool, std::tuple<doubl
         {"Pont de Bois",          {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 2100,                 2100},         2},
         {"Terminus CANTONS",      {0,        dis(gen)}, true,  {DISTANCE_TOT - 1000,  1000},         1},
-        {"RESERVE",               {0,        0},        false, {DISTANCE_TOT, 0},                    1}
+        {"RESERVE",               {0,        0},        false, {DISTANCE_TOT,         0},            1}
 
 };
 
@@ -59,8 +57,6 @@ std::vector<std::tuple<std::string, std::tuple<int, int>, bool, std::tuple<doubl
                                                                 9200,                 9200},         2.5},
         {"Porte des Postes",      {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 8400,                 8400},         3},
-        {"Lille Grand Palais",    {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
-                                                                7900,                 7900},         3.5},
         {"Gare Lille Flandres",   {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 6800,                 6800},         2.5},
         {"Gare Lille Europe",     {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
@@ -70,7 +66,7 @@ std::vector<std::tuple<std::string, std::tuple<int, int>, bool, std::tuple<doubl
         {"Roubaix Grand Place",   {dis(gen), dis(gen)}, false, {DISTANCE_TOT -
                                                                 2400,                 2400},         2},
         {"Terminus C.H. Dron",    {0,        dis(gen)}, true,  {DISTANCE_TOT - 1500,  1500},         1},
-        {"RESERVE",               {0,        0},        false, {DISTANCE_TOT, 0},                    1}
+        {"RESERVE",               {0,        0},        false, {DISTANCE_TOT,         0},            1}
 
 };
 

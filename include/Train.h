@@ -28,10 +28,12 @@ private:
     double accelerationDistance;
     bool emergencyStop;
     double wait = 0;
-    bool isStopping = false;
     double decelerationDistance;
 
 public:
+    bool isStopping = false;
+    bool isNight = false;
+
     /**
      * @brief Contructeur de la classe Train
      * @param id : id du train

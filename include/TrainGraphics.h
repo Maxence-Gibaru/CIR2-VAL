@@ -3,7 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <string>
-#include "TrainControlFunction.h"
+
 #include "Train.h"
 
 #define WIDTH 1920.0
@@ -37,8 +37,6 @@ public:
             Stations2 = Stations_data;
         }
     }
-
-
 };
 
 /**

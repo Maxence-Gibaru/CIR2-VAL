@@ -12,7 +12,6 @@ add_executable(CIR2_VAL src/main.cpp
         src/Train.cpp
         src/Terminus.cpp
         src/Station.cpp
-        src/TrainControlFunction.cpp
         src/TrainGraphics.cpp
         include/TrainGraphics.h
         include/Heure.h
