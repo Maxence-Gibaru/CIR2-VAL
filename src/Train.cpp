@@ -152,8 +152,6 @@ void Train::setEmergencyStop(const bool &newState) {
 
 /* ==== OTHER ==== */
 
-
-// à faire
 void Train::stopX() {
     isStopping = true;
     decelerationDistance = pow(speed, 2) / (2 * DECELERATION_COEFF);

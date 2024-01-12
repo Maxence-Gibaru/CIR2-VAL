@@ -8,15 +8,6 @@
 
 std::mutex mtx_;
 
-
-
-/* TODO
- * - [ ] mettre à jour les informations dans le rendu
- * - [ ] gérer le cas des passagers terminus
- * - [ ] rendre le visuel plus beau
-*/
-
-
 // Main function
 int main() {
     try {
@@ -42,7 +33,6 @@ int main() {
             line2 = MetroLine(1, dataTerminusLine2, dataStationsLine2, TRAIN_NUMBER_LINE_2);
             metroLines.push_back(&line2);
 
-            // ... [Other potentially problematic code]
         } catch (const std::exception &e) {
             std::cerr << "Exception in MetroLine setup: " << e.what() << std::endl;
             // Handle or log the exception as needed
@@ -75,8 +65,6 @@ int main() {
                 }
             }
 
-
-            // ... [Other potentially problematic code]
         } catch (const std::exception &e) {
             std::cerr << "Exception in launching threads: " << e.what() << std::endl;
             // Handle or log the exception as needed

@@ -14,7 +14,7 @@ Projet CIR2 VAL.
 
 
 5. [Fonctionnalités Clés du Code](#fonctionnalités-clés-du-code)
-   
+
     - [Gestion du mouvement des trains](#gestion-du-mouvement-des-trains)
     - [Gestion du temps dans la simulation](#gestion-du-temps-dans-la-simulation)
     - [Utilisation des threads pour la gestion simultanée](#utilisation-des-threads-pour-la-gestion-simultanée)
@@ -56,15 +56,18 @@ commande `git clone` pour récupérer votre projet depuis le dépôt :
 
 ## Chiffres Clés
 
-1. **Nombre de lignes de code** :
-2. **Nombre d'heures de codage** :
+1. **Nombre de lignes de code** : 2300 
+2. **Durée de développement** : 3 mois
 
 ## Installation
 
 Pour utiliser ce projet, vous devez avoir le fichier SFML.exe fourni sur JUNIA Learning de `Monsieur Pascal Mosbah`
 
 1. **Téléchargement de SFML**
-    - Télécharger le fichier SFML.exe depuis junia learning ! A refaire
+    - Télécharger le fichier SFML.exe depuis junia learning, ou installer sfml manuellement sous unix avec la commande suivante :
+   ```bash
+    $ sudo apt-get install libsfml-dev
+    ```
 
 2. **Récupération du projet depuis GitHub**
     - Clonez le dépôt GitHub "CIR2-VAL" en utilisant la commande suivante dans votre terminal :
@@ -77,7 +80,7 @@ Pour utiliser ce projet, vous devez avoir le fichier SFML.exe fourni sur JUNIA L
 
 ### Prérequis
 
-Assurez-vous d'avoir le fichier SFML.exe fourni par JUNIA Learning installé sur votre système.
+Assurez-vous que la bibliothèque SFML soit correctement installée et de bien avoir récupéré la dernière version du projet.
 
 ### Étapes pour lancer le programme
 
@@ -91,32 +94,39 @@ Assurez-vous d'avoir le fichier SFML.exe fourni par JUNIA Learning installé sur
     - Lorsque le programme est lancé, l'interface utilisateur SFML devrait se charger.
     - Des informations supplémentaires peuvent être affichées dans la console, fournissant des détails sur le
       fonctionnement du programme et du système de métro simulé.
+    - Certains paramètres peuvent être directement modifiés depuis l'interface, les autres sont modifiables depuis le fichier config.cpp.
 
 4. **Observation et utilisation**
     - Observez le fonctionnement de l'interface SFML pour visualiser la simulation du système de métro.
     - Interagissez avec les fonctionnalités.
 
-Ci-dessous, une capture d'écran de notre interface : 
-![img.png](img.png)
+Ci-dessous, une capture d'écran de notre interface :
+![img_2.png](img_2.png)
 
 ### Fonctionnalités de l'interface SFML
 
-1. **Arrêt d'urgence des trains** : En appuyant sur le bouton rouge, cette action simule un arrêt d'urgence pour toutes
-    les lignes de métro, illustrant ainsi la réaction du système en cas d'urgence.
+1. **Arrêt d'urgence des trains** : En appuyant sur le bouton jaune, cette action simule un arrêt d'urgence pour toutes
+   les lignes de métro, illustrant ainsi la réaction du système en cas d'urgence.
 
 2. **Molette de gestion de la vitesse du temps** : Permet de régler la vitesse de la simulation, accélérant ou
    ralentissant le défilement du temps dans la simulation du système de métro.
 
-3. **Bouton de redémarrage** : Permet de réinitialiser le système à son état initial, relançant la simulation du réseau de
-    métro.
+3. **Bouton de redémarrage** : Permet de réinitialiser le système à son état initial, relançant la simulation du réseau
+   de
+   métro.
 
 4. **Molette de gestion de la distance de sécurité entre les trains** : Cette fonctionnalité permet de régler la
    distance de sécurité entre chaque train présents sur les différentes voies de manière dynamique, permettant ainsi
    d'observer l'impact sur le fonctionnement du réseau.
 
-5. **Informations de chaque trains** : En appuyant précisément sur un train, cela affichera les informations détaillées de celui-ci.
+5. **Informations de chaque trains** : En appuyant précisément sur un train, cela affichera les informations détaillées
+   de celui-ci.
+   ![img_1.png](img_1.png)
 
-    ![img_1.png](img_1.png)
+6. **Figer le fonctionnement global** : En appuyant sur les boutons Start/Stop, cela permet d'arrêter et de relancer le 
+    fonctionnement globale des métros.
+
+   
 
 ## Fonctionnalités Clés du Code
 
@@ -133,81 +143,83 @@ Source : https://www.tpline.net/fr/bras/tp2/ressources/Synthese-loi-trapeze-de-v
 ```c++
 void Train::stopX() {
     isStopping = true;
-
     decelerationDistance = pow(speed, 2) / (2 * DECELERATION_COEFF);
 
-}
+    if (decelerationDistance > 0 and speed > 0) {
+        coordX += speed * REFRESH - 0.5 * DECELERATION_COEFF * pow(REFRESH, 2);
+        speed -= DECELERATION_COEFF * REFRESH;
 
-void Train::moveX() {
-    this->time += REFRESH;
-    double NEW_MAX_SPEED = sqrt(
-            (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) * COEFF_SPEED);
-    double time1 = MAX_SPEED / COEFF_SPEED;
-    double time2 = (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) / MAX_SPEED;
-
-    if (isStopping) {
-        if (decelerationDistance > 0 and speed > 0) {
-            coordX += speed * REFRESH - 0.5 * DECELERATION_COEFF * pow(REFRESH, 2);
-            speed -= DECELERATION_COEFF * REFRESH;
-
-            // Assurez-vous que la vitesse ne devient pas négative
-            if (speed < 0) {
-                speed = 0;
-            }
-
-            // Mettre à jour la distance de décélération restante
-            decelerationDistance -= speed * REFRESH;
-        } else {
-            // Le train est complètement arrêté
-
-            speed = 0; // Assurez-vous que la vitesse est bien à 0
-            return;
+        // Assurez-vous que la vitesse ne devient pas négative
+        if (speed < 0) {
+            setSpeed(0);
         }
+        // Mettre à jour la distance de décélération restante
+        decelerationDistance -= speed * REFRESH;
     } else {
-        if (fullSpeed()) {
-            if (coordX <= getAccelerationDistance()) {
-                this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
-                this->speed = COEFF_SPEED * time;
-            }
-
-            if (coordX > getAccelerationDistance() and
-                getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
-                this->coordX = MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2);
-                this->speed = MAX_SPEED;
-            }
-
-            if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                          getAccelerationDistance()) {
-                this->coordX =
-                        -0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
-                        MAX_SPEED * (time2 - time1) +
-                        0.5 * COEFF_SPEED * pow(time1, 2);
-                this->speed = -COEFF_SPEED * (time - time2) + MAX_SPEED;
-            }
-        } else {
-            time1 = NEW_MAX_SPEED / COEFF_SPEED;
-            if (coordX < getAccelerationDistance()) {
-                this->coordX = 0.5 * COEFF_SPEED * pow(this->time, 2);
-                this->speed = COEFF_SPEED * time;
-            }
-
-            if (coordX >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
-                          getAccelerationDistance()) {
-                this->coordX = -0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
-                               0.5 * COEFF_SPEED * pow(time1, 2);
-                this->speed = -COEFF_SPEED * (time - time1) + NEW_MAX_SPEED;
-            }
-        }
+        // Le train est complètement arrêté
+        setSpeed(0); // Assurez-vous que la vitesse est bien à 0
+        return;
     }
 }
 
 
-void Train::restart() {
-    isStopping = false;
+void Train::moveX() {
+    if (speed == 0) {
+        time = 0;
+        updateTotalCoordX();
+        setCoordX(0);
+    }
 
-    speed = 0;
+    if (isStopping and speed > 0) {
+        time = 0;
+        updateTotalCoordX();
+        setCoordX(0);
+        isStopping = false;
+    }
+
+    this->time += REFRESH;
+    double NEW_MAX_SPEED = sqrt(
+            (getNextStation()->getCoordX(getTerminus()->getDirection()) - (getTotalCoordX())) * COEFF_SPEED);
+    double time1 = MAX_SPEED / COEFF_SPEED;
+    double time2 =
+            (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) / MAX_SPEED;
+
+
+    if (fullSpeed()) {
+        if (getCoordX() <= getAccelerationDistance()) {
+            setCoordX(0.5 * COEFF_SPEED * pow(this->time, 2));
+            setSpeed(COEFF_SPEED * time);
+        }
+
+        if (getCoordX() > getAccelerationDistance() and
+            getCoordX() < getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) {
+            setCoordX(MAX_SPEED * (this->time - time1) + 0.5 * COEFF_SPEED * pow(time1, 2)
+            );
+            setSpeed(MAX_SPEED);
+        }
+
+        if (getCoordX() >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
+                           getAccelerationDistance()) {
+            setCoordX(-0.5 * COEFF_SPEED * pow(this->time - time2, 2) + MAX_SPEED * (this->time - time2) +
+                      MAX_SPEED * (time2 - time1) + 0.5 * COEFF_SPEED * pow(time1, 2));
+            setSpeed(-COEFF_SPEED * (time - time2) + MAX_SPEED);
+        }
+    } else {
+        time1 = NEW_MAX_SPEED / COEFF_SPEED;
+        if (getCoordX() < getAccelerationDistance()) {
+            setCoordX(0.5 * COEFF_SPEED * pow(this->time, 2));
+            setSpeed(COEFF_SPEED * time);
+        }
+
+        if (getCoordX() >= (getNextStation()->getCoordX(getTerminus()->getDirection()) - getTotalCoordX()) -
+                           getAccelerationDistance()) {
+            setCoordX(-0.5 * COEFF_SPEED * pow(this->time - time1, 2) + NEW_MAX_SPEED * (this->time - time1) +
+                      0.5 * COEFF_SPEED * pow(time1, 2)
+            );
+            setSpeed(-COEFF_SPEED * (time - time1) + NEW_MAX_SPEED);
+        }
+    }
 }
-
 
 ```
 
@@ -271,9 +283,7 @@ void incrementerTemps(double refresh);
 void incrementerMinute();
 void incrementerHeure();
 void remiseAZero();
-
-
-
+void ManageTime(Heure &temps, bool &stopWorking, std::mutex &mtxTemps);
 };
 
 #endif // HEURE_H
@@ -291,19 +301,32 @@ Cette implémentation de l'heure nous a permit de rajouter :
 
 L'utilisation de threads est une composante clé pour permettre un fonctionnement simultané et efficace des différents
 aspects du système de métro simulé. Les threads sont utilisés pour gérer des tâches spécifiques telles que le mouvement
-des rames et du visuel.
+des rames, du rendu visuel et de la gestion de l'heure.
 
 ```c++
 
-for (auto &train: Trains) {
-threads.emplace_back(manageSubway, std::ref(sharedData), std::ref(train), std::ref(Trains), std::ref(Stations),
-std::ref(mtx_), std::ref(stop_working), std::ref(temps));
+std::thread hourThread(ManageTime, std::ref(temps), std::ref(stop_working), std::ref(mtx_));;
+
+std::thread renderThread;
+
+if (DISPLAY) {
+    renderThread = std::thread([&sharedData]() {
+        sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Train Simulator");
+        renderVisuals(window, sharedData);
+    });
 }
 
-for (auto &thread: threads) {
-if (thread.joinable())
-thread.join();
+for (auto &line: metroLines) {
+    for (auto &actualTrain: line->getTrains()) {
+        threads.emplace_back(&MetroLine::manageLine, line,
+                            std::ref(actualTrain),
+                            std::ref(sharedData),
+                            std::ref(mtx_),
+                            std::ref(stop_working),
+                            std::ref(temps));
+    }
 }
+
 ```
 
 Ce que montre le code, est que chaque train forme un thread et est géré par la fonction `ManageSubway(..)`
@@ -337,12 +360,6 @@ lumière les objectifs atteints, les défis relevés et les conclusions tirées 
   été soigneusement réfléchi.
 
 ## Défis non-relevés
-
-### Aspect Visuel Sophistiqué
-
-L'amélioration de l'aspect visuel pour offrir une représentation plus sophistiquée du système de métro a été envisagée.
-Cependant, la complexité d'utilisation de la bibliothèque SFML ainsi que des contraintes de temps ont limité la mise en
-œuvre de ces améliorations.
 
 ### Heures d'Influence dans la Simulation
 
