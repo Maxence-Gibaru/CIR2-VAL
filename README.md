@@ -8,24 +8,22 @@ Projet CIR2 VAL.
 2. [Chiffres Clés](#chiffres-clés)
 3. [Installation](#installation)
 4. [Utilisation](#utilisation)
-    - [Prérequis](#prérequis)
-    - [Étapes pour lancer le programme](#étapes-pour-lancer-le-programme)
-    - [Fonctionnalités de l'interface](#fonctionnalités-de-linterface-sfml)
 
-
+   - [Prérequis](#prérequis)
+   - [Étapes pour lancer le programme](#étapes-pour-lancer-le-programme)
+   - [Fonctionnalités de l&#39;interface](#fonctionnalités-de-linterface-sfml)
 5. [Fonctionnalités Clés du Code](#fonctionnalités-clés-du-code)
 
-    - [Gestion du mouvement des trains](#gestion-du-mouvement-des-trains)
-    - [Gestion du temps dans la simulation](#gestion-du-temps-dans-la-simulation)
-    - [Utilisation des threads pour la gestion simultanée](#utilisation-des-threads-pour-la-gestion-simultanée)
-
-
+   - [Gestion du mouvement des trains](#gestion-du-mouvement-des-trains)
+   - [Gestion du temps dans la simulation](#gestion-du-temps-dans-la-simulation)
+   - [Utilisation des threads pour la gestion simultanée](#utilisation-des-threads-pour-la-gestion-simultanée)
 6. [Réussite du Projet](#réussite-du-projet)
-    - [Objectifs Accomplis](#objectifs-accomplis)
-    - [Défis Relevés](#défis-relevés)
-    - [Défis non-relevés](#défis-non-relevés)
+
+   - [Objectifs Accomplis](#objectifs-accomplis)
+   - [Défis Relevés](#défis-relevés)
+   - [Défis non-relevés](#défis-non-relevés)
 7. [Conclusions](#conclusions)
-7. [Contact](#contact)
+8. [Contact](#contact)
 
 ## Aperçu
 
@@ -56,7 +54,7 @@ commande `git clone` pour récupérer votre projet depuis le dépôt :
 
 ## Chiffres Clés
 
-1. **Nombre de lignes de code** : 2300 
+1. **Nombre de lignes de code** : 2300
 2. **Durée de développement** : 3 mois
 
 ## Installation
@@ -64,16 +62,20 @@ commande `git clone` pour récupérer votre projet depuis le dépôt :
 Pour utiliser ce projet, vous devez avoir le fichier SFML.exe fourni sur JUNIA Learning de `Monsieur Pascal Mosbah`
 
 1. **Téléchargement de SFML**
-    - Télécharger le fichier SFML.exe depuis junia learning, ou installer sfml manuellement sous unix avec la commande suivante :
+
+   - Télécharger le fichier SFML.exe depuis junia learning, ou installer sfml manuellement sous unix avec la commande suivante :
+
    ```bash
     $ sudo apt-get install libsfml-dev
-    ```
-
+   ```
 2. **Récupération du projet depuis GitHub**
-    - Clonez le dépôt GitHub "CIR2-VAL" en utilisant la commande suivante dans votre terminal :
-    ```bash
-    $ git clone https://github.com/username/CIR2-VAL.git
-    ```
+
+   - Clonez le dépôt GitHub "CIR2-VAL" en utilisant la commande suivante dans votre terminal :
+
+   ```bash
+   $ git clone https://github.com/username/CIR2-VAL.git
+   ```
+
    Assurez-vous de remplacer `username` par votre nom d'utilisateur GitHub.
 
 ## Utilisation
@@ -85,48 +87,42 @@ Assurez-vous que la bibliothèque SFML soit correctement installée et de bien a
 ### Étapes pour lancer le programme
 
 1. **Construction du projet**
-    - Exécutez les commandes nécessaires pour construire le projet en utilisant le système de build.
 
+   - Exécutez les commandes nécessaires pour construire le projet en utilisant le système de build.
 2. **Lancement du programme**
-    - Après la construction réussie du projet, lancez le programme en exécutant le fichier exécutable généré.
 
+   - Après la construction réussie du projet, lancez le programme en exécutant le fichier exécutable généré.
 3. **Interface utilisateur SFML**
-    - Lorsque le programme est lancé, l'interface utilisateur SFML devrait se charger.
-    - Des informations supplémentaires peuvent être affichées dans la console, fournissant des détails sur le
-      fonctionnement du programme et du système de métro simulé.
-    - Certains paramètres peuvent être directement modifiés depuis l'interface, les autres sont modifiables depuis le fichier config.cpp.
 
+   - Lorsque le programme est lancé, l'interface utilisateur SFML devrait se charger.
+   - Des informations supplémentaires peuvent être affichées dans la console, fournissant des détails sur le
+     fonctionnement du programme et du système de métro simulé.
+   - Certains paramètres peuvent être directement modifiés depuis l'interface, les autres sont modifiables depuis le fichier config.cpp.
 4. **Observation et utilisation**
-    - Observez le fonctionnement de l'interface SFML pour visualiser la simulation du système de métro.
-    - Interagissez avec les fonctionnalités.
+
+   - Observez le fonctionnement de l'interface SFML pour visualiser la simulation du système de métro.
+   - Interagissez avec les fonctionnalités.
 
 Ci-dessous, une capture d'écran de notre interface :
-![img_2.png](img_2.png)
+
 
 ### Fonctionnalités de l'interface SFML
 
 1. **Arrêt d'urgence des trains** : En appuyant sur le bouton jaune, cette action simule un arrêt d'urgence pour toutes
    les lignes de métro, illustrant ainsi la réaction du système en cas d'urgence.
-
 2. **Molette de gestion de la vitesse du temps** : Permet de régler la vitesse de la simulation, accélérant ou
    ralentissant le défilement du temps dans la simulation du système de métro.
-
 3. **Bouton de redémarrage** : Permet de réinitialiser le système à son état initial, relançant la simulation du réseau
    de
    métro.
-
 4. **Molette de gestion de la distance de sécurité entre les trains** : Cette fonctionnalité permet de régler la
    distance de sécurité entre chaque train présents sur les différentes voies de manière dynamique, permettant ainsi
    d'observer l'impact sur le fonctionnement du réseau.
-
 5. **Informations de chaque trains** : En appuyant précisément sur un train, cela affichera les informations détaillées
    de celui-ci.
    ![img_1.png](img_1.png)
-
-6. **Figer le fonctionnement global** : En appuyant sur les boutons Start/Stop, cela permet d'arrêter et de relancer le 
-    fonctionnement globale des métros.
-
-   
+6. **Figer le fonctionnement global** : En appuyant sur les boutons Start/Stop, cela permet d'arrêter et de relancer le
+   fonctionnement globale des métros.
 
 ## Fonctionnalités Clés du Code
 
@@ -341,10 +337,8 @@ lumière les objectifs atteints, les défis relevés et les conclusions tirées 
 
 - **Modélisation précise** : Réussite dans la modélisation précise du système de métro, en utilisant des principes
   physiques et algorithmiques pour simuler le comportement réaliste des rames et des stations.
-
 - **Interface interactive** : Développement d'une interface utilisateur SFML interactive, offrant une représentation
   visuelle claire du système de métro et permettant une expérience immersive pour les utilisateurs.
-
 - **Gestion des aspects temporels** : Intégration réussie de la gestion du temps dans la simulation, avec une variation
   dynamique des conditions de fonctionnement du système à différentes heures de la journée.
 
@@ -352,10 +346,8 @@ lumière les objectifs atteints, les défis relevés et les conclusions tirées 
 
 - **Complexité de la modélisation** : Surmonter la complexité liée à la modélisation physique du mouvement des rames de
   métro tout en assurant la précision des calculs.
-
 - **Optimisation des performances** : Optimiser l'utilisation des threads pour garantir une simulation fluide et
   efficace, même avec une charge de travail importante.
-
 - **DocString & Commentaires** : Ajout de commentaire de documentation dans l'intégralité du code. La structure à aussi
   été soigneusement réfléchi.
 
