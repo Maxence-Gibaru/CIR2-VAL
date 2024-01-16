@@ -2,8 +2,6 @@
 
 ![Junia Banner](/docs/images/junia_banner.jpeg "Junia Banner")
 
-Projet CIR2 VAL.
-
 ## Table des matières
 
 1. [Aperçu](#aperçu)
