@@ -1,5 +1,7 @@
 # Modélisation simplifiée d’un système de transport de type " VAL "
 
+![Junia Banner](/docs/images/junia_banner.jpeg "Junia Banner")
+
 Projet CIR2 VAL.
 
 ## Table des matières
