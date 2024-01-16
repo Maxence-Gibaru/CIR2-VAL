@@ -104,7 +104,7 @@ Assurez-vous que la bibliothèque SFML soit correctement installée et de bien a
    - Interagissez avec les fonctionnalités.
 
 Ci-dessous, une capture d'écran de notre interface :
-![Interface](../docs/images/interface.png "Interface SFML")
+![Interface](/docs/images/interface.png "Interface SFML")
 
 ### Fonctionnalités de l'interface SFML
 
