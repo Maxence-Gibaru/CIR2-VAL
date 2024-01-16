@@ -120,7 +120,7 @@ Ci-dessous, une capture d'écran de notre interface :
    d'observer l'impact sur le fonctionnement du réseau.
 5. **Informations de chaque trains** : En appuyant précisément sur un train, cela affichera les informations détaillées
    de celui-ci.
-   ![img_1.png](img_1.png)
+   ![Details](/docs/images/details.png "Details Metro")
 6. **Figer le fonctionnement global** : En appuyant sur les boutons Start/Stop, cela permet d'arrêter et de relancer le
    fonctionnement globale des métros.
 
